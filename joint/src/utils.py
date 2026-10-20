@@ -15,20 +15,24 @@ def flatten(lists):
     return [item for l in lists for item in l]
 
 def fill_expand(labels):
-    event_num = max(flatten(labels)) + 1
-    filled_labels = torch.zeros((event_num, event_num)) # account for dummy
+    """Gold antecedents, with a dummy for the first mention of *every* cluster.
+
+    Column i is mention i's dummy antecedent; columns < i are actual
+    antecedents. The original implementation omitted the dummy target for
+    multi-mention clusters, giving their first mention an all-zero target.
+    """
+    mentions = flatten(labels)
+    event_num = max(mentions, default=-1) + 1
+    if sorted(mentions) != list(range(event_num)):
+        raise ValueError("Coreference clusters must partition contiguous mention indices")
+    filled_labels = torch.zeros((event_num, event_num))
     for gr in labels:
-        if len(gr) > 1:
-            sorted_gr = sorted(gr)
-            for i in range(len(sorted_gr)):
-                for j in range(i+1, len(sorted_gr)):
-                    filled_labels[sorted_gr[j]][sorted_gr[i]] = 1
-        else:
-            try:
-                filled_labels[gr[0]][gr[0]] = 1 # dummy default to same index as itself
-            except:
-                print(gr)
-                raise ValueError
+        if not gr:
+            raise ValueError("Empty coreference cluster")
+        sorted_gr = sorted(gr)
+        filled_labels[sorted_gr[0], sorted_gr[0]] = 1
+        for i, mention in enumerate(sorted_gr[1:], start=1):
+            filled_labels[mention, sorted_gr[:i]] = 1
     return filled_labels
 
 def pad_and_stack(tensors, pad_size=None, value=0):
@@ -66,6 +70,8 @@ def get_clusters(event2cluster):
 def get_predicted_clusters(prob):
     """ 根据预测的先行词得到指代簇
     """
+    if prob.shape[0] == 0:
+        return [], {}
     predicted_antecedents = torch.argmax(prob, dim=-1).cpu().numpy().tolist()
     idx_to_clusters = {}
     predicted_clusters = []

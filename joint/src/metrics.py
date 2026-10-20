@@ -1,7 +1,5 @@
-from pyparsing import col
 import numpy as np
 from collections import Counter
-from .linear_assignment import linear_assignment
 from scipy.optimize import linear_sum_assignment
 
 
@@ -150,7 +148,7 @@ def blanc(mention_to_cluster, mention_to_gold):
                 else:
                     rn += 1
     return rc, wc, rn, wn
-                
+
 if __name__ == "__main__":
     from utils import get_event2cluster
     class Doc:

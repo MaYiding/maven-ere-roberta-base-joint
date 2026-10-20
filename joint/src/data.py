@@ -68,6 +68,8 @@ def type_tokens(type_str):
 
 class Document:
     def __init__(self, data, ignore_nonetype=False):
+        # Do not add eid fields or append TIMEX to callers' original JSON.
+        data = copy.deepcopy(data)
         self.id = data["id"]
         self.words = data["tokens"]
         self.mentions = []
@@ -109,11 +111,11 @@ class Document:
                 for mention2 in event["mention"]:
                     relations[(mention1["id"], mention2["id"])] = COREFREL2ID["coref"]
         return relations
-    
+
     def sort_events(self):
         self.events = sorted(self.events, key=lambda x: (x["sent_id"], x["offset"][0]))
         self.sorted_event_spans = [(event["sent_id"], event["offset"]) for event in self.events]
-    
+
     def get_coref_labels(self, data):
         label_group = []
         events_only = [e for e in self.events if not e["id"].startswith("TIME")]
@@ -126,7 +128,7 @@ class Document:
             for m in data['event_mentions']:
                 label_group.append([mid2index[m["id"]]])
         return label_group
- 
+
     def get_relation_labels(self, relations, REL2ID, ignore_timex=True):
         pair2rel = {}
         for rel in relations:
@@ -163,21 +165,24 @@ class myDataset(Dataset):
             self.examples = list(random.sample(self.examples, int(sample_rate * len(self.examples))))
         self.tokenize()
         self.to_tensor()
-    
+
     def load_examples(self, data_dir, split):
         self.examples = []
-        with open(os.path.join(data_dir, f"{split}.jsonl"))as f:
-            lines = f.readlines()
-        for line in lines:
-            data = json.loads(line.strip())
-            doc = Document(data, ignore_nonetype=self.ignore_nonetype)
-            if doc.sorted_event_spans:
-                self.examples.append(doc)
-    
+        with open(os.path.join(data_dir, f"{split}.jsonl"), encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                data = json.loads(line)
+                doc = Document(data, ignore_nonetype=self.ignore_nonetype)
+                if doc.sorted_event_spans:
+                    self.examples.append(doc)
+
     def tokenize(self):
         # {input_ids, event_spans, event_group}
         # TODO: split articless into part of max_length
         self.tokenized_samples = []
+        if self.max_length < 16:
+            raise ValueError("max_length must be at least 16")
         for example in tqdm(self.examples, desc="tokenizing"):
             event_spans = []
             input_ids = []
@@ -205,7 +210,7 @@ class myDataset(Dataset):
                     event_id += 1
                 if word[i:]:
                     tmp_input_ids += self.tokenizer(word[i:], is_split_into_words=True, add_special_tokens=False)["input_ids"]
-                
+
                 # add SEP between sentences
                 tmp_input_ids.append(self.tokenizer.sep_token_id)
 
@@ -218,8 +223,10 @@ class myDataset(Dataset):
                     event_spans.append(sub_event_spans)
                     while len(tmp_input_ids) >= self.max_length:
                         split_point = self.max_length - 1
-                        while not valid_split(split_point, tmp_event_spans):
+                        while split_point > 0 and not valid_split(split_point, tmp_event_spans):
                             split_point -= 1
+                        if split_point <= 0:
+                            raise ValueError(f"Cannot split document {example.id} without cutting an event span; increase max_length")
                         tmp_event_spans_part1, tmp_event_spans = split_spans(split_point, tmp_event_spans)
                         tmp_input_ids_part1, tmp_input_ids = tmp_input_ids[:split_point], tmp_input_ids[split_point:]
 
@@ -232,12 +239,16 @@ class myDataset(Dataset):
             if sub_input_ids:
                 input_ids.append(sub_input_ids)
                 event_spans.append(sub_event_spans)
-            
+
             assert event_id == len(spans)
-                
+            assert sum(map(len, event_spans)) == len(spans)
+            for chunk, chunk_spans in zip(input_ids, event_spans):
+                if any(not (0 <= start < end <= len(chunk)) for start, end in chunk_spans):
+                    raise ValueError(f"Invalid tokenized event span in document {example.id}")
+
             tokenized = {"input_ids": input_ids, "attention_mask": None, "event_spans": event_spans, "coref_labels": example.coref_labels, "temporal_labels": example.temporal_labels, "causal_labels": example.causal_labels, "subevent_labels": example.subevent_labels, "events_idx": example.events_idx, "doc_id": example.id}
             self.tokenized_samples.append(tokenized)
-    
+
     def to_tensor(self):
         for item in self.tokenized_samples:
             attention_mask = []
@@ -252,7 +263,7 @@ class myDataset(Dataset):
             item["temporal_labels"] = torch.LongTensor(item["temporal_labels"])
             item["causal_labels"] = torch.LongTensor(item["causal_labels"])
             item["subevent_labels"] = torch.LongTensor(item["subevent_labels"])
-    
+
     def __getitem__(self, index):
         return self.tokenized_samples[index]
 
@@ -270,6 +281,11 @@ def collator(data):
         collate_data["splits"].append(collate_data["splits"][-1]+l)
     collate_data["input_ids"] = torch.cat(collate_data["input_ids"])
     collate_data["attention_mask"] = torch.cat(collate_data["attention_mask"])
+    # Only trim trailing padding; all event offsets and document splits stay
+    # unchanged. At least one real token exists in each encoded chunk.
+    active_length = int(collate_data["attention_mask"].sum(dim=1).max().item())
+    collate_data["input_ids"] = collate_data["input_ids"][:, :active_length]
+    collate_data["attention_mask"] = collate_data["attention_mask"][:, :active_length]
     for label_type in ["temporal_labels", "causal_labels", "subevent_labels"]:
         max_label_length = max([len(label) for label in collate_data[label_type]])
         collate_data[label_type] = torch.stack([F.pad(label, pad=(0, max_label_length-len(label)), value=-100) for label in collate_data[label_type]])

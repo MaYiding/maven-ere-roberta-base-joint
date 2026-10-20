@@ -1,4 +1,72 @@
-# MAVEN-ERE
+# MAVEN-ERE Joint RoBERTa-base Training
+
+本仓库在 THU-KEG/MAVEN-ERE 官方实现上，补充可断点续训、可独立导出的四任务联合训练流程。
+英文说明见 [README.en.md](README.en.md)。原始项目说明保留在本文后半部分。
+
+模型输入需要已标出的事件提及和时间表达；它不负责从原始文本发现全部事件。
+一个共享 RoBERTa-base 编码器同时预测事件共指、六类时间关系、两类因果关系和子事件关系。
+子事件有向边 `[parent, child]` 的第二项属于第一项。
+
+## 训练
+
+建议使用 Python 3.11、支持 BF16 的 NVIDIA GPU。只在计划训练的服务器上执行以下步骤。
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-train.txt
+python scripts/prepare_data.py
+python scripts/download_base.py
+python -m pytest -q tests
+python train_joint.py --base_model base_model --data_dir data/MAVEN_ERE \
+  --output_dir runs/roberta-joint-seed42 --cache_dir runs/tokenization-cache \
+  --batch_size 4 --grad_accum 8 --max_epochs 100 --seed 42
+```
+
+完整数据首次分词会写入缓存。正式训练前可在独立目录使用 `--smoke`：它运行真实训练文档的短试验，覆盖长文档和四类关系正例，检查损失、完整训练状态恢复及 HF 导出重载。
+正式训练不要复用 smoke 的输出目录；两者可以共享分词缓存。
+
+默认设置：微批4文档、梯度累积8次、名义有效批32文档、512-token最大分块、BF16、梯度检查点、seed 42、最多100轮。
+编码器 AdamW 学习率2e-5、eps=1e-6；任务头 Adam 学习率3e-4。编码器按实际优化器更新步数进行200步 warmup 和线性衰减。
+四任务损失权重为0.4／2／4／4。每轮在710篇 valid 文档上验证；连续10次验证未提升则停止。
+
+共指损失先对每篇文档的提及求均值，再对文档求均值；其他任务对每个微批内有效事件对求均值。
+因此4×8与上游README的8×4虽然名义有效批相同，事件对权重仍存在差别。
+分类头隐藏维度200沿用公开代码，论文附录写150。本仓库是记录差异的工程复现，不宣称逐项复现论文结果。
+
+## 断点、验证和推理
+
+同一命令追加 `--resume`，从输出目录的 `latest.pt` 恢复。checkpoint 只在梯度更新边界保存，包含两个优化器、scheduler、轮次、样本排列、下一微批位置及 Python／NumPy／Torch／CUDA RNG。
+恢复时数据、批大小、累积次数、训练总轮数等签名必须一致。SIGTERM／SIGINT 会在下个更新边界保存并退出。
+
+`best_joint` 指向按官方 overall F1 选出的**同一个完整联合模型**，包含 safetensors、配置、自定义模型源码和 tokenizer。
+`best_dev_metrics.json` 是该快照的验证结果；`progress.json` 记录当前状态。
+训练标签会双向扩展 SIMULTANEOUS／BEGINS-ON，官方 `evaluate.py` 使用原始标注方向；两套指标会分别记录。
+
+```bash
+python train_joint.py --predict-only --checkpoint runs/roberta-joint-seed42/best_joint \
+  --data-dir data/MAVEN_ERE --split test \
+  --prediction-file runs/roberta-joint-seed42/test_predictions.jsonl
+```
+
+正式训练结束会自动用最佳模型生成 test 预测。测试金标未公开，所有本地成绩均标为 valid，不宣称测试成绩。
+`AutoModel.from_pretrained(checkpoint, trust_remote_code=True)` 可以加载导出的完整模型；使用前审阅导出的自定义源码。
+其 forward 需要 `input_ids`、`attention_mask`、`event_spans`、`splits`、`events_idx`。
+推荐使用上面的推理入口，以保留完整的分词、span对齐和JSONL解码流程。
+
+## 后续发布
+
+训练代码在 GitHub 发布，HF 只上传模型包。正式训练成功后，`scripts/package_release.py` 可生成
+`huggingface/`、训练代码归档和SHA-256清单，不会创建远程仓库或上传文件。
+它要求启动时保存的 `source_manifest.json`；提交代码后运行 `python scripts/snapshot_source.py` 生成来源清单。
+数据正文、虚拟环境、优化器状态及训练缓存均不加入公开代码仓库。
+
+上游commit：`ac81a9711a69f43f55bfbc50b3bb573fd11c64b0`。
+保留GPL-3.0许可证、上游署名及RoBERTa的MIT归属，详见 [UPSTREAM_NOTICE.md](UPSTREAM_NOTICE.md)。
+
+---
+
+# Original MAVEN-ERE Project
 Source code and dataset for EMNLP 2022 paper ["MAVEN-ERE: A Unified Large-scale Dataset for Event Coreference, Temporal, Causal, and Subevent Relation Extraction"](https://arxiv.org/abs/2211.07342).
 
 ## Overview

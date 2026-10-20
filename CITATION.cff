@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "Please cite the original MAVEN-ERE paper when using this adapted training code."
+title: "MAVEN-ERE Joint RoBERTa-base Training"
+type: software
+license: GPL-3.0-only
+authors:
+  - name: "MAVEN-ERE contributors"
+preferred-citation:
+  type: conference-paper
+  title: "MAVEN-ERE: A Unified Large-scale Dataset for Event Coreference, Temporal, Causal, and Subevent Relation Extraction"
+  year: 2022
+  conference:
+    name: "EMNLP 2022"
+  start: 926
+  end: 941
+  url: "https://aclanthology.org/2022.emnlp-main.60/"
+  authors:
+    - family-names: Wang
+      given-names: Xiaozhi
+    - family-names: Chen
+      given-names: Yulin
+    - family-names: Ding
+      given-names: Ning
+    - family-names: Peng
+      given-names: Hao
+    - family-names: Wang
+      given-names: Zimu
+    - family-names: Lin
+      given-names: Yankai
+    - family-names: Han
+      given-names: Xu
+    - family-names: Hou
+      given-names: Lei
+    - family-names: Li
+      given-names: Juanzi
+    - family-names: Liu
+      given-names: Zhiyuan
+    - family-names: Li
+      given-names: Peng
+    - family-names: Zhou
+      given-names: Jie

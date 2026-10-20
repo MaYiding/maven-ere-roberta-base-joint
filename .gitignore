@@ -137,3 +137,16 @@ StructTempRel-EMNLP17
 NeuralTemporalRelation-EMNLP19
 .history
 **_ignore
+
+# 本项目训练产物与环境；权重另行发布到 Hugging Face。
+base_model/
+runs/
+artifacts/
+environment-initial.json
+*.safetensors
+*.pt
+*.pth
+.hf_cache/
+source_manifest.json
+PREPARATION_COMPLETE
+gpu.lock

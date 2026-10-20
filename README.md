@@ -7,15 +7,41 @@
 一个共享 RoBERTa-base 编码器同时预测事件共指、六类时间关系、两类因果关系和子事件关系。
 子事件有向边 `[parent, child]` 的第二项属于第一项。
 
-## 已训练模型（2026-10-20）
+## 中期结果与模型入口（2026-10-20）
 
-[Hugging Face 权重](https://huggingface.co/MaYiding/maven-ere-roberta-base-joint) · [训练记录与使用方法](docs/TRAINING_RUN.md)
+[Hugging Face 权重](https://huggingface.co/MaYiding/maven-ere-roberta-base-joint) ·
+[数据镜像](https://huggingface.co/datasets/MaYiding/MAVEN-ERE) ·
+[参考模型、复核要求与四次推理步骤](docs/REFERENCE_CHECKPOINTS.md)
 
-seed 42 正式训练已完成，23 轮提前停止，实际批设置为 **8 × 4**。
-710 篇 valid 上最佳同一检查点的 F1：共指均值 **90.08**、时间 **53.08**、因果 **27.34**、子事件 **24.35**，overall **48.71**。
-使用金标事件提及和已标注 TIMEX；完整发布模型已重跑验证，全部指标一致。测试金标未公开，无测试成绩。
-仓库初始为私有。精确训练代码 commit 为 `369d9df4262f3fb4c22073d8c6c8021fa78698f8`；后续提交只补充发布文档与证据。
+**HF 仓库根目录的默认模型仍是旧版单模型。** 新的作者参考 seed 42 计划放在
+`reference-seed42/{coreference,temporal,causal,subevent}/`，每个子目录都是一个包含独立
+编码器及全部任务头的完整联合模型。最新参考组合需要四个子目录、每篇文档四次 forward，
+按任务提取预测字段，不拼接权重。
 
+| 710 篇 valid，F1 % | 旧版根目录单模型 | 作者参考 seed 42 四模型组合 |
+|---|---:|---:|
+| 共指四项均值 | 90.0837 | 90.7807 |
+| 时间 | 53.0809 | 53.1078 |
+| 因果 | 27.3367 | 31.0995 |
+| 子事件 | 24.3539 | 25.1569 |
+| Overall | 48.7138 | 50.0362 |
+
+组合比旧单模型高 **1.3224 个百分点**，但使用了四套约 126M 参数的完整模型，不能据此
+宣称同模型数量或同推理成本的单模型改善。目前尚未证实单共享 checkpoint 的整体改善。
+参考 run 已完成 100 轮、9,125 次 optimizer updates；本轮发布前还必须将四个导出分别
+在 CPU 上重载、覆盖全部 710 篇 valid，逐一核对权重、预测、指标及重新组合的结果。
+这项完整复核尚待完成，小样本 canary 不能替代它。
+
+这是 **15 次、每次 100 轮实验的中期结果**；当前只有作者参考 seed 42 这一正式 run
+完成。允许在复核后提前公开已有结果，公开不会取消、提前停止或缩减剩余实验。
+五 seed 汇总、改进候选选择和隐藏 test 复现均尚无完成结论。所有分数均为官方原始方向
+评测的 validation 结果，使用 gold event mentions 和 annotated TIMEX；无 test F1。
+
+旧单模型在 23 轮、2,116 次更新后早停，实际批设置为 **8 × 4**；它已通过完整发布模型
+重载复核，详见 [旧版训练记录](docs/TRAINING_RUN.md)。旧版冻结训练来源为
+`369d9df4262f3fb4c22073d8c6c8021fa78698f8`，本轮参考实验与兼容导出来源为
+`8a49171cfe160d85877ffea5e7247c2141bcf3d4`。发布文档及复核工具的后续提交另行记录，
+不改写已完成 run 的冻结训练来源。
 
 ## 训练
 
@@ -66,13 +92,22 @@ python train_joint.py --predict-only --checkpoint runs/roberta-joint-seed42/best
 
 ## 后续发布
 
-训练代码在 GitHub 发布，HF 只上传模型包。正式训练成功后，`scripts/package_release.py` 可生成
+训练代码在 [GitHub](https://github.com/MaYiding/maven-ere-roberta-base-joint) 发布，HF 模型仓库
+保存旧版根模型与新增参考子目录；数据放在独立的
+[MAVEN-ERE 镜像仓库](https://huggingface.co/datasets/MaYiding/MAVEN-ERE)，不是新标注数据。
+本轮公开须先完成上文的全量重载复核；尚未公开时需认证下载。历史实验协议中“保持私有”
+是当时的发布约束，本段记录当前中期发布安排，实验数量与 100 轮预算不变。
+
+`scripts/package_release.py` 可生成
 `huggingface/`、训练代码归档和SHA-256清单，不会创建远程仓库或上传文件。
 它要求启动时保存的 `source_manifest.json`；提交代码后运行 `python scripts/snapshot_source.py` 生成来源清单。
 数据正文、虚拟环境、优化器状态及训练缓存均不加入公开代码仓库。
 
 上游commit：`ac81a9711a69f43f55bfbc50b3bb573fd11c64b0`。
-保留GPL-3.0许可证、上游署名及RoBERTa的MIT归属，详见 [UPSTREAM_NOTICE.md](UPSTREAM_NOTICE.md)。
+代码和改编 checkpoint 保留 GPL-3.0、上游署名及 RoBERTa 的 MIT 归属；参考 runner 的
+Transformers AdamW 适配保留 Apache-2.0 声明。数据另保留 MAVEN-ERE、MAVEN 与 Wikipedia
+的许可及署名，不把 checkpoint 的许可当作全部数据内容的统一许可。
+详见 [UPSTREAM_NOTICE.md](UPSTREAM_NOTICE.md) 及数据镜像中的来源与许可文件。
 
 ---
 

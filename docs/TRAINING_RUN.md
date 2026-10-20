@@ -1,12 +1,19 @@
 # Completed training run: RoBERTa joint, seed 42
 
+This page records the initial single-checkpoint baseline. The subsequent full reproduction
+campaign and its interim task-selected checkpoint releases are documented separately in
+[REFERENCE_CHECKPOINTS.md](REFERENCE_CHECKPOINTS.md). Publishing an interim result does
+not end the remaining experiments.
+
 The model is available at [Hugging Face](https://huggingface.co/MaYiding/maven-ere-roberta-base-joint).
-Code and model repositories are initially private. Authenticate before downloading.
+Repository visibility is managed by the current release; authenticate if a repository is still private.
 
 Training completed on 2026-10-20 with early stopping after 23 epochs and 2,116 optimizer updates,
 using a single RTX 4090 D, BF16, microbatch 8 and gradient accumulation 4.
 The frozen training commit is `369d9df4262f3fb4c22073d8c6c8021fa78698f8`.
-Later commits add publication documentation and evidence only.
+The first publication commits added documentation and evidence. Later reproduction commits
+also add the isolated reference runner, controlled candidate settings and export/evaluation tools;
+they do not change the frozen source or weights of this baseline.
 
 ## Validation
 

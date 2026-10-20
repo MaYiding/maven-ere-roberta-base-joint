@@ -1,0 +1,94 @@
+{
+  "created_at": "2026-10-20T02:28:21.631516+00:00",
+  "training_status": "early_stopped",
+  "code_commit": "369d9df4262f3fb4c22073d8c6c8021fa78698f8",
+  "validation_only": true,
+  "files": {
+    "huggingface/CITATION.cff": {
+      "sha256": "ff9309472322a9e22843c3a62602382d06acbf6fed890616b08d50cfe6b62ec9",
+      "bytes": 1134
+    },
+    "huggingface/LICENSE": {
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149
+    },
+    "huggingface/README.md": {
+      "sha256": "9d0ce4ebcb12f93dabc8e0769de5d4ed4bf6ba9b32e5655af9d42ebbfb0e47f3",
+      "bytes": 4139
+    },
+    "huggingface/ROBERTA-MIT-LICENSE": {
+      "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85",
+      "bytes": 1086
+    },
+    "huggingface/UPSTREAM_NOTICE.md": {
+      "sha256": "ceee2ade199df5637ff4f9d6de8c1e3ed360a45538962d90b80ec00c27d0aa0b",
+      "bytes": 1532
+    },
+    "huggingface/config.json": {
+      "sha256": "51949ecf34b10ee54b34f06969e334e76cf21b6c76c61e9231f7bb964abe7b3f",
+      "bytes": 3070
+    },
+    "huggingface/configuration_maven_ere.py": {
+      "sha256": "94ba510e8c20c73fb91d8738acbd938914167dde892d6c1c02a2e6a6879a0936",
+      "bytes": 4047
+    },
+    "huggingface/dev_metrics.json": {
+      "sha256": "fa020385efef03f88db8de45c26bea4f5a202e9e13e50c19cadfc2dc2a560796",
+      "bytes": 1670
+    },
+    "huggingface/merges.txt": {
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "bytes": 456318
+    },
+    "huggingface/model.safetensors": {
+      "sha256": "6a47ebc48a2d4c5c45714bfbe4a59791c4f182f521341631b0e93e116973480a",
+      "bytes": 504795436
+    },
+    "huggingface/modeling_maven_ere.py": {
+      "sha256": "d8997e6c90f48eac0758af15f551894add3ebca3f4356862384785ff3d755099",
+      "bytes": 12241
+    },
+    "huggingface/publication_notes.json": {
+      "sha256": "eb7000c17f30db2f87d928e691ff9a07593580b69cd3453d2f17c930ac8aeb99",
+      "bytes": 658
+    },
+    "huggingface/release_verification.json": {
+      "sha256": "dac325271e1c9b4d4f78bcb459110dbde2b371b318e800c4b3d2b9d866879cc2",
+      "bytes": 1679
+    },
+    "huggingface/requirements-lock.txt": {
+      "sha256": "c3426da5a638a1fcc9edca3d094b00b518ce72d413fda1ab1bcda275961ab6fe",
+      "bytes": 1186
+    },
+    "huggingface/source_manifest.json": {
+      "sha256": "c2237cbe9a261966b36dcac78bc30ffd271d9df9508ad0a529771c213e7a7f8a",
+      "bytes": 6373
+    },
+    "huggingface/special_tokens_map.json": {
+      "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+      "bytes": 958
+    },
+    "huggingface/tokenizer_config.json": {
+      "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+      "bytes": 1221
+    },
+    "huggingface/training_recipe.json": {
+      "sha256": "35c7a209806c68948d19b734ff74bc0743d9310f52ee1bce1cd598bbc7fece95",
+      "bytes": 124967
+    },
+    "huggingface/vocab.json": {
+      "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+      "bytes": 999355
+    },
+    "training-code.tar.gz": {
+      "sha256": "b775b8072c289357e43c0fb2a1491d189a659d7165040b2f09d2f9547f5b91e1",
+      "bytes": 112167
+    },
+    "huggingface/release_manifest.json": {
+      "sha256": "7851b5dfee645d390cdac2752ddcce1d4149fc2672179e9f323654f66d26b919",
+      "bytes": 2929
+    }
+  },
+  "uploaded": false,
+  "metadata_adjusted": true
+}

@@ -8,6 +8,18 @@ The input must contain pre-identified event mentions and temporal expressions.
 This model predicts within-document coreference, temporal, causal and subevent
 relations; it is not an end-to-end event detector. Subevent pairs are `[parent, child]`.
 
+## Trained checkpoint (2026-10-20)
+
+[Hugging Face weights](https://huggingface.co/MaYiding/maven-ere-roberta-base-joint) · [Run details and usage](docs/TRAINING_RUN.md)
+
+Seed 42 training stopped after 23 epochs, using microbatch **8** and accumulation **4**.
+On all 710 validation documents with gold mentions and annotated TIMEX, one best checkpoint
+achieved coreference mean F1 **90.08**, temporal **53.08**, causal **27.34**, subevent **24.35**,
+and overall **48.71**. Reloading the release model and reevaluating reproduced every metric exactly.
+No hidden-test score is claimed. Repositories are initially private.
+Exact training source: `369d9df4262f3fb4c22073d8c6c8021fa78698f8`; later commits add release documentation and evidence.
+
+
 ## Training
 
 Use Python 3.11 and a BF16-capable NVIDIA GPU. Run these commands on the training server:

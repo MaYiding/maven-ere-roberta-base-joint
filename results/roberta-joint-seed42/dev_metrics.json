@@ -1,0 +1,54 @@
+{
+  "split": "valid",
+  "official_protocol": {
+    "coreference": {
+      "b_cubed_precision": 97.32276410922276,
+      "b_cubed_recall": 97.93967228247314,
+      "b_cubed_f1": 97.63024367227534,
+      "ceaf_precision": 97.52676106271446,
+      "ceaf_recall": 97.08402869545841,
+      "ceaf_f1": 97.30489127918517,
+      "muc_precision": 76.43271088216356,
+      "muc_recall": 80.25693035835023,
+      "muc_f1": 78.2981530343008,
+      "blanc_precision": 84.7346243207677,
+      "blanc_recall": 89.8282456365954,
+      "blanc_f1": 87.1014682495755
+    },
+    "temporal": {
+      "temporal_precision": 53.98981069125994,
+      "temporal_recall": 52.202153475057756,
+      "temporal_f1": 53.08093518979112
+    },
+    "causal": {
+      "causal_precision": 37.39329850936425,
+      "causal_recall": 21.54286553141515,
+      "causal_f1": 27.336655334606252
+    },
+    "subevent": {
+      "subevent_precision": 28.6697757050855,
+      "subevent_recall": 21.16740449253976,
+      "subevent_f1": 24.353895491416715
+    },
+    "coreference_mean_f1": 90.08368905883421,
+    "overall_f1": 48.71379376866207
+  },
+  "training_augmented_labels_positive_micro": {
+    "temporal": {
+      "precision": 54.022372395689835,
+      "recall": 51.77148343734997,
+      "f1": 52.87298275891656
+    },
+    "causal": {
+      "precision": 37.39329850936425,
+      "recall": 21.54286553141515,
+      "f1": 27.336655334606252
+    },
+    "subevent": {
+      "precision": 28.6697757050855,
+      "recall": 21.16740449253976,
+      "f1": 24.353895491416715
+    }
+  },
+  "temporal_protocol_note": "Training labels symmetrize SIMULTANEOUS/BEGINS-ON; official evaluator uses raw annotated directions."
+}

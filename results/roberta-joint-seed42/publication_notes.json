@@ -1,0 +1,12 @@
+{
+  "training_code_commit": "369d9df4262f3fb4c22073d8c6c8021fa78698f8",
+  "github_repository": "https://github.com/MaYiding/maven-ere-roberta-base-joint",
+  "huggingface_repository": "https://huggingface.co/MaYiding/maven-ere-roberta-base-joint",
+  "original_release_manifest_sha256": "f79a2c72e728dc5552af977e70b47185cc2ea3fd9fa6762ec76b43f2169a12ea",
+  "metadata_edits": {
+    "config_base_name_fields": [],
+    "model_card": "Added gold input conditions, exact source commit, repository link and complete prediction commands."
+  },
+  "weight_sha256": "6a47ebc48a2d4c5c45714bfbe4a59791c4f182f521341631b0e93e116973480a",
+  "training_code_modified": false
+}

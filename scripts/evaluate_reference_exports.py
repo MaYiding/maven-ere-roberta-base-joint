@@ -56,12 +56,19 @@ def checked_path(value):
     return path
 
 
+def json_scalar(value):
+    """Convert NumPy metric scalars; reject arrays and arbitrary objects."""
+    if type(value).__module__.split('.', 1)[0] == 'numpy' and getattr(value, 'ndim', None) == 0:
+        return value.item()
+    raise TypeError('Unsupported JSON value: ' + type(value).__name__)
+
+
 def atomic_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
     with open(temporary, "w", encoding="utf-8") as stream:
-        json.dump(value, stream, indent=2, ensure_ascii=False, allow_nan=False)
+        json.dump(value, stream, indent=2, ensure_ascii=False, allow_nan=False, default=json_scalar)
         stream.write("\n")
         stream.flush()
         os.fsync(stream.fileno())
@@ -87,8 +94,8 @@ def update(stage, **values):
     atomic_json(ACTIVE_OUTPUT / "progress.json", PROGRESS)
     with open(ACTIVE_OUTPUT / "events.jsonl", "a", encoding="utf-8") as stream:
         stream.write(json.dumps({"stage": stage, **values,
-                                "timestamp_utc": PROGRESS["timestamp_utc"]}, allow_nan=False) + "\n")
-    print(json.dumps({"stage": stage, **values}, ensure_ascii=False, allow_nan=False), flush=True)
+                                "timestamp_utc": PROGRESS["timestamp_utc"]}, allow_nan=False, default=json_scalar) + "\n")
+    print(json.dumps({"stage": stage, **values}, ensure_ascii=False, allow_nan=False, default=json_scalar), flush=True)
 
 
 def verify_hash(path, expected, description):
@@ -801,7 +808,7 @@ def main(argv=None):
     atomic_json(combo_output / "metrics.json", combination)
     best_key = max(results, key=lambda key: results[key]["official_protocol"]["overall_f1"])
     best = results[best_key]
-    improved = (best["official_protocol"]["overall_f1"] > baseline["overall_f1"] + 1e-9) if not args.canary_only else None
+    improved = bool(best["official_protocol"]["overall_f1"] > baseline["overall_f1"] + 1e-9) if not args.canary_only else None
     final = {"status": "smoke" if args.canary_only else "completed", "split": "valid_subset" if args.canary_only else "valid",
         "documents": len(evaluation_dataset), "valid_sha256": valid_sha, "cpu_only": True, "threads": args.threads,
         "source_commit": FROZEN_COMMIT, "single_checkpoint_results": results,

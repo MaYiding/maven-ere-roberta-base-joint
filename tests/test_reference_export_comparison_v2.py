@@ -9,7 +9,9 @@ import copy
 import importlib.util
 import math
 import os
+import json
 from pathlib import Path
+import tempfile
 import unittest
 
 
@@ -52,6 +54,19 @@ def metrics(precision):
 
 
 class ReferenceExportComparisonV2Tests(unittest.TestCase):
+    def test_full_summary_numpy_improvement_flag_is_serializable(self):
+        import numpy as np
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'summary.json'
+            value = {'status': 'completed', 'single_model_observed_validation_improvement': np.bool_(False),
+                     'nested': {'score': np.float32(1.5), 'count': np.int64(710)}}
+            HELPER.atomic_json(path, value)
+            decoded = json.loads(path.read_text())
+            self.assertIs(decoded['single_model_observed_validation_improvement'], False)
+            self.assertEqual(decoded['nested'], {'score': 1.5, 'count': 710})
+            with self.assertRaises(TypeError):
+                HELPER.atomic_json(path, {'unexpected_array': np.array([1, 2])})
+
     def test_import_is_standard_library_only(self):
         self.assertIsNone(HELPER.TORCH)
         self.assertEqual(HELPER.ASSESSMENT_VERSION, 2)

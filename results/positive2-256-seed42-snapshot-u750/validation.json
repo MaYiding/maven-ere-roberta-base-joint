@@ -1,0 +1,206 @@
+{
+  "status": "completed",
+  "documents": 710,
+  "split": "valid",
+  "single_joint_model": true,
+  "model_count": 1,
+  "forward_passes_per_document": 1,
+  "actual_cpu_metrics": {
+    "coreference": {
+      "b_cubed_precision": 97.15735923080068,
+      "b_cubed_recall": 98.19804707853073,
+      "b_cubed_f1": 97.67493120374591,
+      "ceaf_precision": 97.74901906570008,
+      "ceaf_recall": 96.95748047808752,
+      "ceaf_f1": 97.35164085453061,
+      "muc_precision": 75.91558038485414,
+      "muc_recall": 82.69100743745774,
+      "muc_f1": 79.15857605177993,
+      "blanc_precision": 85.41248143803499,
+      "blanc_recall": 91.17546330604335,
+      "blanc_f1": 88.06974792984053
+    },
+    "temporal": {
+      "temporal_precision": 47.423566959193735,
+      "temporal_recall": 63.83944356451949,
+      "temporal_f1": 54.42049630455428
+    },
+    "causal": {
+      "causal_precision": 33.846553066343745,
+      "causal_recall": 28.72137404580153,
+      "causal_f1": 31.074052015088345
+    },
+    "subevent": {
+      "subevent_precision": 29.668383773341915,
+      "subevent_recall": 30.218068535825545,
+      "subevent_f1": 29.940703435951587
+    },
+    "coreference_mean_f1": 90.56372400997427,
+    "overall_f1": 51.49974394139212
+  },
+  "original_gpu_metrics": {
+    "split": "valid",
+    "official_protocol": {
+      "coreference": {
+        "b_cubed_precision": 97.15735923080068,
+        "b_cubed_recall": 98.19804707853073,
+        "b_cubed_f1": 97.67493120374591,
+        "ceaf_precision": 97.74901906570008,
+        "ceaf_recall": 96.95748047808752,
+        "ceaf_f1": 97.35164085453061,
+        "muc_precision": 75.91558038485414,
+        "muc_recall": 82.69100743745774,
+        "muc_f1": 79.15857605177993,
+        "blanc_precision": 85.41248143803499,
+        "blanc_recall": 91.17546330604335,
+        "blanc_f1": 88.06974792984053
+      },
+      "temporal": {
+        "temporal_precision": 47.423566959193735,
+        "temporal_recall": 63.83944356451949,
+        "temporal_f1": 54.42049630455428
+      },
+      "causal": {
+        "causal_precision": 33.846553066343745,
+        "causal_recall": 28.72137404580153,
+        "causal_f1": 31.074052015088345
+      },
+      "subevent": {
+        "subevent_precision": 29.668383773341915,
+        "subevent_recall": 30.218068535825545,
+        "subevent_f1": 29.940703435951587
+      },
+      "coreference_mean_f1": 90.56372400997427,
+      "overall_f1": 51.49974394139212
+    },
+    "training_augmented_labels_positive_micro": {
+      "temporal": {
+        "precision": 47.44335661316264,
+        "recall": 63.3010081613058,
+        "f1": 54.23684194289452
+      },
+      "causal": {
+        "precision": 33.846553066343745,
+        "recall": 28.72137404580153,
+        "f1": 31.074052015088345
+      },
+      "subevent": {
+        "precision": 29.668383773341915,
+        "recall": 30.218068535825545,
+        "f1": 29.940703435951587
+      }
+    },
+    "temporal_protocol_note": "Training labels symmetrize SIMULTANEOUS/BEGINS-ON; official evaluator uses raw annotated directions."
+  },
+  "cpu_overall_delta_vs_baseline": 2.785950172692118,
+  "cpu_overall_delta_vs_preceding_public_single": 2.0301076016233495,
+  "preceding_public_single_overall": 49.46963633976877,
+  "original_gpu_vs_actual_cpu_metric_differences": [],
+  "public_cli_predictions_file_sha256": "eae7b8f95f239db77cf1ec329bec3f2bb6a18359e85b339c6cab8a9ef695d19c",
+  "automodel_predictions_file_sha256": "26461c669cf9d8ecdc47c6df709a39ee87d8810daac78aef2394b3fd917b714d",
+  "single_model_overall_improved": true,
+  "automodel_all_state_tensors_exact": true,
+  "public_cli_vs_automodel_all_predictions_exact": true,
+  "public_cli_vs_automodel_all_metrics_exact": true,
+  "cpu_gpu_differing_document_counts_by_field": {
+    "coreference": 0,
+    "temporal_relations": 0,
+    "causal_relations": 0,
+    "subevent_relations": 0
+  },
+  "canonical_predictions_sha256": "26461c669cf9d8ecdc47c6df709a39ee87d8810daac78aef2394b3fd917b714d",
+  "files": {
+    "config.json": {
+      "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+      "bytes": 3128
+    },
+    "configuration_maven_ere.py": {
+      "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+      "bytes": 4241
+    },
+    "modeling_maven_ere.py": {
+      "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+      "bytes": 12477
+    },
+    "model.safetensors": {
+      "sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6",
+      "bytes": 504795436
+    },
+    "vocab.json": {
+      "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+      "bytes": 999355
+    },
+    "merges.txt": {
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "bytes": 456318
+    },
+    "special_tokens_map.json": {
+      "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+      "bytes": 958
+    },
+    "tokenizer_config.json": {
+      "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+      "bytes": 1221
+    }
+  },
+  "valid_sha256": "6faea0e4e16b4a2d5d9631e09ef6e1c6bac6e3f912490bfc48eeaceaf98c6153",
+  "checkpoint_identity": {
+    "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+    "epoch": 9,
+    "update_step": 750
+  },
+  "interim_snapshot": true,
+  "training_campaign_complete": false,
+  "test_scored": false,
+  "cpu_threads": 4,
+  "elapsed_seconds": 425.0110351671465,
+  "training_source_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "public_inference_code_commit": "b81c49577fdec046ae1de1e22b59aaa94287201c",
+  "public_inference_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "old_baseline_f1": {
+    "coreference_mean_f1": 90.0836890588,
+    "temporal_f1": 53.0809351898,
+    "causal_f1": 27.3366553346,
+    "subevent_f1": 24.3538954914,
+    "overall_f1": 48.7137937687
+  },
+  "actual_cpu_f1_vector": {
+    "coreference_mean_f1": 90.56372400997427,
+    "temporal_f1": 54.42049630455428,
+    "causal_f1": 31.074052015088345,
+    "subevent_f1": 29.940703435951587,
+    "overall_f1": 51.49974394139212
+  },
+  "cpu_delta_vs_baseline": {
+    "coreference_mean_f1": 0.480034951174261,
+    "temporal_f1": 1.3395611147542752,
+    "causal_f1": 3.737396680488345,
+    "subevent_f1": 5.5868079445515875,
+    "overall_f1": 2.785950172692118
+  },
+  "publication_label": "MID-TRAINING SNAPSHOT; parent formal run and15-run campaign continue",
+  "source_checkpoint_selected_epoch": 9,
+  "source_checkpoint_selected_update": 750,
+  "source_run_epochs_completed_at_freeze": 13,
+  "snapshot_files_frozen": true,
+  "parent_training_run_completed_at_freeze": false,
+  "data_repository": "MaYiding/MAVEN-ERE",
+  "data_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "default_padding_trim": true,
+  "reference_padding_flag_used": false,
+  "preceding_public_single_subdirectory": "corrected-512-seed42-snapshot-u1500",
+  "preceding_public_single_f1": {
+    "coreference_mean_f1": 89.92380233200059,
+    "temporal_f1": 53.10557319765314,
+    "causal_f1": 31.467123900402566,
+    "subevent_f1": 23.382045929018787,
+    "overall_f1": 49.46963633976877
+  },
+  "cpu_delta_vs_preceding_public_single": {
+    "coreference_mean_f1": 0.6399216779736747,
+    "temporal_f1": 1.3149231069011336,
+    "causal_f1": -0.393071885314221,
+    "subevent_f1": 6.5586575069328,
+    "overall_f1": 2.0301076016233495
+  }
+}

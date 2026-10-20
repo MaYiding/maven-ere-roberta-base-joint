@@ -1,0 +1,87 @@
+{
+  "status": "full_validation_verified_before_upload",
+  "single_joint_model": true,
+  "documents": 710,
+  "files": {
+    "positive2-256-seed42-snapshot-u750/special_tokens_map.json": {
+      "bytes": 958,
+      "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857"
+    },
+    "positive2-256-seed42-snapshot-u750/ROBERTA-MIT-LICENSE": {
+      "bytes": 1086,
+      "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85"
+    },
+    "positive2-256-seed42-snapshot-u750/vocab.json": {
+      "bytes": 999355,
+      "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf"
+    },
+    "positive2-256-seed42-snapshot-u750/validation.json": {
+      "bytes": 7444,
+      "sha256": "48e8dd44bd2bf8d5ddd7d86d430781e42f245d5b8f50743fdcda38e4401a5795"
+    },
+    "positive2-256-seed42-snapshot-u750/LICENSE": {
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    "positive2-256-seed42-snapshot-u750/UPSTREAM_NOTICE.md": {
+      "bytes": 2034,
+      "sha256": "d8d76b82229874ddbc34e4bc4a186cc1922d9dcd9c72fa7ac4eaeae20173ba8a"
+    },
+    "positive2-256-seed42-snapshot-u750/training_recipe.json": {
+      "bytes": 3066,
+      "sha256": "569defad9f266a17bf966b6a95abcfd1e195088af72b40e904fe71cef1f77b04"
+    },
+    "positive2-256-seed42-snapshot-u750/model.safetensors": {
+      "bytes": 504795436,
+      "sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6"
+    },
+    "positive2-256-seed42-snapshot-u750/tokenizer_config.json": {
+      "bytes": 1221,
+      "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689"
+    },
+    "positive2-256-seed42-snapshot-u750/checkpoint_identity.json": {
+      "bytes": 109,
+      "sha256": "e379934a22ff7ec084016fdc521e74b1275f8d104b1f7eb0c526fd68b16d6894"
+    },
+    "positive2-256-seed42-snapshot-u750/dev_metrics.json": {
+      "bytes": 1130,
+      "sha256": "bc3c6716b21ec541031f2dd47037351777f298d1b132af56ebbd75d0b21e8037"
+    },
+    "positive2-256-seed42-snapshot-u750/README.md": {
+      "bytes": 3092,
+      "sha256": "124494b023d42d7a2363899f5f938ac7e22a89104abc4c2ae593954f02965a9c"
+    },
+    "positive2-256-seed42-snapshot-u750/modeling_maven_ere.py": {
+      "bytes": 12477,
+      "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104"
+    },
+    "positive2-256-seed42-snapshot-u750/merges.txt": {
+      "bytes": 456318,
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "positive2-256-seed42-snapshot-u750/config.json": {
+      "bytes": 3128,
+      "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c"
+    },
+    "positive2-256-seed42-snapshot-u750/configuration_maven_ere.py": {
+      "bytes": 4241,
+      "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d"
+    },
+    "positive2-256-seed42-snapshot-u750/CITATION.cff": {
+      "bytes": 1134,
+      "sha256": "ff9309472322a9e22843c3a62602382d06acbf6fed890616b08d50cfe6b62ec9"
+    }
+  },
+  "training_source_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "public_inference_code_commit": "b81c49577fdec046ae1de1e22b59aaa94287201c",
+  "public_inference_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "interim_snapshot": true,
+  "selected_checkpoint": {
+    "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+    "epoch": 9,
+    "update_step": 750
+  },
+  "full15campaign_complete": false,
+  "data_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "old_versions_preserved": true
+}

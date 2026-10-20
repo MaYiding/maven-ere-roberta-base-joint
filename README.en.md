@@ -1,5 +1,19 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## Latest verified single-joint improvement: positive2 interim snapshot
+
+`positive2-256-seed42-snapshot-u750/` has CPU overall **51.4997** on the full710-document validation set: **+2.0301points** over the preceding corrected512 single, and **+2.7860points** over the original root single. It contains one encoder and all task heads, one forward per document. Full public CLI and independent AutoModel weights, predictions and metrics match exactly.
+
+| F1 % | Original root single | Preceding corrected512 single | Positive2 CPU single | Delta vs preceding |
+|---|---:|---:|---:|---:|
+| coreference_mean_f1 | 90.08368906 | 89.92380233 | 90.56372401 | +0.63992168 |
+| temporal_f1 | 53.08093519 | 53.10557320 | 54.42049630 | +1.31492311 |
+| causal_f1 | 27.33665533 | 31.46712390 | 31.07405202 | -0.39307189 |
+| subevent_f1 | 24.35389549 | 23.38204593 | 29.94070344 | +6.55865751 |
+| overall_f1 | 48.71379377 | 49.46963634 | 51.49974394 | +2.03010760 |
+
+Selected at epoch9/update750 of a still-running formal100-epoch run. All15formal experiments continue. The root still loads the old baseline: select this subdirectory and use default padding without `--reference-padding`. [Full metrics, training and inference](docs/POSITIVE2_SINGLE_SNAPSHOT.md).
+
 ## Verified single-joint improvement: interim update1500 snapshot
 
 `corrected-512-seed42-snapshot-u1500/` contains one complete joint model. On the same710-document validation protocol, overall49.4696 versus oldsingle48.7138 (+0.7558points). Causal+4.1305, temporal+0.0246, coreference mean-0.1599, subevent-0.9718points. PublicCLI and independent AutoModel full710 predictions/metrics and all state tensors match exactly.

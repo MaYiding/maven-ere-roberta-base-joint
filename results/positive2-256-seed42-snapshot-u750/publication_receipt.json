@@ -1,0 +1,63 @@
+{
+  "status": "published_huggingface_verified",
+  "verified_at_utc": "2026-10-20T22:58:31.379621+00:00",
+  "model_repository": "MaYiding/maven-ere-roberta-base-joint",
+  "model_revision": "1f4fa66ad77bf1e63d82892de2130c8dc394513e",
+  "model_subdirectory": "positive2-256-seed42-snapshot-u750",
+  "single_joint_model": true,
+  "model_count": 1,
+  "forward_passes_per_document": 1,
+  "documents": 710,
+  "split": "valid",
+  "protocol": "official raw-direction evaluator; gold event mentions and TIMEX",
+  "model_weight_sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6",
+  "dataset_repository": "MaYiding/MAVEN-ERE",
+  "dataset_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "huggingface_model_files_verified": 120,
+  "dataset_files_verified": 9,
+  "all_git_lfs_sizes_and_hashes_exact": true,
+  "anonymous_model_and_dataset_access_verified": true,
+  "old_root_and_preceding_versions_preserved": true,
+  "source_training_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "public_inference_code_commit": "b81c49577fdec046ae1de1e22b59aaa94287201c",
+  "public_inference_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "full710_public_cli_and_independent_automodel_predictions_metrics_state_exact": true,
+  "cpu_vs_original_gpu_all_prediction_fields_and_metrics_exact": true,
+  "actual_cpu_f1": {
+    "coreference_mean_f1": 90.56372400997427,
+    "temporal_f1": 54.42049630455428,
+    "causal_f1": 31.074052015088345,
+    "subevent_f1": 29.940703435951587,
+    "overall_f1": 51.49974394139212
+  },
+  "delta_vs_preceding_public_single": {
+    "coreference_mean_f1": 0.6399216779736747,
+    "temporal_f1": 1.3149231069011336,
+    "causal_f1": -0.393071885314221,
+    "subevent_f1": 6.5586575069328,
+    "overall_f1": 2.0301076016233495
+  },
+  "delta_vs_original_root_single": {
+    "coreference_mean_f1": 0.480034951174261,
+    "temporal_f1": 1.3395611147542752,
+    "causal_f1": 3.737396680488345,
+    "subevent_f1": 5.5868079445515875,
+    "overall_f1": 2.785950172692118
+  },
+  "selected_checkpoint": {
+    "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+    "epoch": 9,
+    "update_step": 750
+  },
+  "interim_snapshot": true,
+  "parent_formal_run_completed_at_freeze": false,
+  "parent_formal_run_planned_epochs": 100,
+  "all15_formal_runs_still_required": true,
+  "test_scored": false,
+  "canonical_predictions_sha256": "26461c669cf9d8ecdc47c6df709a39ee87d8810daac78aef2394b3fd917b714d",
+  "evidence_sha256": {
+    "validation.json": "48e8dd44bd2bf8d5ddd7d86d430781e42f245d5b8f50743fdcda38e4401a5795",
+    "publication_manifest.json": "c4c51a19b21bbefdfa8a14824d3f744b5f3117b2ec404a5af002059808f0818c",
+    "training_recipe.json": "569defad9f266a17bf966b6a95abcfd1e195088af72b40e904fe71cef1f77b04"
+  }
+}

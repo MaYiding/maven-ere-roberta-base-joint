@@ -48,10 +48,12 @@ TASK_MAPS = {"temporal": TEMPREL2ID, "causal": CAUSALREL2ID, "subevent": SUBEVEN
 REVERSE_MAPS = {"temporal": ID2TEMPREL, "causal": ID2CAUSALREL, "subevent": ID2SUBEVENTREL}
 STOP_REQUESTED = False
 SELECTION_TASKS = ("coreference", "temporal", "causal", "subevent")
+COREFERENCE_METRICS = ("muc", "b_cubed", "ceaf", "blanc")
 NEW_SIGNATURE_DEFAULTS = {
     "scorer_hidden_size": 200, "scorer_num_layers": 3, "positive_class_weight": 1.0,
     "export_task_bests": False, "early_stopping_monitor": "overall",
     "early_stopping_patience": 10, "eval_every_updates": 0,
+    "eval_epoch_end": True, "coreference_selection": "mean",
 }
 
 
@@ -352,10 +354,10 @@ def evaluate_dev(model, dataset, gold, args, device, score=True):
 
 def score_official_predictions(gold, predictions):
     evaluator = load_official_evaluator()
-    coref = evaluator.evaluate_coreference(gold, predictions)
+    coref = {name: float(value) for name, value in evaluator.evaluate_coreference(gold, predictions).items()}
     official = {"coreference": coref}
     for task in TASK_MAPS:
-        official[task] = evaluator.evaluate(gold, predictions, task)
+        official[task] = {name: float(value) for name, value in evaluator.evaluate(gold, predictions, task).items()}
     coref_mean = sum(coref[name + "_f1"] for name in ("b_cubed", "ceaf", "muc", "blanc")) / 4
     official["coreference_mean_f1"] = coref_mean
     official["overall_f1"] = (coref_mean + sum(official[t][t + "_f1"] for t in TASK_MAPS)) / 4
@@ -425,11 +427,22 @@ def prune_exports(output_dir):
 
 def selection_scores(metrics):
     official = metrics["official_protocol"]
-    return {"coreference": official["coreference_mean_f1"],
-            **{task: official[task][task + "_f1"] for task in TASK_MAPS}}
+    return {"coreference": float(official["coreference_mean_f1"]),
+            **{task: float(official[task][task + "_f1"]) for task in TASK_MAPS}}
 
 
-def restore_selection_artifacts(progress, output_dir):
+def python_scalars(value):
+    """上游 sklearn/NumPy 指标可含 np.bool/float32；持久化前去除 NumPy scalar。"""
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, dict):
+        return {key: python_scalars(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [python_scalars(item) for item in value]
+    return value
+
+
+def restore_selection_artifacts(progress, output_dir, coreference_selection=None):
     """磁盘历史和链接回到 latest.pt 的事务边界，丢弃未提交的验证结果。"""
     output_dir = Path(output_dir)
     legacy = "selection_format_version" not in progress
@@ -437,6 +450,18 @@ def restore_selection_artifacts(progress, output_dir):
     progress.setdefault("run_id", uuid.uuid4().hex)
     progress.setdefault("task_bests", {})
     progress.setdefault("validation_history", [])
+    selector = coreference_selection or progress.get("coreference_selection", "mean")
+    if progress.get("coreference_selection", selector) != selector:
+        raise ValueError("Cannot restore with a different coreference selection rule")
+    progress["coreference_selection"] = selector
+    if "coreference_metric_bests" not in progress:
+        # 旧 mean 模式只恢复实际保存的观察历史，不臆造缺失的过去验证结果。
+        maxima = {name: 0.0 for name in COREFERENCE_METRICS}
+        for history in progress["validation_history"]:
+            observed = history["metrics"]["official_protocol"].get("coreference", {})
+            for name in COREFERENCE_METRICS:
+                maxima[name] = max(maxima[name], observed.get(name + "_f1", 0.0))
+        progress["coreference_metric_bests"] = maxima
     if legacy and progress["best_score"] >= 0 and "joint_best" not in progress and (output_dir / "best_joint").is_symlink():
         directory = (output_dir / "best_joint").resolve()
         progress["joint_best"] = {
@@ -478,13 +503,25 @@ def restore_selection_artifacts(progress, output_dir):
 
 def record_validation(model, tokenizer, output_dir, progress, metrics, predictions, args, epoch):
     """一次验证对应一个模型身份；每个任务选择的是完整模型，不拼接编码器或头。"""
+    metrics = python_scalars(metrics)
     identity = {"checkpoint_id": f"{progress['run_id']}-e{epoch + 1:03d}-u{progress['update_step']:08d}",
                 "epoch": epoch + 1, "update_step": progress["update_step"]}
-    overall = metrics["official_protocol"]["overall_f1"]
-    overall_improved = overall > progress["best_score"]
+    overall = float(metrics["official_protocol"]["overall_f1"])
+    overall_improved = bool(overall > progress["best_score"])
     scores = selection_scores(metrics)
-    improved = {task: scores[task] > progress["task_bests"].get(task, {}).get("score", -1.0)
+    improved = {task: bool(scores[task] > progress["task_bests"].get(task, {}).get("score", -1.0))
                 for task in SELECTION_TASKS}
+    selector = getattr(args, "coreference_selection", "mean")
+    if progress.get("coreference_selection", selector) != selector:
+        raise ValueError("Coreference selection rule changed within one training run")
+    progress["coreference_selection"] = selector
+    coreference = metrics["official_protocol"]["coreference"]
+    observed = {name: float(coreference[name + "_f1"]) for name in COREFERENCE_METRICS}
+    maxima = progress.setdefault("coreference_metric_bests", {name: 0.0 for name in COREFERENCE_METRICS})
+    if selector == "upstream-any":
+        improved["coreference"] = bool(any(observed[name] > maxima[name] for name in COREFERENCE_METRICS))
+    for name in COREFERENCE_METRICS:
+        maxima[name] = max(maxima[name], observed[name])
     shared_directory = None
     if overall_improved:
         directory = export_best(model, tokenizer, output_dir, metrics, predictions,
@@ -492,7 +529,8 @@ def record_validation(model, tokenizer, output_dir, progress, metrics, predictio
         shared_directory = Path(output_dir) / directory
         progress["best_score"] = overall
         progress["joint_best"] = {**identity, "score": overall, "export_directory": directory,
-                                  "export_name": "best_joint", "exported": True}
+                                  "export_name": "best_joint", "exported": True,
+                                  "selection_rule": "overall_f1"}
     for task in SELECTION_TASKS:
         if not improved[task]:
             continue
@@ -503,12 +541,18 @@ def record_validation(model, tokenizer, output_dir, progress, metrics, predictio
                                     shared_directory=shared_directory, defer_cleanup=True)
             shared_directory = Path(output_dir) / directory
         progress["task_bests"][task] = {**identity, "score": scores[task], "export_directory": directory,
-                                        "export_name": "best_" + task, "exported": bool(directory)}
+                                        "export_name": "best_" + task, "exported": bool(directory),
+                                        "selection_rule": selector if task == "coreference" else task + "_f1"}
+        if task == "coreference":
+            # score 是该快照当时的 mean；每项历次 max 属于 progress，不能充当同一模型成绩。
+            progress["task_bests"][task]["coreference_metric_values"] = copy.deepcopy(observed)
     monitored_improvement = (overall_improved if args.early_stopping_monitor == "overall"
                              else any(improved.values()))
     progress["bad_evaluations"] = 0 if monitored_improvement else progress["bad_evaluations"] + 1
     history = {**identity, "metrics": copy.deepcopy(metrics), "overall_improved": overall_improved,
                "task_improvements": improved, "early_stopping_monitor": args.early_stopping_monitor,
+               "coreference_selection": selector, "coreference_metric_values": observed,
+               "coreference_metric_bests": copy.deepcopy(maxima),
                "bad_evaluations": progress["bad_evaluations"],
                "joint_best": copy.deepcopy(progress.get("joint_best")),
                "task_bests": copy.deepcopy(progress["task_bests"])}
@@ -518,6 +562,13 @@ def record_validation(model, tokenizer, output_dir, progress, metrics, predictio
         stream.flush()
         os.fsync(stream.fileno())
     return overall_improved
+
+
+def should_evaluate(args, update_step, epoch_end, schedule_end):
+    """末次强制评估；关闭 epoch-end 后只在配置的更新间隔评估。"""
+    frequency = args.eval_every_updates
+    return bool(schedule_end or (epoch_end and getattr(args, "eval_epoch_end", True))
+                or (frequency and update_step % frequency == 0))
 
 
 def combine_task_best_predictions(output_dir, progress, gold):
@@ -607,7 +658,7 @@ def build_optimizers(model, args, total_updates):
 def checkpoint_state(model, encoder_optimizer, head_optimizer, scheduler, progress, signature):
     return {"format_version": 1, "model": model.state_dict(), "model_config": model.config.to_dict(),
             "encoder_optimizer": encoder_optimizer.state_dict(), "head_optimizer": head_optimizer.state_dict(),
-            "scheduler": scheduler.state_dict(), "progress": copy.deepcopy(progress), "signature": signature,
+            "scheduler": scheduler.state_dict(), "progress": python_scalars(copy.deepcopy(progress)), "signature": signature,
             "rng": rng_state()}
 
 
@@ -617,7 +668,7 @@ def restore_training_state(state, model, encoder_optimizer, head_optimizer, sche
     head_optimizer.load_state_dict(state["head_optimizer"])
     scheduler.load_state_dict(state["scheduler"])
     restore_rng(state["rng"])
-    return copy.deepcopy(state["progress"])
+    return python_scalars(copy.deepcopy(state["progress"]))
 
 
 @torch.inference_mode()
@@ -669,7 +720,10 @@ def parse_args(argv=None):
     parser.add_argument("--gradient_checkpointing", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     parser.add_argument("--max_steps", type=int)
-    parser.add_argument("--eval_every_updates", type=int, default=0, help="0 evaluates at epoch/end only")
+    parser.add_argument("--eval_every_updates", type=int, default=0,
+                        help="Periodic optimizer-update interval; 0 disables periodic evaluation")
+    parser.add_argument("--eval-epoch-end", "--eval_epoch_end", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--coreference-selection", "--coreference_selection", choices=("mean", "upstream-any"), default="mean")
     parser.add_argument("--save_every_updates", type=int, default=50)
     parser.add_argument("--early_stopping_patience", type=int, default=10, help="Number of dev evaluations; 0 disables")
     parser.add_argument("--early-stopping-monitor", "--early_stopping_monitor", choices=("overall", "any-task"), default="overall")
@@ -788,7 +842,7 @@ def main(argv=None):
     if state is not None:
         progress = restore_training_state(state, model, encoder_optimizer, head_optimizer, scheduler)
         del state
-    restore_selection_artifacts(progress, output_dir)
+    restore_selection_artifacts(progress, output_dir, args.coreference_selection)
     atomic_json(output_dir / "training_config.json", {**vars(args), "signature": signature,
                                                        "total_updates": total_updates, "updates_per_epoch": updates_per_epoch})
     LOGGER.info("Training %s docs; microbatch=%s accumulation=%s nominal_effective_docs=%s updates=%s",
@@ -848,7 +902,7 @@ def main(argv=None):
             progress["next_batch"] = batch_index + 1
             epoch_end = progress["next_batch"] == batch_count
             schedule_end = progress["update_step"] >= total_updates
-            evaluate_now = epoch_end or schedule_end or (args.eval_every_updates and progress["update_step"] % args.eval_every_updates == 0)
+            evaluate_now = should_evaluate(args, progress["update_step"], epoch_end, schedule_end)
             if evaluate_now and progress["last_eval_update"] != progress["update_step"]:
                 metrics, predictions = evaluate_dev(model, datasets["valid"], gold, args, device)
                 progress["last_metrics"] = metrics

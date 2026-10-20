@@ -583,6 +583,25 @@ def parse_args(argv=None):
     return args
 
 
+def inherited_gpu_lock_fds(environment):
+    """Keep the campaign's flock open in the real trainer if this wrapper dies.
+
+    The descriptor number remains an internal process detail, never a logged
+    identity. Absent, malformed or already closed descriptors are not passed.
+    """
+    raw_descriptor = environment.get("MAVEN_CAMPAIGN_GPU_LOCK_FD")
+    if raw_descriptor is None:
+        return ()
+    try:
+        descriptor = int(raw_descriptor)
+        if descriptor < 0:
+            return ()
+        os.fstat(descriptor)
+    except (ValueError, TypeError, OSError, OverflowError):
+        return ()
+    return (descriptor,)
+
+
 def main(argv=None):
     args = parse_args(argv)
     repo = checked_path(Path(__file__).resolve().parents[1])
@@ -608,11 +627,15 @@ def main(argv=None):
         "--eval_steps", "200", "--lr", "3e-4", "--bert_lr", "2e-5"]
     if args.max_steps:
         command.extend(["--reference_max_updates", str(args.max_steps)])
+    lock_fds = inherited_gpu_lock_fds(environment)
+    recorded_environment = {key: value for key, value in environment.items()
+                            if key.startswith("MAVEN_REFERENCE_") or key in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "PYTHONUNBUFFERED")}
+    recorded_environment["NVIDIA_TF32_OVERRIDE"] = environment.get("NVIDIA_TF32_OVERRIDE")
     write_json(output / "launch.json", {"command": command, "cwd": str(output / "executed" / "joint"),
-        "environment_overrides": {key: value for key, value in environment.items() if key.startswith("MAVEN_REFERENCE_") or key in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "PYTHONUNBUFFERED")}})
+        "environment_overrides": recorded_environment, "campaign_gpu_lock_inherited": bool(lock_fds)})
     with open(output / "console.log", "w", encoding="utf-8", buffering=1) as console:
         process = subprocess.Popen(command, cwd=output / "executed" / "joint", env=environment,
-                                   stdout=console, stderr=subprocess.STDOUT)
+                                   stdout=console, stderr=subprocess.STDOUT, pass_fds=lock_fds)
         def forward_signal(signum, frame):
             if process.poll() is None:
                 process.send_signal(signum)

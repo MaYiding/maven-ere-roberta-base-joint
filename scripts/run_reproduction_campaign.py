@@ -12,6 +12,7 @@ import fcntl
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import shutil
 import signal
@@ -43,6 +44,32 @@ def atomic_json(path, value):
 
 def load_json(path):
     return json.loads(Path(path).read_text())
+
+
+def process_start_ticks(pid, proc_root=Path("/proc")):
+    """Linux start time distinguishes a live child from an unrelated reused PID."""
+    try:
+        tail = (proc_root / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
+        if tail[0] == "Z":
+            return None
+        return int(tail[19])
+    except FileNotFoundError:
+        return None
+
+
+def prior_process_alive(record, proc_root=Path("/proc")):
+    pid = record.get("pid") if record else None
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    ticks = process_start_ticks(pid, proc_root)
+    if ticks is None:
+        return False
+    if record.get("process_start_ticks") is not None:
+        return ticks == record["process_start_ticks"]
+    # Older state: require command identity before treating a reused PID as ours.
+    actual = (proc_root / str(pid) / "cmdline").read_bytes().rstrip(b"\0").split(b"\0")
+    expected = [str(x).encode() for x in record.get("argv", [])]
+    return actual == expected
 
 
 def task_scores(report):
@@ -92,8 +119,9 @@ def summarize_paired(reference, candidate):
 
 
 class Campaign:
-    def __init__(self, root, plan_path, output, python):
+    def __init__(self, root, plan_path, output, python, gpu_lock_fd):
         self.root, self.output, self.python = root, output, python
+        self.gpu_lock_fd = gpu_lock_fd
         self.plan_path = plan_path
         self.plan = load_json(plan_path)
         self.state_path = output / "campaign_state.json"
@@ -148,6 +176,8 @@ class Campaign:
         run_id = name + "-seed" + str(seed)
         folder = self.output / run_id
         record = self.state["runs"].get(run_id)
+        if record and prior_process_alive(record):
+            raise RuntimeError("A previous process for this run is still alive; refusing duplicate launch: " + run_id)
         if record and record.get("status") == "completed":
             result = self.read_result(kind, folder)
             if result != record["result"]:
@@ -185,7 +215,8 @@ class Campaign:
                     "--batch_size", str(self.plan["batch_size"]), "--grad_accum", str(self.plan["grad_accum"]),
                     "--eval_every_updates", "50", "--save_every_updates", "100",
                     "--early_stopping_patience", "0", "--no-bf16", "--export-task-bests",
-                    "--skip-test-predictions"]
+                    "--skip-test-predictions", "--no-eval-epoch-end",
+                    "--coreference-selection", "upstream-any"]
             for field in ("max_length", "scorer_hidden_size", "scorer_num_layers", "positive_class_weight"):
                 argv.extend(["--" + field, str(variant[field])])
             if (folder / "latest.pt").exists():
@@ -203,8 +234,11 @@ class Campaign:
         print("START " + run_id, flush=True)
         forwarded = False
         with (folder / "process.log").open("a") as log:
-            process = subprocess.Popen(argv, cwd=self.root, stdout=log, stderr=subprocess.STDOUT)
+            environment = {**os.environ, "MAVEN_CAMPAIGN_GPU_LOCK_FD": str(self.gpu_lock_fd)}
+            process = subprocess.Popen(argv, cwd=self.root, stdout=log, stderr=subprocess.STDOUT,
+                                       pass_fds=(self.gpu_lock_fd,), env=environment)
             record["pid"] = process.pid
+            record["process_start_ticks"] = process_start_ticks(process.pid)
             self.save()
             while process.poll() is None:
                 if STOP and not forwarded:
@@ -305,7 +339,8 @@ def main():
     root = Path(__file__).resolve().parents[1]
     with args.gpu_lock.resolve().open("a+") as gpu_lock:
         fcntl.flock(gpu_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        campaign = Campaign(root, args.plan_file.resolve(), args.output_dir.resolve(), sys.executable)
+        campaign = Campaign(root, args.plan_file.resolve(), args.output_dir.resolve(),
+                            sys.executable, gpu_lock.fileno())
         try:
             campaign.execute()
         except Exception as exc:

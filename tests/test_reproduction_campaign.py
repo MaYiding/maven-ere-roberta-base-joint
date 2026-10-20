@@ -41,3 +41,23 @@ def test_paired_uncertainty_uses_seed_matched_differences():
     assert result["causal"]["paired_mean_delta"] == 1
     assert result["causal"]["paired_95pct_ci"] == [1, 1]
     assert result["causal"]["reference_sample_std"] > 0
+
+
+def test_reused_pid_does_not_match_previous_child(tmp_path):
+    process = tmp_path / "12"
+    process.mkdir()
+    fields = ["S", *(["0"] * 18), "150"]
+    (process / "stat").write_text("12 (python with spaces) " + " ".join(fields))
+    (process / "cmdline").write_bytes(b"python\0train_joint.py\0")
+    assert campaign.prior_process_alive({"pid": 12, "process_start_ticks": 150}, tmp_path)
+    assert not campaign.prior_process_alive({"pid": 12, "process_start_ticks": 149}, tmp_path)
+    assert not campaign.prior_process_alive({"pid": 99, "process_start_ticks": 150}, tmp_path)
+
+
+def test_older_pid_record_requires_exact_command_identity(tmp_path):
+    process = tmp_path / "12"
+    process.mkdir()
+    (process / "stat").write_text("12 (python) " + " ".join(["S", *(["0"] * 18), "150"]))
+    (process / "cmdline").write_bytes(b"python\0train_joint.py\0")
+    assert campaign.prior_process_alive({"pid": 12, "argv": ["python", "train_joint.py"]}, tmp_path)
+    assert not campaign.prior_process_alive({"pid": 12, "argv": ["python", "different.py"]}, tmp_path)

@@ -78,5 +78,15 @@
   },
   "paper_source": "https://aclanthology.org/2022.emnlp-main.60.pdf",
   "total_formal_runs": 15,
-  "public_release_automatic": false
+  "public_release_automatic": false,
+  "candidate_selection_protocol": {
+    "coreference": "upstream-any: replace when any MUC/B3/CEAF/BLANC historical max improves; report actual checkpoint scores",
+    "relations": "strict task F1 improvement",
+    "eval_epoch_end": false,
+    "evaluation_interval_optimizer_updates": 50,
+    "tail_gradient_flush": true,
+    "author_tail_gradient_flush": false,
+    "author_total_optimizer_updates": 9125,
+    "candidate_total_optimizer_updates": 9200
+  }
 }

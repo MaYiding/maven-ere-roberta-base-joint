@@ -5,6 +5,7 @@ import json
 from types import SimpleNamespace
 
 import pytest
+import numpy as np
 import torch
 from transformers import RobertaConfig, RobertaModel
 
@@ -42,11 +43,14 @@ class TokenizerFixture:
         (directory / "tokenizer_config.json").write_text("{}")
 
 
-def metrics(coref=90.0, temporal=50.0, causal=20.0, subevent=10.0):
+def metrics(coref=90.0, temporal=50.0, causal=20.0, subevent=10.0, coreference_metrics=None):
+    coreference_metrics = coreference_metrics or {name: coref for name in training.COREFERENCE_METRICS}
+    coref = sum(coreference_metrics.values()) / 4
     values = {"temporal": temporal, "causal": causal, "subevent": subevent}
     return {
         "split": "valid",
         "official_protocol": {
+            "coreference": {name + "_f1": value for name, value in coreference_metrics.items()},
             "coreference_mean_f1": coref,
             "overall_f1": (coref + temporal + causal + subevent) / 4,
             **{task: {task + "_f1": value} for task, value in values.items()},
@@ -64,14 +68,15 @@ def predictions(marker):
                     "subevent_relations": [[marker, "other"]]}}
 
 
-def progress(directory):
+def progress(directory, selector="mean"):
     value = {"best_score": -1.0, "bad_evaluations": 0, "update_step": 1}
-    training.restore_selection_artifacts(value, directory)
+    training.restore_selection_artifacts(value, directory, selector)
     return value
 
 
-def selection_args(monitor="any-task"):
-    return SimpleNamespace(export_task_bests=True, early_stopping_monitor=monitor)
+def selection_args(monitor="any-task", selector="mean"):
+    return SimpleNamespace(export_task_bests=True, early_stopping_monitor=monitor,
+                           coreference_selection=selector)
 
 
 def test_each_task_selects_one_complete_checkpoint_and_combination_is_explicit(tmp_path, monkeypatch):
@@ -122,6 +127,8 @@ def test_resume_rolls_back_uncommitted_history_and_links_without_losing_saved_be
     restored = training.restore_training_state(checkpoint, model, *optimizers)
     training.restore_selection_artifacts(restored, tmp_path)
     assert restored["joint_best"]["checkpoint_id"] == committed_id
+    assert restored["coreference_selection"] == "mean"
+    assert restored["coreference_metric_bests"] == {name: 90.0 for name in training.COREFERENCE_METRICS}
     assert len((tmp_path / "history.jsonl").read_text().splitlines()) == 1
     assert len(list((tmp_path / "exports").iterdir())) == 1
     for task in ("joint", *training.SELECTION_TASKS):
@@ -189,10 +196,99 @@ def test_new_cli_defaults_and_selection_signature_are_compatible_with_old_cli():
     assert (args.scorer_hidden_size, args.scorer_num_layers, args.positive_class_weight) == (200, 3, 1)
     assert not args.export_task_bests and not args.skip_test_predictions
     assert args.early_stopping_monitor == "overall"
+    assert args.eval_epoch_end and args.coreference_selection == "mean"
+    formal = training.parse_args(["--base-model", "base", "--data-dir", "data", "--output-dir", "run",
+                                  "--no-eval-epoch-end", "--coreference-selection", "upstream-any"])
+    assert not formal.eval_epoch_end and formal.coreference_selection == "upstream-any"
     signature = training.training_signature(args, {"train": "hash"}, ["doc"])
     legacy = {key: value for key, value in signature.items() if key not in training.NEW_SIGNATURE_DEFAULTS}
     assert training.resume_signature_matches(legacy, signature)
     for key, changed in {"scorer_num_layers": 2, "positive_class_weight": 2,
-                         "early_stopping_monitor": "any-task", "export_task_bests": True}.items():
+                         "early_stopping_monitor": "any-task", "export_task_bests": True,
+                         "eval_epoch_end": False, "coreference_selection": "upstream-any"}.items():
         altered = {**signature, key: changed}
         assert not training.resume_signature_matches(signature, altered)
+
+
+@pytest.mark.parametrize("selector, selected", [("mean", "A"), ("upstream-any", "B")])
+def test_upstream_any_can_replace_coreference_with_lower_mean_and_preserves_actual_scores(tmp_path, selector, selected):
+    state = progress(tmp_path, selector)
+    args = selection_args(selector=selector)
+    initial = dict(muc=80.0, b_cubed=96.0, ceaf=96.0, blanc=88.0)
+    changed = dict(muc=81.0, b_cubed=92.0, ceaf=94.0, blanc=87.0)
+    training.record_validation(CompleteCheckpoint("A"), TokenizerFixture(), tmp_path, state,
+                               metrics(coreference_metrics=initial), predictions("A"), args, 0)
+    state["update_step"] = 2
+    training.record_validation(CompleteCheckpoint("B"), TokenizerFixture(), tmp_path, state,
+                               metrics(coreference_metrics=changed), predictions("B"), args, 1)
+    entry = state["task_bests"]["coreference"]
+    actual = changed if selected == "B" else initial
+    assert entry["score"] == sum(actual.values()) / 4
+    assert entry["coreference_metric_values"] == actual
+    assert entry["selection_rule"] == selector
+    assert set(json.loads((tmp_path / "best_coreference" / "complete_weights.json").read_text()).values()) == {selected}
+    assert set(json.loads((tmp_path / "best_joint" / "complete_weights.json").read_text()).values()) == {"A"}
+    assert state["coreference_metric_bests"] == dict(muc=81.0, b_cubed=96.0, ceaf=96.0, blanc=88.0)
+    stores = [StoredState(), StoredState(), StoredState()]
+    restored_model = CompleteCheckpoint("B")
+    saved = training.checkpoint_state(restored_model, *stores, state, {"fixture": True})
+    state = training.restore_training_state(saved, restored_model, *stores)
+    training.restore_selection_artifacts(state, tmp_path, selector)
+    assert state["coreference_metric_bests"] == dict(muc=81.0, b_cubed=96.0, ceaf=96.0, blanc=88.0)
+    assert state["task_bests"]["coreference"]["selection_rule"] == selector
+    # mean 高于 B，但没有一项突破各自历史 max，upstream-any 不得换成 C。
+    state["update_step"] = 3
+    training.record_validation(CompleteCheckpoint("C"), TokenizerFixture(), tmp_path, state,
+                               metrics(coreference_metrics=dict(muc=80.5, b_cubed=93, ceaf=95, blanc=87.5)),
+                               predictions("C"), args, 2)
+    assert set(json.loads((tmp_path / "best_coreference" / "complete_weights.json").read_text()).values()) == {selected}
+
+
+@pytest.mark.parametrize("step, epoch_end, schedule_end, expected", [
+    (92, True, False, False), (100, False, False, True),
+    (73, False, True, True), (92, True, True, True),
+])
+def test_disabling_epoch_end_keeps_periodic_and_final_evaluation(step, epoch_end, schedule_end, expected):
+    args = SimpleNamespace(eval_every_updates=50, eval_epoch_end=False)
+    assert training.should_evaluate(args, step, epoch_end, schedule_end) is expected
+    assert training.should_evaluate(SimpleNamespace(eval_every_updates=0), 92, True, False)
+
+
+def test_numpy_metrics_produce_builtin_history_and_serializable_resume_progress(tmp_path):
+    state = progress(tmp_path, "upstream-any")
+    raw = metrics()
+    raw["official_protocol"]["overall_f1"] = np.float64(raw["official_protocol"]["overall_f1"])
+    raw["official_protocol"]["coreference_mean_f1"] = np.float32(90)
+    for group in ("coreference", "temporal", "causal", "subevent"):
+        raw["official_protocol"][group] = {
+            key: np.float64(value) for key, value in raw["official_protocol"][group].items()}
+    raw["training_augmented_labels_positive_micro"]["causal"]["f1"] = np.float32(20)
+    raw["numpy_flag"] = np.bool_(True)
+    model = CompleteCheckpoint("A")
+    assert training.record_validation(model, TokenizerFixture(), tmp_path, state, raw, predictions("A"),
+                                      selection_args(selector="upstream-any"), 0) is True
+    history = json.loads((tmp_path / "history.jsonl").read_text())
+    assert type(history["overall_improved"]) is bool
+    assert all(type(flag) is bool for flag in state["validation_history"][0]["task_improvements"].values())
+    assert history["metrics"]["numpy_flag"] is True
+    state["last_metrics"] = raw
+    stores = [StoredState(), StoredState(), StoredState()]
+    checkpoint = training.checkpoint_state(model, *stores, state, {"fixture": True})
+    json.dumps(checkpoint["progress"], allow_nan=False)
+    restored = training.restore_training_state(checkpoint, model, *stores)
+    training.restore_selection_artifacts(restored, tmp_path, "upstream-any")
+    assert restored["coreference_metric_bests"] == state["coreference_metric_bests"]
+    json.dumps(restored, allow_nan=False)
+
+
+def test_official_evaluator_numpy_scores_are_converted_to_python_floats(monkeypatch):
+    evaluator = SimpleNamespace(
+        evaluate_coreference=lambda gold, preds: {name + "_f1": np.float64(90) for name in training.COREFERENCE_METRICS},
+        evaluate=lambda gold, preds, task: {task + "_f1": np.float32(25)},
+    )
+    monkeypatch.setattr(training, "load_official_evaluator", lambda: evaluator)
+    official = training.score_official_predictions({}, {})
+    assert type(official["overall_f1"]) is float
+    assert type(official["coreference"]["muc_f1"]) is float
+    assert type(official["causal"]["causal_f1"]) is float
+    json.dumps(official, allow_nan=False)

@@ -3,6 +3,7 @@
 import ast
 import importlib.util
 import math
+import os
 from pathlib import Path
 
 import pytest
@@ -93,6 +94,19 @@ def test_cli_reference_defaults_and_canary_limit():
 def test_protected_paths_are_rejected():
     with pytest.raises(ValueError, match="Protected"):
         RUNNER.checked_path("/Users/mayiding/Library/Mobile Documents/com~apple~CloudDocs/example")
+
+
+def test_gpu_lock_descriptor_helper_passes_only_open_valid_descriptors():
+    assert RUNNER.inherited_gpu_lock_fds({}) == ()
+    for value in ("invalid", "-1", "999999999999999999999999999999999"):
+        assert RUNNER.inherited_gpu_lock_fds({"MAVEN_CAMPAIGN_GPU_LOCK_FD": value}) == ()
+    read_fd, write_fd = os.pipe()
+    try:
+        assert RUNNER.inherited_gpu_lock_fds({"MAVEN_CAMPAIGN_GPU_LOCK_FD": str(read_fd)}) == (read_fd,)
+    finally:
+        os.close(read_fd)
+        os.close(write_fd)
+    assert RUNNER.inherited_gpu_lock_fds({"MAVEN_CAMPAIGN_GPU_LOCK_FD": str(read_fd)}) == ()
 
 
 def test_legacy_adamw_retains_uncorrected_second_moment_epsilon_math():

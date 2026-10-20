@@ -331,6 +331,9 @@ def evaluate_dev(model, dataset, gold, args, device, score=True):
         for index, doc_id in enumerate(original_batch["doc_id"]):
             combined, events = document_mentions(gold[doc_id])
             clusters, _ = get_predicted_clusters(output.coref_log_probs[index])
+            if getattr(args, "reference_padding", False):
+                # Stable reference serialization; cluster memberships are unchanged.
+                clusters = sorted(clusters, key=lambda cluster: cluster[0])
             record = {"id": doc_id, "coreference": [[events[i]["id"] for i in c] for c in clusters],
                       "temporal_relations": {k: [] for k in TEMPREL2ID if k != "NONE"},
                       "causal_relations": {"CAUSE": [], "PRECONDITION": []}, "subevent_relations": []}
@@ -709,7 +712,7 @@ def parse_args(argv=None):
     parser.add_argument("--cache_dir", "--cache-dir")
     parser.add_argument("--predict_only", "--predict-only", action="store_true")
     parser.add_argument("--reference-padding", action="store_true",
-                        help="Prediction only: preserve checkpoint chunk padding for reference evaluation")
+                        help="Prediction only: preserve reference padding and stable coreference cluster order")
     parser.add_argument("--checkpoint", help="Local save_pretrained export for prediction")
     parser.add_argument("--split", choices=("valid", "test"), default="test")
     parser.add_argument("--prediction_file", "--prediction-file")

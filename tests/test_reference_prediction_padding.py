@@ -1,12 +1,13 @@
 """Reference inference shape contracts; run only in the remote test environment."""
 import copy
+from types import SimpleNamespace
 
 import pytest
 import torch
 
 from joint.src.data import collator
-from test_training_contracts import fixture_dataset
-from train_joint import make_loader, parse_args, preserve_padding_collator
+from test_training_contracts import fixture_dataset, gold_document
+from train_joint import evaluate_dev, make_loader, parse_args, preserve_padding_collator
 
 
 def test_reference_collator_restores_original_chunks_without_changing_other_inputs(tmp_path):
@@ -53,3 +54,31 @@ def test_reference_flag_is_prediction_only(tmp_path):
     assert args.predict_only and args.reference_padding
     training = parse_args(common + ["--base-model", "base", "--output-dir", "run"])
     assert not training.reference_padding
+
+
+def test_reference_predictions_order_clusters_without_changing_membership_or_defaults(tmp_path, monkeypatch):
+    dataset = fixture_dataset(tmp_path, max_length=32)
+    monkeypatch.setattr('train_joint.get_predicted_clusters', lambda _: ([[3], [0, 2], [1]], {}))
+
+    class Scores:
+        def eval(self):
+            return self
+
+        def __call__(self, **batch):
+            pairs = batch['temporal_labels'].shape[-1]
+            temporal = torch.zeros((1, pairs, 7)); temporal[:, :, 6] = 1
+            causal = torch.zeros((1, pairs, 3)); causal[:, :, 0] = 1
+            subevent = torch.zeros((1, pairs, 2)); subevent[:, :, 0] = 1
+            return SimpleNamespace(coref_log_probs=[torch.eye(4)], temporal_logits=temporal,
+                                   causal_logits=causal, subevent_logits=subevent)
+
+    args = SimpleNamespace(eval_batch_size=1, batch_size=1, num_workers=0, seed=42,
+                           bf16=False, reference_padding=True)
+    gold = {'fixture-train': gold_document()}
+    _, reference = evaluate_dev(Scores(), dataset, gold, args, torch.device('cpu'), score=False)
+    assert reference['fixture-train']['coreference'] == [['m_a1', 'm_a2'], ['m_b'], ['m_c']]
+    args.reference_padding = False
+    _, normal = evaluate_dev(Scores(), dataset, gold, args, torch.device('cpu'), score=False)
+    assert normal['fixture-train']['coreference'] == [['m_c'], ['m_a1', 'm_a2'], ['m_b']]
+    for field in ['temporal_relations', 'causal_relations', 'subevent_relations']:
+        assert reference['fixture-train'][field] == normal['fixture-train'][field]

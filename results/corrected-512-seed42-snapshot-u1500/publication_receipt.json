@@ -1,0 +1,78 @@
+{
+  "status": "published_model_verified",
+  "huggingface_repository": "MaYiding/maven-ere-roberta-base-joint",
+  "huggingface_revision": "fd86462a71ecb54206c05e51ecc9e662b4348134",
+  "huggingface_subdirectory": "corrected-512-seed42-snapshot-u1500",
+  "model_public": true,
+  "anonymous_huggingface_access_verified": true,
+  "all102_model_files_git_lfs_sha_and_sizes_exact": true,
+  "single_weight_sha256": "f42d99f3a5c9d02b71c09f4737e89d322cf1ee9b10e0762fef068bba751e761a",
+  "dataset_repository": "MaYiding/MAVEN-ERE",
+  "dataset_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "frozen_training_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "inference_code_commit": "3bae4b758c10175f998d409de04e883bdad0e4ff",
+  "public_inference_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "full_validation_documents": 710,
+  "single_joint_model": true,
+  "model_count": 1,
+  "forward_passes_per_document": 1,
+  "actual_cpu_metrics": {
+    "coreference": {
+      "b_cubed_precision": 96.80652531739345,
+      "b_cubed_recall": 98.21624407338692,
+      "b_cubed_f1": 97.50628963142098,
+      "ceaf_precision": 97.65879548881632,
+      "ceaf_recall": 96.51452029475684,
+      "ceaf_f1": 97.08328625002814,
+      "muc_precision": 73.35329341317365,
+      "muc_recall": 82.8262339418526,
+      "muc_f1": 77.80247697681804,
+      "blanc_precision": 83.90054341073724,
+      "blanc_recall": 91.4985340306122,
+      "blanc_f1": 87.30315646973519
+    },
+    "temporal": {
+      "temporal_precision": 51.80525869693396,
+      "temporal_recall": 54.47284422422103,
+      "temporal_f1": 53.10557319765314
+    },
+    "causal": {
+      "causal_precision": 31.967585580127235,
+      "causal_recall": 30.98209042865531,
+      "causal_f1": 31.467123900402566
+    },
+    "subevent": {
+      "subevent_precision": 27.75399864834422,
+      "subevent_recall": 20.200032792261027,
+      "subevent_f1": 23.382045929018787
+    },
+    "coreference_mean_f1": 89.92380233200059,
+    "overall_f1": 49.46963633976877
+  },
+  "delta_vs_old_baseline": {
+    "coreference_mean_f1": -0.15988672679941374,
+    "temporal_f1": 0.02463800785314163,
+    "causal_f1": 4.130468565802566,
+    "subevent_f1": -0.9718495623812125,
+    "overall_f1": 0.7558425710687686
+  },
+  "all_public_cli_automodel_state_prediction_metric_checks_passed": true,
+  "cpu_gpu_differing_documents_by_field": {
+    "coreference": 0,
+    "temporal_relations": 0,
+    "causal_relations": 0,
+    "subevent_relations": 0
+  },
+  "selected_checkpoint": {
+    "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e017-u00001500",
+    "epoch": 17,
+    "update_step": 1500
+  },
+  "mid_training_snapshot": true,
+  "parent_training_run_ongoing": true,
+  "training_must_continue": true,
+  "required_formal_runs": 15,
+  "epochs_each": 100,
+  "campaign_complete": false,
+  "test_scored": false
+}

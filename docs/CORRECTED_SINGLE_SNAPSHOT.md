@@ -20,6 +20,7 @@
 ```bash
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4
 hf download MaYiding/maven-ere-roberta-base-joint \
+  --revision fd86462a71ecb54206c05e51ecc9e662b4348134 \
   --include "corrected-512-seed42-snapshot-u1500/*" --local-dir checkpoint
 python train_joint.py --predict-only \
   --checkpoint checkpoint/corrected-512-seed42-snapshot-u1500 \
@@ -30,3 +31,5 @@ python train_joint.py --predict-only \
 存档复现应将模型revision固定为公开验证记录中的HF commit，数据revision为682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e。训练源码8a49171cfe160d85877ffea5e7247c2141bcf3d4，公开推理trainer SHA14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54。
 
 GPL、RoBERTa MIT、上游署名和引用随模型保留；原数据的MAVEN/Wikipedia许可层独立保留。这个快照发布不会停止或缩减原定15次完整实验。
+
+[Published model revision and verification receipt](../results/corrected-512-seed42-snapshot-u1500/publication_receipt.json)

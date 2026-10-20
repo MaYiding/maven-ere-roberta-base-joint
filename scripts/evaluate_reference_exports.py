@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CPU-only, read-only assessment of completed MAVEN-ERE reference checkpoints.
+"""V2 CPU-only, read-only assessment of completed MAVEN-ERE reference checkpoints.
 
 Writes only a fresh postprocessing output directory. It does not train, publish,
 acquire the GPU lock, modify a source checkout, or change a completed run.
@@ -8,7 +8,8 @@ including the longest documents, without making full-validation improvement clai
 """
 
 import argparse
-from collections import OrderedDict
+from collections import Counter, OrderedDict
+import copy
 from datetime import datetime, timezone
 import gc
 import hashlib
@@ -45,6 +46,7 @@ TORCH = None
 START = time.monotonic()
 ACTIVE_OUTPUT = None
 PROGRESS = {"status": "initializing", "test_scored": False}
+ASSESSMENT_VERSION = 2
 
 
 def checked_path(value):
@@ -294,6 +296,110 @@ def comparison_error(actual, expected, label, atol=1e-8):
         raise AssertionError(label + " differs")
 
 
+def require_prediction_coverage(predictions, expected_document_ids, label):
+    expected = set(expected_document_ids)
+    if not expected or set(predictions) != expected:
+        raise ValueError(label + " prediction coverage differs from expected documents")
+
+
+def assert_cpu_equivalent(expected_document_ids, first_metrics, second_metrics,
+                          first_predictions, second_predictions, label):
+    """No score tolerance can substitute for exact complete CPU predictions."""
+    require_prediction_coverage(first_predictions, expected_document_ids, label + " first")
+    require_prediction_coverage(second_predictions, expected_document_ids, label + " second")
+    if first_predictions != second_predictions:
+        raise AssertionError(label + " CPU predictions differ, even if aggregate metrics agree")
+    if first_metrics != second_metrics:
+        comparison_error(second_metrics, first_metrics, label + " CPU metrics", atol=0.0)
+        raise AssertionError(label + " CPU metrics/fields differ")
+    return {"all_predictions_exact": True, "all_metrics_exact": True,
+            "documents": len(set(expected_document_ids)), "metric_tolerance": 0.0}
+
+
+def exact_metric_differences(actual, reference, path=""):
+    """Report every unequal recorded number, including sub-ULP-scale rounding.
+
+    Inputs and their original values are retained; no thresholds, score edits,
+    rounding, or success assertions are applied to GPU-vs-CPU comparisons.
+    """
+    differences = []
+    if isinstance(actual, dict) and isinstance(reference, dict):
+        for key in sorted(set(actual) | set(reference)):
+            child = path + "." + key if path else key
+            if key not in actual or key not in reference:
+                differences.append({"path": child, "gpu_reference": copy.deepcopy(reference.get(key)),
+                                    "cpu_actual": copy.deepcopy(actual.get(key)), "kind": "missing_metric_field"})
+            else:
+                differences.extend(exact_metric_differences(actual[key], reference[key], child))
+    elif actual != reference:
+        entry = {"path": path, "gpu_reference": copy.deepcopy(reference), "cpu_actual": copy.deepcopy(actual)}
+        if isinstance(actual, (int, float)) and isinstance(reference, (int, float)):
+            entry["cpu_minus_gpu"] = actual - reference
+        differences.append(entry)
+    return differences
+
+
+def prediction_field_differences(task, gpu_predictions, cpu_predictions, expected_document_ids):
+    require_prediction_coverage(gpu_predictions, expected_document_ids, "GPU selected field")
+    require_prediction_coverage(cpu_predictions, expected_document_ids, "CPU selected field")
+    field = "coreference" if task == "COREFERENCE" else task.lower() + "_relations"
+    documents, transitions = [], Counter()
+    for doc_id in sorted(expected_document_ids):
+        gpu_value, cpu_value = gpu_predictions[doc_id][field], cpu_predictions[doc_id][field]
+        if task == "COREFERENCE":
+            normalized_gpu = sorted(tuple(sorted(cluster)) for cluster in gpu_value)
+            normalized_cpu = sorted(tuple(sorted(cluster)) for cluster in cpu_value)
+            if normalized_gpu != normalized_cpu:
+                old = {mention: tuple(cluster) for cluster in normalized_gpu for mention in cluster}
+                new = {mention: tuple(cluster) for cluster in normalized_cpu for mention in cluster}
+                documents.append({"document_id": doc_id, "gpu_clusters": normalized_gpu, "cpu_clusters": normalized_cpu,
+                    "changed_mentions": [mention for mention in sorted(set(old) | set(new)) if old.get(mention) != new.get(mention)]})
+            continue
+        def pair_map(value):
+            if task == "SUBEVENT":
+                labeled = (("subevent", value),)
+            else:
+                labeled = value.items()
+            result = {}
+            for label, pairs in labeled:
+                for pair in pairs:
+                    key = tuple(pair)
+                    if key in result:
+                        raise ValueError("Duplicate/conflicting predicted relation pair")
+                    result[key] = label
+            return result
+        old, new = pair_map(gpu_value), pair_map(cpu_value)
+        changed = []
+        for pair in sorted(set(old) | set(new)):
+            before, after = old.get(pair, "NONE"), new.get(pair, "NONE")
+            if before != after:
+                changed.append({"pair": list(pair), "gpu_label": before, "cpu_label": after})
+                transitions[before + " -> " + after] += 1
+        if changed:
+            documents.append({"document_id": doc_id, "differences": changed})
+    return {"selected_task": task.lower(), "documents_compared": len(set(expected_document_ids)),
+        "changed_document_count": len(documents),
+        "changed_relation_pair_count": sum(len(doc.get("differences", [])) for doc in documents) if task != "COREFERENCE" else None,
+        "relation_label_transitions": dict(transitions), "document_differences": documents}
+
+
+def gpu_reference_report(task, gpu_augmented, gpu_selected_raw, cpu_metrics,
+                         gpu_predictions, cpu_predictions, expected_document_ids, canary=False):
+    selected_predictions = prediction_field_differences(task, gpu_predictions, cpu_predictions, expected_document_ids)
+    return {"selected_task": task.lower(), "comparison_scope": "valid_subset" if canary else "valid",
+        "original_gpu_augmented_protocol_fraction": copy.deepcopy(gpu_augmented),
+        "original_gpu_selected_task_raw_protocol_percent": copy.deepcopy(gpu_selected_raw),
+        "actual_cpu_augmented_protocol_fraction": copy.deepcopy(cpu_metrics["upstream_augmented_protocol_fraction"]),
+        "actual_cpu_selected_task_raw_protocol_percent": copy.deepcopy(cpu_metrics["official_protocol"][task.lower()]),
+        "metric_comparison_performed": not canary,
+        "metric_comparison_omission_reason": "Canary CPU subset is not the original full GPU validation split" if canary else None,
+        "augmented_exact_metric_differences": exact_metric_differences(cpu_metrics["upstream_augmented_protocol_fraction"], gpu_augmented) if not canary else None,
+        "selected_raw_exact_metric_differences": exact_metric_differences(cpu_metrics["official_protocol"][task.lower()], gpu_selected_raw) if not canary else None,
+        "selected_task_prediction_differences": selected_predictions,
+        "gpu_logits_available": False, "scores_modified": False, "tolerances_relaxed": False,
+        "interpretation": "GPU records and CPU actual results are separate evidence. CPU legacy/converted equivalence is verified independently; no GPU numerical margin is asserted."}
+
+
 def semantic_compatibility(legacy, converted, dataset, indices, collate, records):
     checks = []
     legacy.eval()
@@ -367,25 +473,26 @@ def official_scores(gold, predictions, evaluator):
     return scores
 
 
-def evaluate(model, dataset, collate, records, legacy_metrics, evaluator, args, label):
+def evaluate(model, dataset, collate, records, legacy_metrics, evaluator, args, label, legacy=False):
     model.eval()
     loader = TORCH.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=False, collate_fn=collate, num_workers=0)
     predictions, coref_documents = {}, []
     confusion = {task: TORCH.zeros((len(mapping), len(mapping)), dtype=TORCH.int64) for task, mapping in RELATIONS.items()}
     with TORCH.inference_mode():
         for batch_index, batch in enumerate(loader):
-            output = model(**batch)
-            decoded = decode_batch(output, batch, records)
+            output = model(batch) if legacy else model(**batch)
+            corefs, relation_logits = unpack(output, legacy)
+            decoded = decode_batch(output, batch, records, legacy)
             predictions.update(decoded)
             for document_index, clusters in enumerate(batch["coref_labels"]):
-                predicted = canonical_clusters(output.coref_log_probs[document_index])
+                predicted = canonical_clusters(corefs[document_index])
                 def inverse(groups):
                     return {index: tuple(group) for group in groups for index in group}
                 coref_documents.append(SimpleNamespace(gold=clusters, mention_to_gold=inverse(clusters),
                     clusters=predicted, mention_to_cluster=inverse(predicted)))
             for task, mapping in RELATIONS.items():
                 labels = batch[task + "_labels"].reshape(-1)
-                predicted = getattr(output, task + "_logits").argmax(-1).reshape(-1)
+                predicted = relation_logits[task].argmax(-1).reshape(-1)
                 valid = labels >= 0
                 counts = TORCH.bincount(labels[valid] * len(mapping) + predicted[valid], minlength=len(mapping) ** 2)
                 confusion[task] += counts.reshape(len(mapping), len(mapping))
@@ -489,7 +596,8 @@ def main(argv=None):
         "HF_MODULES_CACHE": str(args.output_dir / "private/hf_modules"),
         "PYTHONDONTWRITEBYTECODE": "1"})
     sys.dont_write_bytecode = True
-    update("checking_inputs", status="running", cpu_threads=args.threads, gpu_visible=False, canary_only=args.canary_only)
+    update("checking_inputs", status="running", cpu_threads=args.threads, gpu_visible=False,
+           canary_only=args.canary_only, assessment_version=ASSESSMENT_VERSION)
     summary = read_json(args.reference_run / "reference_summary.json")
     source_manifest = read_json(args.reference_run / "source_manifest.json")
     if summary["status"] != "completed" or not summary.get("experiment_complete") or source_manifest["upstream_commit"] != UPSTREAM_COMMIT:
@@ -512,11 +620,15 @@ def main(argv=None):
     source_augmented = read_json(args.reference_run / "validation_by_checkpoint.json")
     source_raw = read_json(args.reference_run / "raw_direction_validation_by_checkpoint.json")
     selection = read_json(args.reference_run / "best_selection.json")
+    gpu_reference_predictions = read_valid_predictions(args.reference_run / "best_valid_predictions.jsonl")
+    require_prediction_coverage(gpu_reference_predictions, all_records, "Original GPU reference")
     atomic_json(args.output_dir / "private/input_manifest.json", {"args": {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()},
         "reference_summary_sha256": sha256_file(args.reference_run / "reference_summary.json"),
         "source_manifest_sha256": sha256_file(args.reference_run / "source_manifest.json"),
         "baseline_metrics_sha256": sha256_file(args.baseline_metrics), "baseline_manifest_sha256": sha256_file(args.baseline_manifest),
         "script_sha256": sha256_file(Path(__file__).resolve()), "frozen_source_commit": FROZEN_COMMIT,
+        "assessment_version": ASSESSMENT_VERSION,
+        "original_gpu_prediction_sha256": sha256_file(args.reference_run / "best_valid_predictions.jsonl"),
         "frozen_model_source_sha256": FROZEN_HASHES, "valid_sha256": valid_sha,
         "reference_metadata_sha256": {name: sha256_file(args.reference_run / name) for name in (
             "reference_summary.json", "source_manifest.json", "dataset_manifest.json", "best_selection.json",
@@ -576,13 +688,24 @@ def main(argv=None):
             "architecture": {"scorer_hidden_size": 200, "scorer_num_layers": 3, "chunk_length": 256,
                              "dtype": "float32", "span_pooling": "mean", "encoder_attention_implementation": "eager"}}
         atomic_json(model_output / "provenance.json", {**provenance, "private_original_checkpoint_path": str(checkpoint)})
+        legacy_cpu_metrics, legacy_cpu_predictions = evaluate(legacy, evaluation_dataset, legacy_data.collator, records,
+            legacy_metrics, evaluator, args, task.lower() + "/original_legacy_cpu", legacy=True)
+        atomic_json(model_output / "legacy_cpu_metrics.json", legacy_cpu_metrics)
+        legacy_prediction_sha = save_predictions(model_output / "legacy_cpu_valid_predictions.jsonl", legacy_cpu_predictions)
         metrics, predictions = evaluate(converted, evaluation_dataset, legacy_data.collator, records,
             legacy_metrics, evaluator, args, task.lower() + "/converted")
         atomic_json(model_output / "metrics.json", metrics)
         prediction_sha = save_predictions(model_output / "valid_predictions.jsonl", predictions)
-        if not args.canary_only:
-            comparison_error(metrics["upstream_augmented_protocol_fraction"], source_augmented[task], task + " all-task augmented reference")
-            comparison_error(metrics["official_protocol"][task.lower()], source_raw[task], task + " selected-task raw reference")
+        cpu_equivalence = assert_cpu_equivalent(records, legacy_cpu_metrics, metrics,
+            legacy_cpu_predictions, predictions, task + " original legacy vs converted")
+        if legacy_prediction_sha != prediction_sha:
+            raise AssertionError("Serialized legacy/converted CPU full predictions changed")
+        cpu_equivalence["prediction_sha256"] = prediction_sha
+        atomic_json(model_output / "cpu_legacy_vs_converted.json", cpu_equivalence)
+        scoped_gpu_predictions = {doc_id: gpu_reference_predictions[doc_id] for doc_id in records}
+        gpu_comparison = gpu_reference_report(task, source_augmented[task], source_raw[task], metrics,
+            scoped_gpu_predictions, predictions, records, canary=args.canary_only)
+        atomic_json(model_output / "gpu_reference_comparison.json", gpu_comparison)
         export_path = model_output / "hf_model"
         exported_files = export_model(converted, tokenizer, export_path, provenance, legacy_source / "LICENSE")
         update("reloading_hf_automodel", selected_task=task)
@@ -592,9 +715,8 @@ def main(argv=None):
             raise AssertionError("HF AutoModel reload changed state_dict")
         reload_metrics, reload_predictions = evaluate(reloaded, evaluation_dataset, legacy_data.collator, records,
             legacy_metrics, evaluator, args, task.lower() + "/automodel_reload")
-        comparison_error(reload_metrics, metrics, task + " full AutoModel reload metrics", atol=0.0)
-        if reload_predictions != predictions:
-            raise AssertionError("HF AutoModel full validation predictions changed")
+        assert_cpu_equivalent(records, metrics, reload_metrics, predictions, reload_predictions,
+                              task + " converted vs HF AutoModel reload")
         reload_sha = save_predictions(model_output / "automodel_valid_predictions.jsonl", reload_predictions)
         if reload_sha != prediction_sha:
             raise AssertionError("Serialized AutoModel full predictions changed")
@@ -607,11 +729,12 @@ def main(argv=None):
         results[task.lower()] = {"checkpoint_sha256": checkpoint_sha, "checkpoint_count": 1,
             "selected_for_task": task.lower(), "official_protocol": metrics["official_protocol"],
             "delta_vs_old_single_percentage_points": deltas, "compatibility_passed": True,
-            "reference_record_matches": not args.canary_only, "hf_automodel_roundtrip_passed": True,
+            "cpu_legacy_vs_converted": cpu_equivalence, "gpu_reference_comparison": gpu_comparison,
+            "hf_automodel_roundtrip_passed": True,
             "hf_export": str(export_path), "validation_predictions_sha256": prediction_sha}
         atomic_json(model_output / "assessment.json", results[task.lower()])
         atomic_json(args.output_dir / "single_checkpoint_results.json", results)
-        del converted, reloaded, first_state, second_state, predictions, reload_predictions
+        del converted, reloaded, first_state, second_state, predictions, reload_predictions, legacy_cpu_predictions
         gc.collect()
     # Preserve the historical reference and, in full mode, independently rebuild
     # the combination from actual reloaded AutoModel predictions. No parameters
@@ -624,6 +747,9 @@ def main(argv=None):
     shutil.copyfile(composite_file, combo_output / "original_reference_valid_predictions.jsonl")
     original_combo_sha = sha256_file(composite_file)
     auto_prediction_sources = {}
+    combo_gpu_comparison = {"comparison_performed": False,
+        "reason": "Canary does not regenerate the full 710-document CPU combination",
+        "original_gpu_official_protocol": original_combo_scores}
     if args.canary_only:
         # These 710 documents come from the old completed run, not the 12-document
         # HF canary. Keep that distinction explicit in every combination report.
@@ -650,10 +776,18 @@ def main(argv=None):
                                                   "sha256": source_sha, "field": field}
         update("scoring_actual_automodel_combination", evaluated_documents=len(combined_from_exports))
         combo_scores = official_scores(all_records, combined_from_exports, evaluator)
-        comparison_error(combo_scores, original_combo_scores, "Actual AutoModel combination vs original reference")
-        comparison_error(combo_scores, summary["official_protocol"], "Actual AutoModel combination vs original summary")
+        combo_gpu_comparison = {"comparison_performed": True,
+            "original_gpu_official_protocol": copy.deepcopy(original_combo_scores),
+            "original_gpu_summary_official_protocol": copy.deepcopy(summary["official_protocol"]),
+            "actual_cpu_automodel_official_protocol": copy.deepcopy(combo_scores),
+            "exact_metric_differences": exact_metric_differences(combo_scores, original_combo_scores),
+            "selected_field_prediction_differences": {task.lower(): prediction_field_differences(
+                task, composite_predictions, combined_from_exports, all_records) for task in TASKS},
+            "gpu_logits_available": False, "scores_modified": False, "tolerances_relaxed": False,
+            "interpretation": "Actual CPU exported-model predictions and original GPU predictions are reported separately; legacy/converted/AutoModel CPU equivalence is strict."}
         combined_prediction_sha = save_predictions(combo_output / "valid_predictions.jsonl", combined_from_exports)
         combination_source = "four_actual_automodel_full_validation_prediction_files"
+    atomic_json(combo_output / "gpu_reference_comparison.json", combo_gpu_comparison)
     combination = {"checkpoint_count": 4, "composition": "prediction fields from four complete task-selected models",
         "complete_model_count": 4, "document_forward_passes": 4, "shared_encoder_checkpoint": False,
         "source": combination_source, "regenerated_from_exported_automodels": not args.canary_only,
@@ -661,6 +795,7 @@ def main(argv=None):
         "automodel_prediction_sources": auto_prediction_sources,
         "original_reference_prediction_sha256": original_combo_sha,
         "original_reference_official_protocol": original_combo_scores,
+        "gpu_reference_comparison": combo_gpu_comparison,
         "official_protocol": combo_scores, "task_checkpoint_sha256": {key: value["checkpoint_sha256"] for key, value in results.items()},
         "single_model": False, "test_scored": False}
     atomic_json(combo_output / "metrics.json", combination)
@@ -674,6 +809,16 @@ def main(argv=None):
         "baseline_single_reported_official_protocol": baseline,
         "baseline_comparison_note": "Baseline is its recorded validation result; candidate conversion/reload use FP32 CPU. No test or multi-seed improvement is claimed.",
         "four_checkpoint_combination": combination, "test_scored": False, "published": False,
+        "cpu_equivalence_passed": all(value["cpu_legacy_vs_converted"]["all_predictions_exact"]
+            and value["cpu_legacy_vs_converted"]["all_metrics_exact"]
+            and value["hf_automodel_roundtrip_passed"] for value in results.values()) and len(results) == 4,
+        "validation_protocol": {"version": ASSESSMENT_VERSION,
+            "inputs": "unchanged original tokenizer, max_length=256, original legacy collator and validation ordering",
+            "cpu_legacy_vs_converted": "strict complete predictions and all metrics; zero metric tolerance",
+            "hf_automodel_reload": "strict state tensors, complete predictions and all metrics",
+            "gpu_vs_cpu": "exact differences and both original/actual scores; no equality claim or tolerance relaxation",
+            "gpu_logits_available": False, "precision": "float32", "device": "cpu",
+            "documents_per_cpu_model": len(evaluation_dataset)},
         "training_campaign_modified": False, "training_campaign_completion_assessed": False,
         "elapsed_seconds": time.monotonic() - START}
     atomic_json(args.output_dir / "summary.json", final)

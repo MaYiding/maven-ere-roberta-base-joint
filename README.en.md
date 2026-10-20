@@ -3,7 +3,7 @@
 ## Verified single-joint improvement: interim update1500 snapshot
 
 `corrected-512-seed42-snapshot-u1500/` contains one complete joint model. On the same710-document validation protocol, overall49.4696 versus oldsingle48.7138 (+0.7558points). Causal+4.1305, temporal+0.0246, coreference mean-0.1599, subevent-0.9718points. PublicCLI and independent AutoModel full710 predictions/metrics and all state tensors match exactly.
-It is a snapshot selected at epoch17/update1500; its parent100-epoch run and the full15-run campaign continue. [Commands and detailed evidence](docs/CORRECTED_SINGLE_SNAPSHOT.md). The Hub root still loads the oldbaseline; select the new subdirectory and use default padding (do not add `--reference-padding`).
+Its parent run has now completed all100epochs/9,200updates; the selected best checkpoint remains epoch17/update1500. The full15-run campaign continues. [Commands and detailed evidence](docs/CORRECTED_SINGLE_SNAPSHOT.md). The Hub root still loads the oldbaseline; select the new subdirectory and use default padding (do not add `--reference-padding`).
 
 
 ## Verified interim reference models (2026-10-20)

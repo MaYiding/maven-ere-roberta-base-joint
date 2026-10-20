@@ -1,0 +1,113 @@
+{
+  "status": "completed_verified",
+  "run_id": "corrected-512-seed42",
+  "run_status": "completed",
+  "formal_run": true,
+  "smoke": false,
+  "epochs_completed": 100,
+  "optimizer_updates": 9200,
+  "micro_steps": 36500,
+  "validation_evaluations": 184,
+  "training_summary_sha256": "9ffe5ad0c262cbd4ab736d80820dc75163767f664a5a348f3baf818fc50837db",
+  "completed_at": "2026-10-20T16:45:39.476651+00:00",
+  "exit_code": 0,
+  "training_source_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "plan_sha256": "4eac71926a9d4c503a8ed352161ad537f4678c636c2ce6e360a2f913b3739dd1",
+  "selected_single_checkpoint": {
+    "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e017-u00001500",
+    "epoch": 17,
+    "update_step": 1500,
+    "score": 49.46963633976877,
+    "export_name": "best_joint",
+    "exported": true,
+    "selection_rule": "overall_f1"
+  },
+  "selected_single_files_sha256": {
+    "config.json": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89",
+    "configuration_maven_ere.py": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+    "modeling_maven_ere.py": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+    "model.safetensors": "f42d99f3a5c9d02b71c09f4737e89d322cf1ee9b10e0762fef068bba751e761a",
+    "vocab.json": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "special_tokens_map.json": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+    "tokenizer_config.json": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689"
+  },
+  "selected_single_official_protocol": {
+    "coreference": {
+      "b_cubed_precision": 96.80652531739345,
+      "b_cubed_recall": 98.21624407338692,
+      "b_cubed_f1": 97.50628963142098,
+      "ceaf_precision": 97.65879548881632,
+      "ceaf_recall": 96.51452029475684,
+      "ceaf_f1": 97.08328625002814,
+      "muc_precision": 73.35329341317365,
+      "muc_recall": 82.8262339418526,
+      "muc_f1": 77.80247697681804,
+      "blanc_precision": 83.90054341073724,
+      "blanc_recall": 91.4985340306122,
+      "blanc_f1": 87.30315646973519
+    },
+    "temporal": {
+      "temporal_precision": 51.80525869693396,
+      "temporal_recall": 54.47284422422103,
+      "temporal_f1": 53.10557319765314
+    },
+    "causal": {
+      "causal_precision": 31.967585580127235,
+      "causal_recall": 30.98209042865531,
+      "causal_f1": 31.467123900402566
+    },
+    "subevent": {
+      "subevent_precision": 27.75399864834422,
+      "subevent_recall": 20.200032792261027,
+      "subevent_f1": 23.382045929018787
+    },
+    "coreference_mean_f1": 89.92380233200059,
+    "overall_f1": 49.46963633976877
+  },
+  "single_checkpoint_exactly_matches_previously_full710_validated_public_package": true,
+  "source_clean": true,
+  "four_model_combination_original_gpu": {
+    "coreference": {
+      "b_cubed_precision": 97.25522280954159,
+      "b_cubed_recall": 98.1898945324142,
+      "b_cubed_f1": 97.72032374374764,
+      "ceaf_precision": 97.70500845691772,
+      "ceaf_recall": 97.06966517144853,
+      "ceaf_f1": 97.38630058836674,
+      "muc_precision": 76.65615141955836,
+      "muc_recall": 82.1501014198783,
+      "muc_f1": 79.30809399477808,
+      "blanc_precision": 85.53674134725327,
+      "blanc_recall": 91.36326483961332,
+      "blanc_f1": 88.22175009228302
+    },
+    "temporal": {
+      "temporal_precision": 52.3957208226705,
+      "temporal_recall": 56.62631928198124,
+      "temporal_f1": 54.42893590077843
+    },
+    "causal": {
+      "causal_precision": 31.967585580127235,
+      "causal_recall": 30.98209042865531,
+      "causal_f1": 31.467123900402566
+    },
+    "subevent": {
+      "subevent_precision": 28.389084507042256,
+      "subevent_recall": 21.15100836202656,
+      "subevent_f1": 24.241285351874474
+    },
+    "coreference_mean_f1": 90.65911710479386,
+    "overall_f1": 50.19911556446233
+  },
+  "four_model_combination_not_single_model": true,
+  "combination_packaged_cpu_reload_not_yet_verified": true,
+  "campaign_completed_runs": 3,
+  "campaign_required_runs": 15,
+  "campaign_complete": false,
+  "training_must_continue": true,
+  "test_scored": false,
+  "validation_split_sha256": "6faea0e4e16b4a2d5d9631e09ef6e1c6bac6e3f912490bfc48eeaceaf98c6153",
+  "previous_full710_validation_model_revision": "fd86462a71ecb54206c05e51ecc9e662b4348134",
+  "interpretation": "All100epochs completed; selected best remains epoch17/update1500. Exact same8model/tokenizer/source files as the previously full710validated published package. No weights changed and no missing model evaluation was substituted."
+}

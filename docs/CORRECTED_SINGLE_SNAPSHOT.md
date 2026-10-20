@@ -1,6 +1,6 @@
 # 单联合模型中期快照：corrected512 seed42
 
-这个快照取自正式训练第17轮、update1500。父训练仍须跑满100轮，完整15次实验及五种子统计继续进行。
+父训练已于2026-10-20T16:45:39Z完整完成100轮、9,200次更新、36,500个微批和184次验证。最终最佳权重仍来自第17轮、update1500；它与先前完整710篇核验的公开权重及配置逐文件哈希相同。完整15次实验及五种子统计继续进行。
 一个完整共享编码器和全部四个任务头，每篇文档一次 forward。原始 GPU、实际公开命令 CPU、AutoModel CPU 的710篇完整预测、全部指标完全一致，重载权重逐 tensor 相同。
 
 | valid710，F1% | 旧单模型 | 新单模型 | 增减（点） |
@@ -33,3 +33,5 @@ python train_joint.py --predict-only \
 GPL、RoBERTa MIT、上游署名和引用随模型保留；原数据的MAVEN/Wikipedia许可层独立保留。这个快照发布不会停止或缩减原定15次完整实验。
 
 [Published model revision and verification receipt](../results/corrected-512-seed42-snapshot-u1500/publication_receipt.json)
+
+[Full100-epoch completion and unchanged selected-weight proof](../results/corrected-512-seed42-snapshot-u1500/training_completion.json)

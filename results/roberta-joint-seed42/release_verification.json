@@ -42,5 +42,5 @@
   "code_commit": "369d9df4262f3fb4c22073d8c6c8021fa78698f8",
   "weight_sha256": "6a47ebc48a2d4c5c45714bfbe4a59791c4f182f521341631b0e93e116973480a",
   "release_metadata_adjusted_after_validation": true,
-  "adjustment_note": "Only model-card text and the base-model name metadata changed after full validation. Weights and executable model source are unchanged."
+  "adjustment_note": "Only the model card and publication metadata were added or adjusted after full validation. Model configuration, weights and executable model source are unchanged."
 }

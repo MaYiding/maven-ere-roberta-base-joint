@@ -53,8 +53,8 @@
       "bytes": 658
     },
     "huggingface/release_verification.json": {
-      "sha256": "dac325271e1c9b4d4f78bcb459110dbde2b371b318e800c4b3d2b9d866879cc2",
-      "bytes": 1679
+      "sha256": "4e4545e89fb0a107771865170c2f15adb240e22d9d472b9ddc41ee9aee569ee9",
+      "bytes": 1706
     },
     "huggingface/requirements-lock.txt": {
       "sha256": "c3426da5a638a1fcc9edca3d094b00b518ce72d413fda1ab1bcda275961ab6fe",
@@ -85,7 +85,7 @@
       "bytes": 112167
     },
     "huggingface/release_manifest.json": {
-      "sha256": "7851b5dfee645d390cdac2752ddcce1d4149fc2672179e9f323654f66d26b919",
+      "sha256": "1137e6c6c74724745bfb2b01d5c61e0baee399b28b7d4df4fa46b70e7736a7ca",
       "bytes": 2929
     }
   },

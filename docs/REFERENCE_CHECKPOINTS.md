@@ -71,12 +71,20 @@ legacy CPU → converted CPU → HF AutoModel CPU 预测及指标严格一致，
 实际 CPU 单模型/组合分数与跨设备差异报告；同设备转换一致性不等于跨设备完全复现。
 在完整 v2 报告到位前，不填入推算的 CPU overall，不宣称导出已通过发布验收。
 
+公开推理增加仅用于 `--predict-only` 的 `--reference-padding`：保留 checkpoint 的完整
+256-token 输入宽度以匹配参考评测。901 上已比对完整710篇：两种数据管线的逐样本 token、
+事件位置和标签全部相同，但默认裁剪末尾 padding 会改变75/89个批次的张量宽度。
+这个选项不修改训练、权重或分类阈值；默认训练行为保留。12项远端预测/训练契约测试通过。
+发布前还会用下列真实 CLI 对四套模型逐一预测710篇，并严格比对 v2 AutoModel 的全部
+预测和指标；这项命令级全量复核目前待完成。
+
 ## 下载数据和模型
 
 在本仓库环境安装 `requirements-train.txt`，在计划推理的计算环境执行下列命令。
 仓库未公开时，需使用有访问权的 Hugging Face 账号认证。
 
 ```bash
+export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4
 hf download MaYiding/MAVEN-ERE --repo-type dataset \
   --revision 682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e --local-dir data/MAVEN_ERE
 hf download MaYiding/maven-ere-roberta-base-joint \
@@ -97,16 +105,16 @@ CLI 默认的 512。输出目录请使用新的空目录，保留四份原始预
 ```bash
 mkdir -p predictions/reference-seed42
 python train_joint.py --predict-only --checkpoint checkpoint/reference-seed42/coreference \
-  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 \
+  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 --reference-padding \
   --prediction-file predictions/reference-seed42/coreference.valid.jsonl
 python train_joint.py --predict-only --checkpoint checkpoint/reference-seed42/temporal \
-  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 \
+  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 --reference-padding \
   --prediction-file predictions/reference-seed42/temporal.valid.jsonl
 python train_joint.py --predict-only --checkpoint checkpoint/reference-seed42/causal \
-  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 \
+  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 --reference-padding \
   --prediction-file predictions/reference-seed42/causal.valid.jsonl
 python train_joint.py --predict-only --checkpoint checkpoint/reference-seed42/subevent \
-  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 \
+  --data-dir data/MAVEN_ERE --split valid --device cpu --no-bf16 --eval_batch_size 8 --reference-padding \
   --prediction-file predictions/reference-seed42/subevent.valid.jsonl
 python scripts/combine_task_predictions.py \
   --coreference-predictions predictions/reference-seed42/coreference.valid.jsonl \

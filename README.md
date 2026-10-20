@@ -37,7 +37,8 @@ v1 发现 TEMPORAL 的 710 篇预测中有 1 篇多出 1 条 BEFORE，原始 GPU
 **53.10777372173359**，CPU 为 **53.10764361015359**。该文档所在原始 batch 8 重放时，
 legacy 与转换模型的 CPU temporal logits 逐位相同，相关 CPU top-2 margin 为
 **1.66893e-6**，支持设备/后端数值差异的解释；没有原始 GPU logits，不能声称测得 GPU
-margin。v1 未通过原先的跨设备精确断言，未公开；完整诊断与 v2 验收见
+margin。公开参考推理使用仅限预测的 `--reference-padding` 以保持原256-token宽度；
+完整710篇分词/事件位置一致性已核对，命令级全量预测复核待完成。v1 未通过原先的跨设备精确断言，未公开；完整诊断与 v2 验收见
 [参考模型说明](docs/REFERENCE_CHECKPOINTS.md)。
 
 这是 **15 次、每次 100 轮实验的中期结果**；当前只有作者参考 seed 42 这一正式 run

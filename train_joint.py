@@ -257,12 +257,22 @@ def autocast_context(args, device):
     return torch.autocast(device_type="cuda", dtype=torch.bfloat16) if args.bf16 and device.type == "cuda" else contextlib.nullcontext()
 
 
-def make_loader(dataset, order, batch_size, num_workers, seed, start_batch=0, pin_memory=False):
+def preserve_padding_collator(data):
+    """Keep original chunk shapes when replaying reference predictions."""
+    batch = collator(data)
+    batch["input_ids"] = torch.cat([item["input_ids"] for item in data])
+    batch["attention_mask"] = torch.cat([item["attention_mask"] for item in data])
+    return batch
+
+
+def make_loader(dataset, order, batch_size, num_workers, seed, start_batch=0, pin_memory=False,
+                preserve_padding=False):
     batches = [order[i:i + batch_size] for i in range(0, len(order), batch_size)]
     # Iterator/worker startup must not consume the model's global dropout RNG.
     generator = torch.Generator().manual_seed(seed)
     return DataLoader(dataset, batch_sampler=batches[start_batch:], num_workers=num_workers,
-                      collate_fn=collator, pin_memory=pin_memory, generator=generator)
+                      collate_fn=preserve_padding_collator if preserve_padding else collator,
+                      pin_memory=pin_memory, generator=generator)
 
 
 def load_official_evaluator():
@@ -298,7 +308,8 @@ def counts_prf(counts):
 def evaluate_dev(model, dataset, gold, args, device, score=True):
     model.eval()
     loader = make_loader(dataset, list(range(len(dataset))), args.eval_batch_size or args.batch_size,
-                         args.num_workers, args.seed + 100000, pin_memory=device.type == "cuda")
+                         args.num_workers, args.seed + 100000, pin_memory=device.type == "cuda",
+                         preserve_padding=getattr(args, "reference_padding", False))
     predictions = {}
     augmented_counts = {task: [0, 0, 0] for task in TASK_MAPS}
     for original_batch in loader:
@@ -697,6 +708,8 @@ def parse_args(argv=None):
     parser.add_argument("--output_dir", "--output-dir")
     parser.add_argument("--cache_dir", "--cache-dir")
     parser.add_argument("--predict_only", "--predict-only", action="store_true")
+    parser.add_argument("--reference-padding", action="store_true",
+                        help="Prediction only: preserve checkpoint chunk padding for reference evaluation")
     parser.add_argument("--checkpoint", help="Local save_pretrained export for prediction")
     parser.add_argument("--split", choices=("valid", "test"), default="test")
     parser.add_argument("--prediction_file", "--prediction-file")
@@ -738,8 +751,11 @@ def parse_args(argv=None):
         if args.resume or args.smoke:
             parser.error("--predict-only cannot be combined with --resume or --smoke")
         args.output_dir = args.output_dir or str(Path(args.prediction_file).expanduser().resolve().parent)
-    elif not args.base_model or not args.output_dir:
-        parser.error("Training requires --base_model and --output_dir")
+    else:
+        if args.reference_padding:
+            parser.error("--reference-padding requires --predict-only")
+        if not args.base_model or not args.output_dir:
+            parser.error("Training requires --base_model and --output_dir")
     for name in ("max_epochs", "batch_size", "eval_batch_size", "grad_accum", "max_length", "save_every_updates", "smoke_documents"):
         if getattr(args, name) <= 0:
             parser.error(f"--{name} must be positive")

@@ -1,5 +1,24 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## Verified interim reference models (2026-10-20)
+
+[Model weights](https://huggingface.co/MaYiding/maven-ere-roberta-base-joint),
+[dataset mirror](https://huggingface.co/datasets/MaYiding/MAVEN-ERE), and
+[detailed results and four-model inference commands](docs/REFERENCE_CHECKPOINTS.md).
+
+The Hub root remains the older single joint checkpoint (validation overall 48.7138).
+New `reference-seed42/{coreference,temporal,causal,subevent}/` directories each contain
+one complete joint model with its own encoder and all four heads. Combining their
+selected prediction fields uses four complete models and four forwards per document.
+Its actual CPU validation overall is 50.0361814071 (+1.3224 points versus the older
+single model). This does not establish equal-cost or single-model improvement.
+All 710 validation documents passed legacy/converted/AutoModel and documented CLI
+prediction/metric checks. CPU and original GPU scores are reported separately;
+one temporal relation differs across devices. The reference run completed 100 epochs.
+The full 15-run, 100 epochs-per-run campaign and five-seed analysis continue after this
+interim publication; no hidden-test scores or completed multi-seed reproduction are claimed.
+
+
 This repository adapts the official THU-KEG/MAVEN-ERE four-task joint baseline with
 complete resume state, official-protocol validation and independent Hugging Face
 exports. See [README.md](README.md) for Chinese instructions and upstream documentation.

@@ -13,36 +13,35 @@
 [数据镜像](https://huggingface.co/datasets/MaYiding/MAVEN-ERE) ·
 [参考模型、复核要求与四次推理步骤](docs/REFERENCE_CHECKPOINTS.md)
 
-**HF 仓库根目录的默认模型仍是旧版单模型。** 新的作者参考 seed 42 计划放在
+**HF 仓库根目录的默认模型仍是旧版单模型。** 新的作者参考 seed 42 已放在
 `reference-seed42/{coreference,temporal,causal,subevent}/`，每个子目录都是一个包含独立
 编码器及全部任务头的完整联合模型。最新参考组合需要四个子目录、每篇文档四次 forward，
 按任务提取预测字段，不拼接权重。
 
 | 710 篇 valid，F1 % | 旧版根目录单模型 | 参考原始 GPU 四模型组合 | 导出 CPU 四模型组合 |
-|---|---:|---:|---|
-| 共指四项均值 | 90.0837 | 90.7807 | 待 v2 全量复核 |
-| 时间 | 53.0809 | 53.1078 | 待 v2 全量复核 |
-| 因果 | 27.3367 | 31.0995 | 待 v2 全量复核 |
-| 子事件 | 24.3539 | 25.1569 | 待 v2 全量复核 |
-| Overall | 48.7138 | 50.0362 | 待 v2 全量复核 |
+|---|---:|---:|---:|
+| 共指四项均值 | 90.0837 | 90.7807 | 90.7807 |
+| 时间 | 53.0809 | 53.1078 | 53.1076 |
+| 因果 | 27.3367 | 31.0995 | 31.0995 |
+| 子事件 | 24.3539 | 25.1569 | 25.1569 |
+| Overall | 48.7138 | 50.0362 | 50.0362 |
 
-原始 GPU 组合比旧单模型高 **1.3224 个百分点**，但使用了四套约 126M 参数的完整模型，不能据此
+导出 CPU 组合比旧单模型高 **1.3224 个百分点**，但使用了四套约 126M 参数的完整模型，不能据此
 宣称同模型数量或同推理成本的单模型改善。目前尚未证实单共享 checkpoint 的整体改善。
-参考 run 已完成 100 轮、9,125 次 optimizer updates；本轮发布前还必须将四个导出分别
-在 CPU 上覆盖全部 710 篇 valid，确认原始 legacy、转换模型及 HF 重载模型的预测与指标
-严格一致，再报告实际 CPU 组合分数。v2 完整复核尚未完成，小样本 canary 不能替代它；
-原始 GPU 分数与实际 CPU 结果分别保留，不要求跨设备逐位或逐预测相同。
+参考 run 已完成100轮、9,125次optimizer updates。四个模型的 legacy CPU、转换 CPU、
+AutoModel CPU 三路各710篇评测已经通过，完整12路预测与指标严格一致；最终汇总的
+NumPy布尔序列化错误经修复后，从完整证据恢复并重新核对全部来源、权重及预测哈希。
+实际 CPU 组合 overall 为 **50.036181407057285**。四套模型的公开推理命令也已完成全部710篇验证，预测、全部指标及重新组合结果与 AutoModel 输出严格一致。
 
 v1 发现 TEMPORAL 的 710 篇预测中有 1 篇多出 1 条 BEFORE，原始 GPU 时间 F1 为
 **53.10777372173359**，CPU 为 **53.10764361015359**。该文档所在原始 batch 8 重放时，
 legacy 与转换模型的 CPU temporal logits 逐位相同，相关 CPU top-2 margin 为
 **1.66893e-6**，支持设备/后端数值差异的解释；没有原始 GPU logits，不能声称测得 GPU
 margin。公开参考推理使用仅限预测的 `--reference-padding` 以保持原256-token宽度；
-完整710篇分词/事件位置一致性已核对，命令级全量预测复核待完成。v1 未通过原先的跨设备精确断言，未公开；完整诊断与 v2 验收见
+完整710篇分词/事件位置一致性及命令级全量预测复核均已通过。v1 未通过原先的跨设备精确断言，未公开；完整诊断与 v2 验收见
 [参考模型说明](docs/REFERENCE_CHECKPOINTS.md)。
 
-这是 **15 次、每次 100 轮实验的中期结果**；当前只有作者参考 seed 42 这一正式 run
-完成。允许在复核后提前公开已有结果，公开不会取消、提前停止或缩减剩余实验。
+这是 **15 次、每次 100 轮实验的中期结果**；本次模型来自已完整训练的作者参考 seed42。公开不会取消、提前停止或缩减剩余实验。
 五 seed 汇总、改进候选选择和隐藏 test 复现均尚无完成结论。所有分数均为官方原始方向
 评测的 validation 结果，使用 gold event mentions 和 annotated TIMEX；无 test F1。
 
@@ -328,3 +327,5 @@ For the detailed implementations of our evaluations, please refer to the [evalua
 ## Contact
 - wangxz20@mails.tsinghua.edu.cn
 - yl-chen21@mails.tsinghua.edu.cn
+
+[Validated metrics and model checksums](results/reference-seed42/publication_manifest.json)

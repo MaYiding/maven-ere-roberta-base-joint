@@ -66,6 +66,11 @@ def main() -> None:
     scores = metrics["official_protocol"]
     rows = [f"| {task} | {scores[task][task + '_precision']:.2f} | {scores[task][task + '_recall']:.2f} | {scores[task][task + '_f1']:.2f} |"
             for task in ("temporal", "causal", "subevent")]
+    batch_note = (
+        "The 8-document microbatch and accumulation of 4 follow the upstream README."
+        if recipe["batch_size"] == 8 and recipe["grad_accum"] == 4
+        else "The microbatch differs from the upstream README's 8-document microbatch, changing relation-pair weighting."
+    )
     card = f'''---
 language:
 - en
@@ -121,9 +126,8 @@ input_ids, attention_mask, event_spans, splits and events_idx, not just raw text
 The scorer hidden size is 200, matching upstream code (the paper appendix states
 150). This implementation fixes missing first-mention dummy labels, stable
 coreference marginal loss, optimizer-step scheduling and complete resume state.
-The nominal effective batch is {recipe['batch_size'] * recipe['grad_accum']} documents; the {recipe['batch_size']}-document microbatch differs
-from the upstream README's 8-document microbatch and changes relation-pair
-weighting. This is a documented adaptation, not an exact paper replication.
+The nominal effective batch is {recipe['batch_size'] * recipe['grad_accum']} documents.
+{batch_note} This is a documented adaptation, not an exact paper replication.
 The data is English Wikipedia and covers within-document relations. Predicted
 causal links reflect the text and are not independently verified causal facts.
 

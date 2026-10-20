@@ -13,21 +13,28 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=Path("requirements-lock.txt"))
     args = parser.parse_args()
-    queue = ["torch", "transformers", "numpy", "scipy", "scikit-learn", "safetensors", "tqdm", "gdown", "pytest"]
+    roots = ["torch", "transformers", "numpy", "scipy", "scikit-learn", "safetensors", "tqdm", "gdown", "pytest"]
+    queue = [(name, frozenset()) for name in roots]
     versions = {}
+    visited = set()
     while queue:
-        name = canonicalize_name(queue.pop())
-        if name in versions:
+        requested, extras = queue.pop()
+        name = canonicalize_name(requested)
+        identity = (name, extras)
+        if identity in visited:
             continue
+        visited.add(identity)
         distribution = metadata.distribution(name)
         versions[name] = distribution.version
         for specification in distribution.requires or []:
             requirement = Requirement(specification)
-            if requirement.marker is None or requirement.marker.evaluate({"extra": ""}):
+            # requests[socks]、CUDA toolkit extras 等也必须纳入锁定闭包。
+            contexts = {"", *extras}
+            if requirement.marker is None or any(requirement.marker.evaluate({"extra": extra}) for extra in contexts):
                 actual = metadata.version(requirement.name)
                 if requirement.specifier and not requirement.specifier.contains(actual, prereleases=True):
                     raise RuntimeError(f"Dependency mismatch: {requirement.name} {actual} does not satisfy {requirement.specifier}")
-                queue.append(requirement.name)
+                queue.append((requirement.name, frozenset(requirement.extras)))
     header = "# Verified training dependency closure on Python 3.11, Linux x86_64.\n"
     args.output.write_text(header + "".join(f"{name}=={versions[name]}\n" for name in sorted(versions)))
     print(f"Locked {len(versions)} distributions to {args.output}")

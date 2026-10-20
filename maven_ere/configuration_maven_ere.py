@@ -45,6 +45,7 @@ class MavenEreConfig(PretrainedConfig):
         causal_label2id=None,
         subevent_label2id=None,
         chunk_length=256,
+        scorer_num_layers=3,
         **kwargs,
     ):
         if encoder_config is None:
@@ -60,6 +61,8 @@ class MavenEreConfig(PretrainedConfig):
         encoder_config = RobertaConfig.from_dict(encoder_config).to_dict()
         if scorer_hidden_size <= 0:
             raise ValueError("scorer_hidden_size must be positive")
+        if scorer_num_layers not in {2, 3}:
+            raise ValueError("scorer_num_layers must be 2 or 3")
         if encoder_attention_implementation not in {"eager", "sdpa"}:
             raise ValueError("encoder_attention_implementation must be 'eager' or 'sdpa'")
         if span_pooling not in {"mean", "max"}:
@@ -72,6 +75,7 @@ class MavenEreConfig(PretrainedConfig):
         self.encoder_config = encoder_config
         self.encoder_attention_implementation = encoder_attention_implementation
         self.scorer_hidden_size = int(scorer_hidden_size)
+        self.scorer_num_layers = int(scorer_num_layers)
         self.span_pooling = span_pooling
         self.dropout = float(dropout)
         self.loss_weights = deepcopy(

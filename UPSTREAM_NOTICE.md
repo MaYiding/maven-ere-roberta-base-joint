@@ -30,3 +30,10 @@ References:
   https://github.com/THU-KEG/MAVEN-dataset
 - Liu et al. 2019. RoBERTa: A Robustly Optimized BERT Pretraining Approach.
   https://arxiv.org/abs/1907.11692
+
+The isolated author-reference runner includes a standalone adaptation of the legacy
+Hugging Face Transformers v4.24.0 AdamW optimizer. Its original update order,
+epsilon placement and bias correction are retained. The adapter identifies its
+modifications and Google/Hugging Face copyright in source; its Apache-2.0 license
+is preserved in notices/TRANSFORMERS-APACHE-2.0 and copied into reference runs.
+Source: https://github.com/huggingface/transformers/blob/v4.24.0/src/transformers/optimization.py

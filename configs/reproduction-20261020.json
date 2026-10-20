@@ -1,0 +1,82 @@
+{
+  "campaign_id": "reproduction-20261020",
+  "upstream_commit": "ac81a9711a69f43f55bfbc50b3bb573fd11c64b0",
+  "seeds": [
+    13,
+    21,
+    42,
+    87,
+    100
+  ],
+  "tuning_seed": 42,
+  "epochs": 100,
+  "batch_size": 8,
+  "grad_accum": 4,
+  "precision": "float32",
+  "base_model": "base_model",
+  "data_dir": "data/MAVEN_ERE",
+  "cache_dir": "runs/reproduction-tokenization-cache",
+  "minimum_free_gib": 60,
+  "candidates": [
+    {
+      "id": "corrected-256",
+      "max_length": 256,
+      "scorer_hidden_size": 200,
+      "scorer_num_layers": 3,
+      "positive_class_weight": 1.0
+    },
+    {
+      "id": "corrected-512",
+      "max_length": 512,
+      "scorer_hidden_size": 200,
+      "scorer_num_layers": 3,
+      "positive_class_weight": 1.0
+    },
+    {
+      "id": "width150-256",
+      "max_length": 256,
+      "scorer_hidden_size": 150,
+      "scorer_num_layers": 3,
+      "positive_class_weight": 1.0
+    },
+    {
+      "id": "appendix-two-layer-256",
+      "max_length": 256,
+      "scorer_hidden_size": 150,
+      "scorer_num_layers": 2,
+      "positive_class_weight": 1.0
+    },
+    {
+      "id": "positive2-256",
+      "max_length": 256,
+      "scorer_hidden_size": 200,
+      "scorer_num_layers": 3,
+      "positive_class_weight": 2.0
+    },
+    {
+      "id": "positive4-256",
+      "max_length": 256,
+      "scorer_hidden_size": 200,
+      "scorer_num_layers": 3,
+      "positive_class_weight": 4.0
+    }
+  ],
+  "selection": {
+    "protocol": "task_best_combined_official_valid",
+    "rule": "maximize minimum F1-point difference from the seed42 upstream reference across coreference mean, temporal, causal and subevent; then overall F1; then stable candidate order",
+    "split": "valid",
+    "test_labels_used": false
+  },
+  "paper_test_f1": {
+    "muc": 82.1,
+    "b_cubed": 98.2,
+    "ceaf": 97.9,
+    "blanc": 90.2,
+    "temporal": 56.0,
+    "causal": 31.5,
+    "subevent": 27.5
+  },
+  "paper_source": "https://aclanthology.org/2022.emnlp-main.60.pdf",
+  "total_formal_runs": 15,
+  "public_release_automatic": false
+}

@@ -11,6 +11,7 @@ Checkpoints are saved only at optimizer update boundaries, including mid-epoch.
 
 import argparse
 import contextlib
+import copy
 import hashlib
 import importlib.util
 import json
@@ -46,6 +47,12 @@ PIPELINE_VERSION = "maven-ere-joint-v2-dummy-fix-padding-trim"
 TASK_MAPS = {"temporal": TEMPREL2ID, "causal": CAUSALREL2ID, "subevent": SUBEVENTREL2ID}
 REVERSE_MAPS = {"temporal": ID2TEMPREL, "causal": ID2CAUSALREL, "subevent": ID2SUBEVENTREL}
 STOP_REQUESTED = False
+SELECTION_TASKS = ("coreference", "temporal", "causal", "subevent")
+NEW_SIGNATURE_DEFAULTS = {
+    "scorer_hidden_size": 200, "scorer_num_layers": 3, "positive_class_weight": 1.0,
+    "export_task_bests": False, "early_stopping_monitor": "overall",
+    "early_stopping_patience": 10, "eval_every_updates": 0,
+}
 
 
 def sha256_file(path):
@@ -213,19 +220,25 @@ def coreference_loss(log_probs, clusters):
     return sum((p.sum() for p in log_probs), torch.tensor(0.0, device=log_probs[0].device)) * 0
 
 
-def relation_loss(logits, labels):
+def relation_loss(logits, labels, positive_class_weight=1.0, none_id=0):
     if logits.shape[:-1] != labels.shape:
         raise ValueError(f"Relation gold/model shape mismatch: {logits.shape}, {labels.shape}")
     valid = labels != -100
     if bool(valid.any()):
-        return F.cross_entropy(logits[valid].float(), labels[valid])
+        weights = None
+        if positive_class_weight != 1.0:
+            weights = torch.full((logits.shape[-1],), positive_class_weight,
+                                 device=logits.device, dtype=torch.float32)
+            weights[none_id] = 1.0
+        return F.cross_entropy(logits[valid].float(), labels[valid], weight=weights)
     return logits.sum() * 0.0
 
 
-def joint_loss(output, batch):
+def joint_loss(output, batch, positive_class_weight=1.0):
     losses = {"coreference": coreference_loss(output.coref_log_probs, batch["coref_labels"])}
     for task in TASK_MAPS:
-        losses[task] = relation_loss(getattr(output, task + "_logits"), batch[task + "_labels"])
+        losses[task] = relation_loss(getattr(output, task + "_logits"), batch[task + "_labels"],
+                                     positive_class_weight, TASK_MAPS[task]["NONE"])
     for task, value in losses.items():
         if not bool(torch.isfinite(value)):
             raise FloatingPointError(f"Non-finite {task} loss")
@@ -291,7 +304,7 @@ def evaluate_dev(model, dataset, gold, args, device, score=True):
         with autocast_context(args, device):
             output = model(**batch)
             if score:
-                joint_loss(output, batch)  # Validate dev loss without retaining a graph.
+                joint_loss(output, batch, getattr(args, "positive_class_weight", 1.0))
         logits = {task: getattr(output, task + "_logits").argmax(-1).cpu() for task in TASK_MAPS}
         for task, pred in (logits.items() if score else []):
             labels = original_batch[task + "_labels"]
@@ -330,6 +343,14 @@ def evaluate_dev(model, dataset, gold, args, device, score=True):
         raise ValueError("Dev predictions do not cover exactly the gold documents")
     if not score:
         return None, predictions
+    official = score_official_predictions(gold, predictions)
+    metrics = {"split": "valid", "official_protocol": official,
+               "training_augmented_labels_positive_micro": {task: counts_prf(value) for task, value in augmented_counts.items()},
+               "temporal_protocol_note": "Training labels symmetrize SIMULTANEOUS/BEGINS-ON; official evaluator uses raw annotated directions."}
+    return metrics, predictions
+
+
+def score_official_predictions(gold, predictions):
     evaluator = load_official_evaluator()
     coref = evaluator.evaluate_coreference(gold, predictions)
     official = {"coreference": coref}
@@ -338,10 +359,7 @@ def evaluate_dev(model, dataset, gold, args, device, score=True):
     coref_mean = sum(coref[name + "_f1"] for name in ("b_cubed", "ceaf", "muc", "blanc")) / 4
     official["coreference_mean_f1"] = coref_mean
     official["overall_f1"] = (coref_mean + sum(official[t][t + "_f1"] for t in TASK_MAPS)) / 4
-    metrics = {"split": "valid", "official_protocol": official,
-               "training_augmented_labels_positive_micro": {task: counts_prf(value) for task, value in augmented_counts.items()},
-               "temporal_protocol_note": "Training labels symmetrize SIMULTANEOUS/BEGINS-ON; official evaluator uses raw annotated directions."}
-    return metrics, predictions
+    return official
 
 
 def save_predictions(path, predictions):
@@ -353,34 +371,205 @@ def save_predictions(path, predictions):
     os.replace(tmp, path)
 
 
-def export_best(model, tokenizer, output_dir, metrics, predictions):
-    """Publish the new local export by atomic symlink swap, preserving old readers."""
+def export_best(model, tokenizer, output_dir, metrics, predictions, name="best_joint",
+                checkpoint_identity=None, shared_directory=None, defer_cleanup=False):
+    """每个链接都指向一个完整快照；同次验证可共享目录，绝不混合各任务权重。"""
     output_dir = Path(output_dir)
     exports = output_dir / "exports"
     exports.mkdir(exist_ok=True)
-    final = exports / ("best-" + uuid.uuid4().hex)
-    model.save_pretrained(final, safe_serialization=True)
-    tokenizer.save_pretrained(final)
-    atomic_json(final / "dev_metrics.json", metrics)
-    save_predictions(final / "dev_predictions.jsonl", predictions)
-    link = output_dir / "best_joint"
+    allowed = {"best_joint", *("best_" + task for task in SELECTION_TASKS)}
+    if name not in allowed:
+        raise ValueError(f"Unknown best-model selector: {name}")
+    final = Path(shared_directory) if shared_directory else exports / ("best-" + uuid.uuid4().hex)
+    identity = copy.deepcopy(checkpoint_identity or {"checkpoint_id": final.name})
+    if shared_directory:
+        if final.resolve().parent != exports.resolve():
+            raise ValueError("Shared checkpoint must be in this run's exports directory")
+        if load_json_file(final / "checkpoint_identity.json") != identity:
+            raise ValueError("Shared export does not identify the same complete checkpoint")
+    else:
+        model.save_pretrained(final, safe_serialization=True)
+        tokenizer.save_pretrained(final)
+        atomic_json(final / "dev_metrics.json", metrics)
+        save_predictions(final / "dev_predictions.jsonl", predictions)
+        atomic_json(final / "checkpoint_identity.json", identity)
+    link = output_dir / name
     if link.exists() and not link.is_symlink():
         raise ValueError(f"Refusing to overwrite a non-symlink export directory: {link}")
-    old = link.resolve() if link.is_symlink() else None
-    temporary_link = output_dir / (".best_joint-" + uuid.uuid4().hex)
+    temporary_link = output_dir / ("." + name + "-" + uuid.uuid4().hex)
     temporary_link.symlink_to(final.relative_to(output_dir), target_is_directory=True)
     os.replace(temporary_link, link)
-    if old and old.parent == exports.resolve() and old != final.resolve():
-        shutil.rmtree(old)
+    if not defer_cleanup:
+        prune_exports(output_dir)
+    return str(final.relative_to(output_dir))
+
+
+def load_json_file(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def prune_exports(output_dir):
+    """仅清理由本驱动创建且已无 best 链接引用的完整快照。"""
+    output_dir = Path(output_dir)
+    exports = output_dir / "exports"
+    if not exports.exists():
+        return
+    keep = {(output_dir / name).resolve() for name in
+            ["best_joint", *("best_" + task for task in SELECTION_TASKS)]
+            if (output_dir / name).is_symlink()}
+    for directory in exports.iterdir():
+        if directory.name.startswith("best-") and directory.is_dir() and not directory.is_symlink():
+            if directory.resolve() not in keep:
+                shutil.rmtree(directory)
+
+
+def selection_scores(metrics):
+    official = metrics["official_protocol"]
+    return {"coreference": official["coreference_mean_f1"],
+            **{task: official[task][task + "_f1"] for task in TASK_MAPS}}
+
+
+def restore_selection_artifacts(progress, output_dir):
+    """磁盘历史和链接回到 latest.pt 的事务边界，丢弃未提交的验证结果。"""
+    output_dir = Path(output_dir)
+    legacy = "selection_format_version" not in progress
+    progress["selection_format_version"] = 1
+    progress.setdefault("run_id", uuid.uuid4().hex)
+    progress.setdefault("task_bests", {})
+    progress.setdefault("validation_history", [])
+    if legacy and progress["best_score"] >= 0 and "joint_best" not in progress and (output_dir / "best_joint").is_symlink():
+        directory = (output_dir / "best_joint").resolve()
+        progress["joint_best"] = {
+            "checkpoint_id": "legacy-" + directory.name, "epoch": None, "update_step": None,
+            "score": progress["best_score"], "export_directory": str(directory.relative_to(output_dir)),
+            "export_name": "best_joint", "exported": True,
+        }
+    entries = [progress.get("joint_best"), *progress["task_bests"].values()]
+    expected_links = {entry["export_name"] for entry in entries if entry and entry.get("export_directory")}
+    for name in ["best_joint", *("best_" + task for task in SELECTION_TASKS)]:
+        link = output_dir / name
+        if name not in expected_links and link.is_symlink():
+            link.unlink()
+    for entry in entries:
+        if not entry or not entry.get("export_directory"):
+            continue
+        final = (output_dir / entry["export_directory"]).resolve(strict=True)
+        if final.parent != (output_dir / "exports").resolve():
+            raise ValueError("Checkpoint selection points outside this run's exports")
+        identity_path = final / "checkpoint_identity.json"
+        if identity_path.exists() and load_json_file(identity_path)["checkpoint_id"] != entry["checkpoint_id"]:
+            raise ValueError("Restored selection and materialized checkpoint disagree")
+        link = output_dir / entry["export_name"]
+        if link.exists() and not link.is_symlink():
+            raise ValueError(f"Refusing to replace a non-symlink export: {link}")
+        temporary = output_dir / ("." + entry["export_name"] + "-" + uuid.uuid4().hex)
+        temporary.symlink_to(final.relative_to(output_dir), target_is_directory=True)
+        os.replace(temporary, link)
+    path = output_dir / "history.jsonl"
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("w", encoding="utf-8") as stream:
+        for entry in progress["validation_history"]:
+            stream.write(json.dumps(entry, allow_nan=False) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(temporary, path)
+    prune_exports(output_dir)
+
+
+def record_validation(model, tokenizer, output_dir, progress, metrics, predictions, args, epoch):
+    """一次验证对应一个模型身份；每个任务选择的是完整模型，不拼接编码器或头。"""
+    identity = {"checkpoint_id": f"{progress['run_id']}-e{epoch + 1:03d}-u{progress['update_step']:08d}",
+                "epoch": epoch + 1, "update_step": progress["update_step"]}
+    overall = metrics["official_protocol"]["overall_f1"]
+    overall_improved = overall > progress["best_score"]
+    scores = selection_scores(metrics)
+    improved = {task: scores[task] > progress["task_bests"].get(task, {}).get("score", -1.0)
+                for task in SELECTION_TASKS}
+    shared_directory = None
+    if overall_improved:
+        directory = export_best(model, tokenizer, output_dir, metrics, predictions,
+                                checkpoint_identity=identity, defer_cleanup=True)
+        shared_directory = Path(output_dir) / directory
+        progress["best_score"] = overall
+        progress["joint_best"] = {**identity, "score": overall, "export_directory": directory,
+                                  "export_name": "best_joint", "exported": True}
+    for task in SELECTION_TASKS:
+        if not improved[task]:
+            continue
+        directory = None
+        if args.export_task_bests:
+            directory = export_best(model, tokenizer, output_dir, metrics, predictions,
+                                    name="best_" + task, checkpoint_identity=identity,
+                                    shared_directory=shared_directory, defer_cleanup=True)
+            shared_directory = Path(output_dir) / directory
+        progress["task_bests"][task] = {**identity, "score": scores[task], "export_directory": directory,
+                                        "export_name": "best_" + task, "exported": bool(directory)}
+    monitored_improvement = (overall_improved if args.early_stopping_monitor == "overall"
+                             else any(improved.values()))
+    progress["bad_evaluations"] = 0 if monitored_improvement else progress["bad_evaluations"] + 1
+    history = {**identity, "metrics": copy.deepcopy(metrics), "overall_improved": overall_improved,
+               "task_improvements": improved, "early_stopping_monitor": args.early_stopping_monitor,
+               "bad_evaluations": progress["bad_evaluations"],
+               "joint_best": copy.deepcopy(progress.get("joint_best")),
+               "task_bests": copy.deepcopy(progress["task_bests"])}
+    progress["validation_history"].append(history)
+    with (Path(output_dir) / "history.jsonl").open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(history, allow_nan=False) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    return overall_improved
+
+
+def combine_task_best_predictions(output_dir, progress, gold):
+    """仅组合各快照的预测，产物显式标为多 checkpoint；不创建混合权重模型。"""
+    output_dir = Path(output_dir)
+    combined, augmented, sources = {}, {}, {}
+    for task in SELECTION_TASKS:
+        entry = progress["task_bests"].get(task)
+        if not entry or not entry.get("export_directory"):
+            raise ValueError("All four task-best checkpoints must be exported before combination")
+        directory = (output_dir / entry["export_directory"]).resolve(strict=True)
+        if directory.parent != (output_dir / "exports").resolve():
+            raise ValueError("Task-best checkpoint is outside this run")
+        if load_json_file(directory / "checkpoint_identity.json")["checkpoint_id"] != entry["checkpoint_id"]:
+            raise ValueError("Task-best identity mismatch")
+        predictions = read_gold(directory / "dev_predictions.jsonl")
+        if set(predictions) != set(gold):
+            raise ValueError("Task-best predictions must cover exactly the current validation split")
+        field = "coreference" if task == "coreference" else task + "_relations"
+        for doc_id, prediction in predictions.items():
+            combined.setdefault(doc_id, {"id": doc_id})[field] = copy.deepcopy(prediction[field])
+        metrics = load_json_file(directory / "dev_metrics.json")
+        if task != "coreference":
+            augmented[task] = metrics["training_augmented_labels_positive_micro"][task]
+        sources[task] = copy.deepcopy(entry)
+    metrics = {"split": "valid", "artifact_type": "multiple_checkpoint_task_combination",
+               "is_single_model": False, "selected_checkpoints": sources,
+               "official_protocol": score_official_predictions(gold, combined),
+               "training_augmented_labels_positive_micro": augmented}
+    prediction_path = output_dir / "task_best_combined_predictions.jsonl"
+    metric_path = output_dir / "task_best_combined_metrics.json"
+    save_predictions(prediction_path, combined)
+    atomic_json(metric_path, metrics)
+    return {"is_single_model": False, "predictions": str(prediction_path),
+            "metrics": str(metric_path), "official_protocol": metrics["official_protocol"],
+            "selected_checkpoints": sources}
 
 
 def training_signature(args, cache_keys, train_ids):
     keys = ("seed", "max_epochs", "batch_size", "grad_accum", "bf16", "max_length", "max_steps",
             "encoder_lr", "head_lr", "warmup_updates", "clip_grad_norm", "gradient_checkpointing", "smoke")
-    return {**{key: getattr(args, key) for key in keys}, "cache_keys": cache_keys,
+    return {**{key: getattr(args, key) for key in keys},
+            **{key: getattr(args, key, default) for key, default in NEW_SIGNATURE_DEFAULTS.items()}, "cache_keys": cache_keys,
             "train_document_ids": train_ids, "loss_weights": LOSS_WEIGHTS,
             "coreference_reduction": "mean_mentions_then_mean_documents",
             "relation_reduction": "mean_nonignored_ordered_pairs_per_microbatch"}
+
+
+def resume_signature_matches(saved, current):
+    # 旧 checkpoint 只有在新参数均取兼容默认值时，才能按原有语义恢复。
+    normalized = {**NEW_SIGNATURE_DEFAULTS, **saved}
+    return normalized == current
 
 
 def build_model(args, state=None):
@@ -390,8 +579,11 @@ def build_model(args, state=None):
     else:
         encoder_config = AutoConfig.from_pretrained(args.base_model, local_files_only=True).to_dict()
         encoder_config["_attn_implementation"] = "eager"
-        config = MavenEreConfig(encoder_config=encoder_config, scorer_hidden_size=200,
+        config = MavenEreConfig(encoder_config=encoder_config,
+                               scorer_hidden_size=getattr(args, "scorer_hidden_size", 200),
+                               scorer_num_layers=getattr(args, "scorer_num_layers", 3),
                                span_pooling="mean", dropout=0.2, loss_weights=LOSS_WEIGHTS)
+        config.positive_class_weight = getattr(args, "positive_class_weight", 1.0)
         config.chunk_length = args.max_length
         model = MavenEreModel(config)
         pretrained = AutoModel.from_pretrained(args.base_model, local_files_only=True, attn_implementation="eager")
@@ -415,7 +607,7 @@ def build_optimizers(model, args, total_updates):
 def checkpoint_state(model, encoder_optimizer, head_optimizer, scheduler, progress, signature):
     return {"format_version": 1, "model": model.state_dict(), "model_config": model.config.to_dict(),
             "encoder_optimizer": encoder_optimizer.state_dict(), "head_optimizer": head_optimizer.state_dict(),
-            "scheduler": scheduler.state_dict(), "progress": progress.copy(), "signature": signature,
+            "scheduler": scheduler.state_dict(), "progress": copy.deepcopy(progress), "signature": signature,
             "rng": rng_state()}
 
 
@@ -425,7 +617,7 @@ def restore_training_state(state, model, encoder_optimizer, head_optimizer, sche
     head_optimizer.load_state_dict(state["head_optimizer"])
     scheduler.load_state_dict(state["scheduler"])
     restore_rng(state["rng"])
-    return state["progress"].copy()
+    return copy.deepcopy(state["progress"])
 
 
 @torch.inference_mode()
@@ -467,6 +659,12 @@ def parse_args(argv=None):
     parser.add_argument("--head_lr", type=float, default=3e-4)
     parser.add_argument("--warmup_updates", type=int, default=200)
     parser.add_argument("--clip_grad_norm", type=float, default=1.0)
+    parser.add_argument("--scorer-hidden-size", "--scorer_hidden_size", type=int, default=200)
+    parser.add_argument("--scorer-num-layers", "--scorer_num_layers", type=int, choices=(2, 3), default=3)
+    parser.add_argument("--positive-class-weight", "--positive_class_weight", type=float, default=1.0,
+                        help="Weighted CE: NONE weight 1; each positive relation class uses this weight")
+    parser.add_argument("--export-task-bests", "--export_task_bests", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--skip-test-predictions", "--skip_test_predictions", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--bf16", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--gradient_checkpointing", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
@@ -474,6 +672,7 @@ def parse_args(argv=None):
     parser.add_argument("--eval_every_updates", type=int, default=0, help="0 evaluates at epoch/end only")
     parser.add_argument("--save_every_updates", type=int, default=50)
     parser.add_argument("--early_stopping_patience", type=int, default=10, help="Number of dev evaluations; 0 disables")
+    parser.add_argument("--early-stopping-monitor", "--early_stopping_monitor", choices=("overall", "any-task"), default="overall")
     parser.add_argument("--num_workers", type=int, default=0)
     parser.add_argument("--resume", nargs="?", const="latest", help="latest, or a trusted training checkpoint path")
     parser.add_argument("--smoke", action="store_true", help="64 real train docs, positive coverage, max 2 updates, checkpoint and HF roundtrips")
@@ -492,6 +691,10 @@ def parse_args(argv=None):
             parser.error(f"--{name} must be positive")
     if args.max_steps is not None and args.max_steps <= 0:
         parser.error("--max_steps must be positive")
+    if args.scorer_hidden_size <= 0:
+        parser.error("--scorer-hidden-size must be positive")
+    if not math.isfinite(args.positive_class_weight) or args.positive_class_weight <= 0:
+        parser.error("--positive-class-weight must be finite and positive")
     if args.num_workers < 0 or args.eval_every_updates < 0 or args.early_stopping_patience < 0:
         parser.error("Worker/evaluation/patience settings cannot be negative")
     if args.smoke:
@@ -529,6 +732,11 @@ def main(argv=None):
                         handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler(output_dir / "train.log")])
     if not args.predict_only and (output_dir / "latest.pt").exists() and not args.resume:
         raise ValueError("output_dir already has latest.pt; use --resume or a fresh output_dir")
+    if not args.predict_only and not args.resume and any(
+        (output_dir / name).exists() or (output_dir / name).is_symlink()
+        for name in ["best_joint", *("best_" + task for task in SELECTION_TASKS)]
+    ):
+        raise ValueError("output_dir already has selected checkpoints; use a fresh output_dir")
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but unavailable")
     device = torch.device(args.device)
@@ -569,7 +777,7 @@ def main(argv=None):
     if args.resume:
         checkpoint_path = output_dir / "latest.pt" if args.resume == "latest" else Path(args.resume)
         state = load_checkpoint(checkpoint_path)
-        if state["signature"] != signature:
+        if not resume_signature_matches(state["signature"], signature):
             raise ValueError("Resume training signature differs (data, schedule, precision, batch, seed, etc.)")
     atomic_json(output_dir / "progress.json", {"status": "loading_model", "resume": bool(state), "seed": args.seed})
     model = build_model(args, state).to(device)
@@ -580,6 +788,7 @@ def main(argv=None):
     if state is not None:
         progress = restore_training_state(state, model, encoder_optimizer, head_optimizer, scheduler)
         del state
+    restore_selection_artifacts(progress, output_dir)
     atomic_json(output_dir / "training_config.json", {**vars(args), "signature": signature,
                                                        "total_updates": total_updates, "updates_per_epoch": updates_per_epoch})
     LOGGER.info("Training %s docs; microbatch=%s accumulation=%s nominal_effective_docs=%s updates=%s",
@@ -588,12 +797,12 @@ def main(argv=None):
     initial_elapsed = progress["elapsed_seconds"]
     start_time = time.monotonic()
     last_losses = {}
-    stopped_early = False
+    stopped_early = bool(args.early_stopping_patience and progress["bad_evaluations"] >= args.early_stopping_patience)
     smoke_resumed = False
     smoke_positive_counts = {task: 0 for task in LOSS_WEIGHTS}
     for optimizer in (encoder_optimizer, head_optimizer):
         optimizer.zero_grad(set_to_none=True)
-    while progress["epoch"] < args.max_epochs and progress["update_step"] < total_updates:
+    while not stopped_early and progress["epoch"] < args.max_epochs and progress["update_step"] < total_updates:
         epoch = progress["epoch"]
         if not progress["order"]:
             generator = torch.Generator().manual_seed(args.seed + epoch)
@@ -609,7 +818,7 @@ def main(argv=None):
             group_size = min(args.grad_accum, batch_count - group_start)
             with autocast_context(args, device):
                 output = model(**batch)
-                loss, task_losses = joint_loss(output, batch)
+                loss, task_losses = joint_loss(output, batch, args.positive_class_weight)
             if args.smoke:
                 for task, label_map in TASK_MAPS.items():
                     labels = batch[task + "_labels"]
@@ -647,15 +856,12 @@ def main(argv=None):
                 atomic_json(output_dir / "dev_metrics.json", metrics)
                 save_predictions(output_dir / "dev_predictions.jsonl", predictions)
                 score = metrics["official_protocol"]["overall_f1"]
-                if score > progress["best_score"]:
-                    progress["best_score"] = score
-                    progress["bad_evaluations"] = 0
-                    export_best(model, tokenizer, output_dir, metrics, predictions)
+                overall_improved = record_validation(
+                    model, tokenizer, output_dir, progress, metrics, predictions, args, epoch)
+                if overall_improved:
                     if args.smoke:
                         smoke_roundtrip(model, datasets["valid"], tokenizer, args, device, output_dir)
                         LOGGER.info("SMOKE: HF model/tokenizer roundtrip passed")
-                else:
-                    progress["bad_evaluations"] += 1
                 LOGGER.info("Dev epoch=%s update=%s official_overall_f1=%.4f best=%.4f", epoch + 1, progress["update_step"], score, progress["best_score"])
                 if args.early_stopping_patience and progress["bad_evaluations"] >= args.early_stopping_patience:
                     stopped_early = True
@@ -667,6 +873,8 @@ def main(argv=None):
             saved_now = epoch_end or evaluate_now or schedule_end or STOP_REQUESTED or stopped_early or progress["update_step"] % args.save_every_updates == 0 or (args.smoke and not smoke_resumed)
             if saved_now:
                 atomic_torch_save(output_dir / "latest.pt", checkpoint_state(model, encoder_optimizer, head_optimizer, scheduler, progress, signature))
+                # latest.pt 提交成功后才删除旧快照，崩溃恢复仍可还原旧 best 链接。
+                prune_exports(output_dir)
                 if args.smoke and not smoke_resumed:
                     restored = load_checkpoint(output_dir / "latest.pt")
                     before_rng = torch.get_rng_state().clone()
@@ -678,7 +886,7 @@ def main(argv=None):
                     del restored
                     smoke_resumed = True
                     LOGGER.info("SMOKE: complete model/optimizer/scheduler/RNG checkpoint restore passed")
-            snapshot = {key: value for key, value in progress.items() if key != "order"}
+            snapshot = {key: value for key, value in progress.items() if key not in {"order", "validation_history"}}
             snapshot.update({"status": "stopping" if STOP_REQUESTED else "running", "losses": last_losses,
                              "gradient_norm": float(grad_norm), "encoder_lr": encoder_optimizer.param_groups[0]["lr"],
                              "head_lr": head_optimizer.param_groups[0]["lr"], "checkpoint_saved_this_update": bool(saved_now),
@@ -697,10 +905,13 @@ def main(argv=None):
     if args.smoke and not STOP_REQUESTED and not all(smoke_positive_counts.values()):
         raise AssertionError(f"Smoke updates did not exercise all four positive-label losses: {smoke_positive_counts}")
     test_prediction_file = None
+    combination = None
     if (output_dir / "best_joint").exists():
         for name in ("dev_metrics.json", "dev_predictions.jsonl"):
             shutil.copyfile(output_dir / "best_joint" / name, output_dir / ("best_" + name))
-    if final_status in ("completed", "early_stopped") and not args.smoke and (Path(args.data_dir) / "test.jsonl").exists():
+    if args.export_task_bests and all(progress["task_bests"].get(task, {}).get("export_directory") for task in SELECTION_TASKS):
+        combination = combine_task_best_predictions(output_dir, progress, gold)
+    if final_status in ("completed", "early_stopped") and not args.smoke and not args.skip_test_predictions and (Path(args.data_dir) / "test.jsonl").exists():
         LOGGER.info("Exporting test candidate predictions using best_joint; no test scores available")
         best = MavenEreModel.from_pretrained(output_dir / "best_joint", local_files_only=True)
         model.load_state_dict(best.state_dict())
@@ -711,11 +922,17 @@ def main(argv=None):
         _, test_predictions = evaluate_dev(model, test_dataset, test_records, args, device, score=False)
         test_prediction_file = output_dir / "test_predictions.jsonl"
         save_predictions(test_prediction_file, test_predictions)
-    summary = {key: value for key, value in progress.items() if key != "order"}
+    summary = {key: value for key, value in progress.items() if key not in {"order", "validation_history"}}
     summary.update({"status": final_status, "smoke": args.smoke, "best_model": str(output_dir / "best_joint"),
                     "latest_checkpoint": str(output_dir / "latest.pt"), "losses": last_losses,
                     "test_evaluated": False, "test_predictions": str(test_prediction_file) if test_prediction_file else None,
                     "smoke_positive_counts": smoke_positive_counts if args.smoke else None,
+                    "validation_history": str(output_dir / "history.jsonl"),
+                    "validation_evaluations": len(progress["validation_history"]),
+                    "task_best_combination": combination,
+                    "best_joint_metrics": str(output_dir / "best_dev_metrics.json") if (output_dir / "best_joint").exists() else None,
+                    "task_best_combined_metrics": combination["metrics"] if combination else None,
+                    "task_best_combined_predictions": combination["predictions"] if combination else None,
                     "validation_protocol": "upstream evaluate.py on raw annotation directions"})
     atomic_json(output_dir / "progress.json", summary)
     atomic_json(output_dir / "training_summary.json", summary)

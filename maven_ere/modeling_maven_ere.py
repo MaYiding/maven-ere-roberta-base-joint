@@ -33,19 +33,17 @@ class MavenEreOutput(ModelOutput):
 
 
 class Score(nn.Module):
-    """沿用官方三层 Linear、两层 ReLU/Dropout 的评分网络。"""
+    """默认沿用公开代码的三层 Linear；两层用于对齐论文附录实验。"""
 
-    def __init__(self, embeds_dim, out_dim, hidden_dim=200, dropout=0.2):
+    def __init__(self, embeds_dim, out_dim, hidden_dim=200, dropout=0.2, num_layers=3):
         super().__init__()
-        self.score = nn.Sequential(
-            nn.Linear(embeds_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, out_dim),
-        )
+        if num_layers not in {2, 3}:
+            raise ValueError("num_layers must be 2 or 3")
+        layers = [nn.Linear(embeds_dim, hidden_dim), nn.ReLU(), nn.Dropout(dropout)]
+        if num_layers == 3:
+            layers.extend([nn.Linear(hidden_dim, hidden_dim), nn.ReLU(), nn.Dropout(dropout)])
+        layers.append(nn.Linear(hidden_dim, out_dim))
+        self.score = nn.Sequential(*layers)
         for module in self.score:
             if isinstance(module, nn.Linear):
                 module._maven_ere_head = True
@@ -55,11 +53,11 @@ class Score(nn.Module):
 
 
 class PairScorer(nn.Module):
-    def __init__(self, embed_dim=768, out_dim=7, hidden_dim=200, dropout=0.2):
+    def __init__(self, embed_dim=768, out_dim=7, hidden_dim=200, dropout=0.2, num_layers=3):
         super().__init__()
         self.out_dim = out_dim
         self.embed_dim = embed_dim
-        self.score = Score(embed_dim * 2, out_dim, hidden_dim, dropout)
+        self.score = Score(embed_dim * 2, out_dim, hidden_dim, dropout, num_layers)
 
     def forward(self, event_embed):
         all_scores = []
@@ -85,10 +83,10 @@ class PairScorer(nn.Module):
 
 
 class CorefPairScorer(nn.Module):
-    def __init__(self, embed_dim=768, hidden_dim=200, dropout=0.2):
+    def __init__(self, embed_dim=768, hidden_dim=200, dropout=0.2, num_layers=3):
         super().__init__()
         self.embed_dim = embed_dim
-        self.score = Score(embed_dim * 3, 1, hidden_dim, dropout)
+        self.score = Score(embed_dim * 3, 1, hidden_dim, dropout, num_layers)
 
     def forward(self, event_embed, event_idx):
         all_log_probs = []
@@ -133,6 +131,7 @@ class MavenEreModel(PreTrainedModel):
             embed_dim=hidden_size,
             hidden_dim=config.scorer_hidden_size,
             dropout=config.dropout,
+            num_layers=config.scorer_num_layers,
         )
         self.temporal_scorer = PairScorer(
             out_dim=len(config.temporal_label2id), **scorer_args

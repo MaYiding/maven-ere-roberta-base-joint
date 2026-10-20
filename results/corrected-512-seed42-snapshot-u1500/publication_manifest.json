@@ -1,0 +1,80 @@
+{
+  "status": "validated_single_joint_snapshot",
+  "documents": 710,
+  "model_count": 1,
+  "forward_passes_per_document": 1,
+  "midtraining_snapshot": true,
+  "training_run_and_campaign_must_continue": true,
+  "overall_cpu": 49.46963633976877,
+  "overall_delta_vs_old_single": 0.7558425710687686,
+  "all_model_files": {
+    "corrected-512-seed42-snapshot-u1500/special_tokens_map.json": {
+      "bytes": 958,
+      "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857"
+    },
+    "corrected-512-seed42-snapshot-u1500/ROBERTA-MIT-LICENSE": {
+      "bytes": 1086,
+      "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85"
+    },
+    "corrected-512-seed42-snapshot-u1500/vocab.json": {
+      "bytes": 999355,
+      "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf"
+    },
+    "corrected-512-seed42-snapshot-u1500/validation.json": {
+      "bytes": 6491,
+      "sha256": "0f105700ca3890ea31e078925fc5e0019940036baac3dd4fcf7ba3cfb3774fc2"
+    },
+    "corrected-512-seed42-snapshot-u1500/LICENSE": {
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    "corrected-512-seed42-snapshot-u1500/UPSTREAM_NOTICE.md": {
+      "bytes": 2034,
+      "sha256": "d8d76b82229874ddbc34e4bc4a186cc1922d9dcd9c72fa7ac4eaeae20173ba8a"
+    },
+    "corrected-512-seed42-snapshot-u1500/model.safetensors": {
+      "bytes": 504795436,
+      "sha256": "f42d99f3a5c9d02b71c09f4737e89d322cf1ee9b10e0762fef068bba751e761a"
+    },
+    "corrected-512-seed42-snapshot-u1500/tokenizer_config.json": {
+      "bytes": 1221,
+      "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689"
+    },
+    "corrected-512-seed42-snapshot-u1500/checkpoint_identity.json": {
+      "bytes": 111,
+      "sha256": "bc59b091d49c7650c81fd54f9ce83a19f241ca0a2301dce3b744b71aa57eb8d1"
+    },
+    "corrected-512-seed42-snapshot-u1500/dev_metrics.json": {
+      "bytes": 1126,
+      "sha256": "f8f901a3dd30468f5c0d0de892aec51daf273bfd9d4cbd42aa11854e3c8b762e"
+    },
+    "corrected-512-seed42-snapshot-u1500/README.md": {
+      "bytes": 2412,
+      "sha256": "cd9d927af4e9ec4840ee1107fa1220ccfd64a3a56aa5a7af2031f307b105f6f9"
+    },
+    "corrected-512-seed42-snapshot-u1500/modeling_maven_ere.py": {
+      "bytes": 12477,
+      "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104"
+    },
+    "corrected-512-seed42-snapshot-u1500/merges.txt": {
+      "bytes": 456318,
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "corrected-512-seed42-snapshot-u1500/config.json": {
+      "bytes": 3128,
+      "sha256": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89"
+    },
+    "corrected-512-seed42-snapshot-u1500/configuration_maven_ere.py": {
+      "bytes": 4241,
+      "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d"
+    },
+    "corrected-512-seed42-snapshot-u1500/CITATION.cff": {
+      "bytes": 1134,
+      "sha256": "ff9309472322a9e22843c3a62602382d06acbf6fed890616b08d50cfe6b62ec9"
+    }
+  },
+  "root_model_card_sha256": "f226aeddb269b06218d67aa33d136c36a701af759814cf4441a3458f101ad7c4",
+  "frozen_training_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "public_inference_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "test_scored": false
+}

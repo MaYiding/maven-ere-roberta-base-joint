@@ -8,7 +8,7 @@ optimizer updates，FP32，微批 8、梯度累积 4、256-token 分块，scorer
 三路全710篇预测、指标及重载权重已严格通过。最终 JSON 汇总的 NumPy布尔问题已修复，
 恢复时重新核对全部12路预测、来源及权重哈希，原失败证据保留。
 四套实际公开推理命令也已经完成全部710篇核验，完整预测、所有官方指标及重新生成的组合均与 AutoModel 输出严格一致。
-目前没有已经证实的单共享 checkpoint 整体超过旧版的结论。
+本文四个参考 checkpoint 单独的 overall 均未超过旧版。另一个 corrected512 单 joint 快照已经独立核验提升，见 [单模型说明](CORRECTED_SINGLE_SNAPSHOT.md)。
 
 ## 模型目录与结果口径
 

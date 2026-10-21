@@ -1,0 +1,472 @@
+{
+  "status": "completed",
+  "split": "valid",
+  "documents": 710,
+  "valid_sha256": "6faea0e4e16b4a2d5d9631e09ef6e1c6bac6e3f912490bfc48eeaceaf98c6153",
+  "device": "cpu",
+  "precision": "float32",
+  "reference_padding": false,
+  "single_model": false,
+  "complete_model_count": 3,
+  "document_forward_passes": 3,
+  "official_protocol": {
+    "coreference": {
+      "b_cubed_precision": 97.53576247984512,
+      "b_cubed_recall": 98.02664776793011,
+      "b_cubed_f1": 97.7805890331835,
+      "ceaf_precision": 97.60884109451206,
+      "ceaf_recall": 97.3333974597444,
+      "ceaf_f1": 97.4709246830872,
+      "muc_precision": 78.36065573770492,
+      "muc_recall": 80.79783637592968,
+      "muc_f1": 79.56058588548602,
+      "blanc_precision": 86.62820155193576,
+      "blanc_recall": 90.59610152747707,
+      "blanc_f1": 88.50683703571359
+    },
+    "temporal": {
+      "temporal_precision": 47.423566959193735,
+      "temporal_recall": 63.83944356451949,
+      "temporal_f1": 54.42049630455428
+    },
+    "causal": {
+      "causal_precision": 28.98705683736635,
+      "causal_recall": 37.80827950675279,
+      "causal_f1": 32.81518761546792
+    },
+    "subevent": {
+      "subevent_precision": 29.668383773341915,
+      "subevent_recall": 30.218068535825545,
+      "subevent_f1": 29.940703435951587
+    },
+    "coreference_mean_f1": 90.82973415936759,
+    "overall_f1": 52.00153037883534
+  },
+  "original_gpu_official_protocol": {
+    "coreference": {
+      "b_cubed_precision": 97.53576247984512,
+      "b_cubed_recall": 98.02664776793011,
+      "b_cubed_f1": 97.7805890331835,
+      "ceaf_precision": 97.60884109451206,
+      "ceaf_recall": 97.3333974597444,
+      "ceaf_f1": 97.4709246830872,
+      "muc_precision": 78.36065573770492,
+      "muc_recall": 80.79783637592968,
+      "muc_f1": 79.56058588548602,
+      "blanc_precision": 86.62820155193576,
+      "blanc_recall": 90.59610152747707,
+      "blanc_f1": 88.50683703571359
+    },
+    "temporal": {
+      "temporal_precision": 47.423566959193735,
+      "temporal_recall": 63.83944356451949,
+      "temporal_f1": 54.42049630455428
+    },
+    "causal": {
+      "causal_precision": 28.98705683736635,
+      "causal_recall": 37.80827950675279,
+      "causal_f1": 32.81518761546792
+    },
+    "subevent": {
+      "subevent_precision": 29.668383773341915,
+      "subevent_recall": 30.218068535825545,
+      "subevent_f1": 29.940703435951587
+    },
+    "coreference_mean_f1": 90.82973415936759,
+    "overall_f1": 52.00153037883534
+  },
+  "all_state_tensors_predictions_metrics_exact": true,
+  "new_actual_full710_passes": 4,
+  "reused_previously_completed_full710_passes": 2,
+  "canonical_predictions_sha256": "d5e77c08a13c8c0609b3a11ce67c145ef61d15a4638814343e756cfbf45ed428",
+  "public_combiner_full710_predictions_exact": true,
+  "public_combiner_sha256": "37133c55467e57f28f8ebe899e7c0e6c71c1330577398758859a2f68298bfa97",
+  "complete_model_results": {
+    "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750": {
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+      "selected_fields": [
+        "joint",
+        "temporal",
+        "subevent"
+      ],
+      "documents": 710,
+      "single_joint_model": true,
+      "forward_passes_per_document": 1,
+      "reference_padding": false,
+      "official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.15735923080068,
+          "b_cubed_recall": 98.19804707853073,
+          "b_cubed_f1": 97.67493120374591,
+          "ceaf_precision": 97.74901906570008,
+          "ceaf_recall": 96.95748047808752,
+          "ceaf_f1": 97.35164085453061,
+          "muc_precision": 75.91558038485414,
+          "muc_recall": 82.69100743745774,
+          "muc_f1": 79.15857605177993,
+          "blanc_precision": 85.41248143803499,
+          "blanc_recall": 91.17546330604335,
+          "blanc_f1": 88.06974792984053
+        },
+        "temporal": {
+          "temporal_precision": 47.423566959193735,
+          "temporal_recall": 63.83944356451949,
+          "temporal_f1": 54.42049630455428
+        },
+        "causal": {
+          "causal_precision": 33.846553066343745,
+          "causal_recall": 28.72137404580153,
+          "causal_f1": 31.074052015088345
+        },
+        "subevent": {
+          "subevent_precision": 29.668383773341915,
+          "subevent_recall": 30.218068535825545,
+          "subevent_f1": 29.940703435951587
+        },
+        "coreference_mean_f1": 90.56372400997427,
+        "overall_f1": 51.49974394139212
+      },
+      "original_gpu_official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.15735923080068,
+          "b_cubed_recall": 98.19804707853073,
+          "b_cubed_f1": 97.67493120374591,
+          "ceaf_precision": 97.74901906570008,
+          "ceaf_recall": 96.95748047808752,
+          "ceaf_f1": 97.35164085453061,
+          "muc_precision": 75.91558038485414,
+          "muc_recall": 82.69100743745774,
+          "muc_f1": 79.15857605177993,
+          "blanc_precision": 85.41248143803499,
+          "blanc_recall": 91.17546330604335,
+          "blanc_f1": 88.06974792984053
+        },
+        "temporal": {
+          "temporal_precision": 47.423566959193735,
+          "temporal_recall": 63.83944356451949,
+          "temporal_f1": 54.42049630455428
+        },
+        "causal": {
+          "causal_precision": 33.846553066343745,
+          "causal_recall": 28.72137404580153,
+          "causal_f1": 31.074052015088345
+        },
+        "subevent": {
+          "subevent_precision": 29.668383773341915,
+          "subevent_recall": 30.218068535825545,
+          "subevent_f1": 29.940703435951587
+        },
+        "coreference_mean_f1": 90.56372400997427,
+        "overall_f1": 51.49974394139212
+      },
+      "original_gpu_vs_actual_cpu_metric_differences": [],
+      "cpu_gpu_differing_document_counts_by_field": {
+        "coreference": 0,
+        "temporal_relations": 0,
+        "causal_relations": 0,
+        "subevent_relations": 0
+      },
+      "canonical_predictions_sha256": "26461c669cf9d8ecdc47c6df709a39ee87d8810daac78aef2394b3fd917b714d",
+      "all_state_tensors_exact": true,
+      "all_predictions_exact": true,
+      "all_metrics_exact": true,
+      "reused_prior_complete710_gates": true,
+      "files": {
+        "config.json": {
+          "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+          "bytes": 3128
+        },
+        "configuration_maven_ere.py": {
+          "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+          "bytes": 4241
+        },
+        "modeling_maven_ere.py": {
+          "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+          "bytes": 12477
+        },
+        "model.safetensors": {
+          "sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6",
+          "bytes": 504795436
+        },
+        "vocab.json": {
+          "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+          "bytes": 999355
+        },
+        "merges.txt": {
+          "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+          "bytes": 456318
+        },
+        "special_tokens_map.json": {
+          "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+          "bytes": 958
+        },
+        "tokenizer_config.json": {
+          "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+          "bytes": 1221
+        }
+      }
+    },
+    "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550": {
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550",
+      "selected_fields": [
+        "coreference"
+      ],
+      "documents": 710,
+      "single_joint_model": true,
+      "forward_passes_per_document": 1,
+      "reference_padding": false,
+      "official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.53576247984512,
+          "b_cubed_recall": 98.02664776793011,
+          "b_cubed_f1": 97.7805890331835,
+          "ceaf_precision": 97.60884109451206,
+          "ceaf_recall": 97.3333974597444,
+          "ceaf_f1": 97.4709246830872,
+          "muc_precision": 78.36065573770492,
+          "muc_recall": 80.79783637592968,
+          "muc_f1": 79.56058588548602,
+          "blanc_precision": 86.62820155193576,
+          "blanc_recall": 90.59610152747707,
+          "blanc_f1": 88.50683703571359
+        },
+        "temporal": {
+          "temporal_precision": 45.6753458096013,
+          "temporal_recall": 65.25523474621833,
+          "temporal_f1": 53.73730846780225
+        },
+        "causal": {
+          "causal_precision": 35.20184061911734,
+          "causal_recall": 24.70640046975925,
+          "causal_f1": 29.034762356594495
+        },
+        "subevent": {
+          "subevent_precision": 33.8882618510158,
+          "subevent_recall": 19.691752746351863,
+          "subevent_f1": 24.909260603546617
+        },
+        "coreference_mean_f1": 90.82973415936759,
+        "overall_f1": 49.62776639682774
+      },
+      "original_gpu_official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.53576247984512,
+          "b_cubed_recall": 98.02664776793011,
+          "b_cubed_f1": 97.7805890331835,
+          "ceaf_precision": 97.60884109451206,
+          "ceaf_recall": 97.3333974597444,
+          "ceaf_f1": 97.4709246830872,
+          "muc_precision": 78.36065573770492,
+          "muc_recall": 80.79783637592968,
+          "muc_f1": 79.56058588548602,
+          "blanc_precision": 86.62820155193576,
+          "blanc_recall": 90.59610152747707,
+          "blanc_f1": 88.50683703571359
+        },
+        "temporal": {
+          "temporal_precision": 45.6753458096013,
+          "temporal_recall": 65.25523474621833,
+          "temporal_f1": 53.73730846780225
+        },
+        "causal": {
+          "causal_precision": 35.20184061911734,
+          "causal_recall": 24.70640046975925,
+          "causal_f1": 29.034762356594495
+        },
+        "subevent": {
+          "subevent_precision": 33.8882618510158,
+          "subevent_recall": 19.691752746351863,
+          "subevent_f1": 24.909260603546617
+        },
+        "coreference_mean_f1": 90.82973415936759,
+        "overall_f1": 49.62776639682774
+      },
+      "original_gpu_vs_actual_cpu_metric_differences": [],
+      "cpu_gpu_differing_document_counts_by_field": {
+        "coreference": 0,
+        "temporal_relations": 0,
+        "causal_relations": 0,
+        "subevent_relations": 0
+      },
+      "canonical_predictions_sha256": "0289b008a771954bd58424a61f342b4f55ade862ad264625a31a845d15990707",
+      "all_state_tensors_exact": true,
+      "all_predictions_exact": true,
+      "all_metrics_exact": true,
+      "reused_prior_complete710_gates": false,
+      "files": {
+        "config.json": {
+          "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+          "bytes": 3128
+        },
+        "configuration_maven_ere.py": {
+          "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+          "bytes": 4241
+        },
+        "modeling_maven_ere.py": {
+          "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+          "bytes": 12477
+        },
+        "model.safetensors": {
+          "sha256": "7930d9ffb3cb93a42d54c939c3a7236ddfeb538d961929b3576c23d0b863d2ed",
+          "bytes": 504795436
+        },
+        "vocab.json": {
+          "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+          "bytes": 999355
+        },
+        "merges.txt": {
+          "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+          "bytes": 456318
+        },
+        "special_tokens_map.json": {
+          "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+          "bytes": 958
+        },
+        "tokenizer_config.json": {
+          "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+          "bytes": 1221
+        }
+      }
+    },
+    "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250": {
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250",
+      "selected_fields": [
+        "causal"
+      ],
+      "documents": 710,
+      "single_joint_model": true,
+      "forward_passes_per_document": 1,
+      "reference_padding": false,
+      "official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.12595356774209,
+          "b_cubed_recall": 98.07573809767283,
+          "b_cubed_f1": 97.59853516970655,
+          "ceaf_precision": 97.59263203650934,
+          "ceaf_recall": 96.89815039021555,
+          "ceaf_f1": 97.24415129661416,
+          "muc_precision": 75.23510971786834,
+          "muc_recall": 81.13590263691684,
+          "muc_f1": 78.07417046193883,
+          "blanc_precision": 84.83279288026888,
+          "blanc_recall": 90.86656011949653,
+          "blanc_f1": 87.60090595663374
+        },
+        "temporal": {
+          "temporal_precision": 46.52559424081767,
+          "temporal_recall": 58.912993989063104,
+          "temporal_f1": 51.99163038622904
+        },
+        "causal": {
+          "causal_precision": 28.98705683736635,
+          "causal_recall": 37.80827950675279,
+          "causal_f1": 32.81518761546792
+        },
+        "subevent": {
+          "subevent_precision": 29.440081074233593,
+          "subevent_recall": 19.052303656337106,
+          "subevent_f1": 23.13358550666932
+        },
+        "coreference_mean_f1": 90.12944072122332,
+        "overall_f1": 49.5174610573974
+      },
+      "original_gpu_official_protocol": {
+        "coreference": {
+          "b_cubed_precision": 97.12595356774209,
+          "b_cubed_recall": 98.07573809767283,
+          "b_cubed_f1": 97.59853516970655,
+          "ceaf_precision": 97.59263203650934,
+          "ceaf_recall": 96.89815039021555,
+          "ceaf_f1": 97.24415129661416,
+          "muc_precision": 75.23510971786834,
+          "muc_recall": 81.13590263691684,
+          "muc_f1": 78.07417046193883,
+          "blanc_precision": 84.83279288026888,
+          "blanc_recall": 90.86656011949653,
+          "blanc_f1": 87.60090595663374
+        },
+        "temporal": {
+          "temporal_precision": 46.52559424081767,
+          "temporal_recall": 58.912993989063104,
+          "temporal_f1": 51.99163038622904
+        },
+        "causal": {
+          "causal_precision": 28.98705683736635,
+          "causal_recall": 37.80827950675279,
+          "causal_f1": 32.81518761546792
+        },
+        "subevent": {
+          "subevent_precision": 29.440081074233593,
+          "subevent_recall": 19.052303656337106,
+          "subevent_f1": 23.13358550666932
+        },
+        "coreference_mean_f1": 90.12944072122332,
+        "overall_f1": 49.5174610573974
+      },
+      "original_gpu_vs_actual_cpu_metric_differences": [],
+      "cpu_gpu_differing_document_counts_by_field": {
+        "coreference": 0,
+        "temporal_relations": 0,
+        "causal_relations": 0,
+        "subevent_relations": 0
+      },
+      "canonical_predictions_sha256": "b145ac414c1d6eb97a398c84525965f58ee7c92f94fa71e32f4f87efa37d8b43",
+      "all_state_tensors_exact": true,
+      "all_predictions_exact": true,
+      "all_metrics_exact": true,
+      "reused_prior_complete710_gates": false,
+      "files": {
+        "config.json": {
+          "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+          "bytes": 3128
+        },
+        "configuration_maven_ere.py": {
+          "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+          "bytes": 4241
+        },
+        "modeling_maven_ere.py": {
+          "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+          "bytes": 12477
+        },
+        "model.safetensors": {
+          "sha256": "72aa9e1d5ce0c065cbd617c0c4a782454b31134b982d31dbff9187bf1cb4c6d7",
+          "bytes": 504795436
+        },
+        "vocab.json": {
+          "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+          "bytes": 999355
+        },
+        "merges.txt": {
+          "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+          "bytes": 456318
+        },
+        "special_tokens_map.json": {
+          "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+          "bytes": 958
+        },
+        "tokenizer_config.json": {
+          "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+          "bytes": 1221
+        }
+      }
+    }
+  },
+  "selected_single_joint_cpu_overall": 51.49974394139212,
+  "strongest_public_single_cpu_overall": 51.78221109033361,
+  "single_overall_improvement_claimed": false,
+  "reference42_cpu_combination_overall": 50.036181407057285,
+  "overall_delta_vs_reference42_cpu_combination": 1.965348971778056,
+  "padding_difference": "Author reference uses reference-padding; corrected positive2 uses default trimming.",
+  "training_source_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "public_trainer_sha256": "14c3e00302020f0219710a6a304f5cbdbd6d6f63ebea4a8fd58488c0949c9c54",
+  "data_repository": "MaYiding/MAVEN-ERE",
+  "data_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "input_summary_sha256": "0c4b296a37eb9fb59bba91a2da45714320491a3c1894bbf4d1112c281494a9dc",
+  "input_manifest_sha256": "e84c238e5a207988f6e596ad45f281e8bae1f4fe25674391c970382428139fd2",
+  "gpu_logits_available": false,
+  "tolerances_relaxed": false,
+  "thresholds_changed": false,
+  "test_scored": false,
+  "parent_actual100epochs_completed": true,
+  "full15campaign_and_final_statistics_still_required": true
+}

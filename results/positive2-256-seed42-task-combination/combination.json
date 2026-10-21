@@ -1,0 +1,33 @@
+{
+  "format_version": 1,
+  "artifact_type": "task_selected_complete_joint_model_combination",
+  "single_model": false,
+  "complete_model_count": 3,
+  "document_forward_passes": 3,
+  "task_sources": {
+    "coreference": {
+      "checkpoint_subdirectory": "positive2-256-seed42-task-combination/coreference",
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550",
+      "weight_sha256": "7930d9ffb3cb93a42d54c939c3a7236ddfeb538d961929b3576c23d0b863d2ed"
+    },
+    "temporal": {
+      "checkpoint_subdirectory": "positive2-256-seed42-snapshot-u750",
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+      "weight_sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6"
+    },
+    "causal": {
+      "checkpoint_subdirectory": "positive2-256-seed42-task-combination/causal",
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250",
+      "weight_sha256": "72aa9e1d5ce0c065cbd617c0c4a782454b31134b982d31dbff9187bf1cb4c6d7"
+    },
+    "subevent": {
+      "checkpoint_subdirectory": "positive2-256-seed42-snapshot-u750",
+      "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+      "weight_sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6"
+    }
+  },
+  "existing_joint_model_revision": "7e539b7632f399806b1220c666f8f86a0b2caeee",
+  "reference_padding": false,
+  "precision": "float32",
+  "validation_batch_size": 8
+}

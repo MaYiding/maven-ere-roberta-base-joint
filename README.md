@@ -1,5 +1,9 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## 已核验的 positive2 三完整模型组合
+
+完整710篇valid的CPU Overall为 **52.0015**，比参考四模型CPU组合提高 **1.9653点**。三套完整编码器、每篇三次forward，时间与子事件复用已公开的positive2联合checkpoint；最强公开单模型仍为positive4 **51.7822**。[组合说明、全部分项增减与复现命令](docs/POSITIVE2_TASK_COMBINATION.md)分别列出四项共指指标、三类关系F1及padding/选择差异。全部15项正式实验已实际完成100轮；最终CPU核验、五种子统计和其余验收继续。下方旧版本计数属于当时的发布快照，valid不等于论文隐藏test。
+
 ## 最新单联合模型提升：positive4 中期快照
 
 `positive4-256-seed42-snapshot-u750/` 在完整710篇valid上的CPU Overall为 **51.7822**，相比上一版51.4997提高 **0.2825点**，相比原始48.7138提高 **3.0684点**。一完整encoder与全部任务头、每篇一次forward。公开CLI和独立AutoModel重载的全部预测、指标与权重严格一致。

@@ -1,5 +1,9 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## Validated positive2 three-model combination
+
+CPU Overall **52.0015** on710valid documents, **+1.9653 points** over the reference four-model CPU combination. Three complete encoders, three forwards per document; temporal/subevent share the previously published positive2 joint checkpoint. The strongest published single remains positive4 **51.7822**. All four coreference metrics, relation F1s, declines and protocol differences are disclosed in [the combination report](docs/POSITIVE2_TASK_COMBINATION.md). All15 formal runs completed actual100epochs; final CPU verification and five-seed statistics continue. Older counts below describe historical release snapshots. These are valid scores, not hidden-test or completed multi-seed claims.
+
 ## Latest verified single-joint improvement: positive4 interim snapshot
 
 `positive4-256-seed42-snapshot-u750/` has CPU overall **51.7822** on the full710-document validation set: **+0.2825points** over the preceding positive2 single, and **+3.0684points** over the original root single. It contains one encoder and all task heads, one forward per document. Full public CLI and independent AutoModel weights, predictions and metrics match exactly.

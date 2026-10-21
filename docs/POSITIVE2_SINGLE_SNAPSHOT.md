@@ -1,6 +1,6 @@
 # Positive2：已核验的单联合模型中期快照
 
-本次权重选于正式 seed42 训练的第9轮、update750，父 run 计划完整100轮且仍在继续。模型包含一个完整 RoBERTa-base 编码器及全部四任务头，约126M参数、每篇一次forward。全部15项正式实验和最终五种子统计仍须完成。
+本次权重选于正式 seed42 训练的第9轮、update750，父 run 已完整完成100轮、9,200次更新、36,500个microsteps和184次验证，最终best仍为第9轮/update750；这不是第100轮权重。模型包含一个完整 RoBERTa-base 编码器及全部四任务头，约126M参数、每篇一次forward。全部15项正式实验和最终五种子统计仍须完成。
 
 | F1 % | 原始根目录单模型 | 上一版 corrected512 单模型 | positive2 CPU 单模型 | 相比上一版增减 |
 |---|---:|---:|---:|---:|
@@ -20,7 +20,7 @@ HF根目录默认仍为旧模型，必须指定本子目录。本模型使用默
 
 ```bash
 hf download MaYiding/maven-ere-roberta-base-joint \
-  --revision 1f4fa66ad77bf1e63d82892de2130c8dc394513e \
+  --revision b7161baa9b6884a5011e5e389f00e7d1af99f5bb \
   --include "positive2-256-seed42-snapshot-u750/*" --local-dir checkpoint
 hf download MaYiding/MAVEN-ERE --repo-type dataset \
   --revision 682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e --local-dir data/MAVEN_ERE
@@ -50,3 +50,5 @@ python train_joint.py --base-model base_model --data-dir data/MAVEN_ERE \
 [全量核验](../results/positive2-256-seed42-snapshot-u750/validation.json) · [训练参数与来源](../results/positive2-256-seed42-snapshot-u750/training_recipe.json) · [发布清单](../results/positive2-256-seed42-snapshot-u750/publication_manifest.json)
 
 [公开上传回读凭证](../results/positive2-256-seed42-snapshot-u750/publication_receipt.json)
+
+[训练完成及权重一致性凭证](../results/positive2-256-seed42-snapshot-u750/training_completion.json)：全部8个模型/配置/分词/source文件哈希与此前完整710核验包完全一致，未重复推理或上传相同权重。旧validation、manifest及receipt仍指向固定原始发布revision `1f4fa66ad77bf1e63d82892de2130c8dc394513e`；本次只更新完成元数据和说明。

@@ -12,7 +12,7 @@
 | subevent_f1 | 24.35389549 | 23.38204593 | 29.94070344 | +6.55865751 |
 | overall_f1 | 48.71379377 | 49.46963634 | 51.49974394 | +2.03010760 |
 
-Selected at epoch9/update750 of a still-running formal100-epoch run. All15formal experiments continue. The root still loads the old baseline: select this subdirectory and use default padding without `--reference-padding`. [Full metrics, training and inference](docs/POSITIVE2_SINGLE_SNAPSHOT.md).
+The parent formal run completed all100epochs/9,200updates/36,500microsteps/184validations. Its final best remains epoch9/update750, not an epoch100 weight; all8model/source/tokenizer hashes are unchanged. All15formal experiments continue (6/15complete). The root still loads the old baseline: select this subdirectory and use default padding without `--reference-padding`. [Full metrics, training and inference](docs/POSITIVE2_SINGLE_SNAPSHOT.md).
 
 ## Verified single-joint improvement: interim update1500 snapshot
 

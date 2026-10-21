@@ -12,7 +12,7 @@
 | 子事件 | 24.35389549 | 29.94070344 | 31.19226171 | +1.25155827 |
 | Overall | 48.71379377 | 51.49974394 | 51.78221109 | +0.28246715 |
 
-父run仍需跑满100轮，全部15项实验继续；这是第9轮/update750的已冻结中期权重。HF根目录仍保留旧版，加载此快照需指定子目录、默认padding，**不要加`--reference-padding`**。[完整指标、训练及推理命令](docs/POSITIVE4_SINGLE_SNAPSHOT.md)。
+父run已于2026-10-21T04:05:34Z完整完成100轮、9,200次更新、36,500个microsteps和184次验证。最终选中权重仍来自第9轮/update750，全部8个模型、配置、分词和源码文件哈希与先前全710核验包完全一致，并非第100轮权重。当前7/15项完成，剩余8项及最终五种子统计、重载核验和发布继续。 [预定候选选择结果](docs/CANDIDATE_SELECTION.md)。HF根目录仍保留旧版，加载此快照需指定子目录、默认padding，**不要加`--reference-padding`**。[完整指标、训练及推理命令](docs/POSITIVE4_SINGLE_SNAPSHOT.md)。
 
 CPU/publicCLI and independentAutoModel match exactly on all710documents, predictions, metrics and state tensors. CPU overall51.78221109033361 and temporal52.456160965460995 differ from saved GPU51.78218842947946 and52.45607032204441: one validation document has one additional saved-GPU BEFORE pair that CPU omits. Full document/pair and metric differences are in validation.json. GPU logits are unavailable; no numerical margin or exact cause is asserted, and no thresholds were changed.
 
@@ -28,7 +28,7 @@ CPU/publicCLI and independentAutoModel match exactly on all710documents, predict
 | 子事件 | 24.35389549 | 23.38204593 | 29.94070344 | +6.55865751 |
 | Overall | 48.71379377 | 49.46963634 | 51.49974394 | +2.03010760 |
 
-父run已完整完成100轮、9,200次更新、36,500个microsteps和184次验证，最终best仍来自第9轮/update750，模型权重未变；全部15项实验继续（当前6/15完成）。HF根目录仍保留旧版，加载此快照需指定子目录、默认padding，**不要加`--reference-padding`**。[完整指标、训练及推理命令](docs/POSITIVE2_SINGLE_SNAPSHOT.md)。
+父run已完整完成100轮、9,200次更新、36,500个microsteps和184次验证，最终best仍来自第9轮/update750，模型权重未变；全部15项实验继续（当前7/15完成）。HF根目录仍保留旧版，加载此快照需指定子目录、默认padding，**不要加`--reference-padding`**。[完整指标、训练及推理命令](docs/POSITIVE2_SINGLE_SNAPSHOT.md)。
 
 ## 已核验的单联合模型提升（中期快照）
 

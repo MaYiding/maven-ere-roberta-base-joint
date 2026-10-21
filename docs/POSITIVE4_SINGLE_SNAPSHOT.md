@@ -1,6 +1,6 @@
 # Positive4：已核验的单联合模型中期快照
 
-本次权重选于正式 seed42 训练的第9轮、update750，父 run 计划完整100轮且仍在继续。模型包含一个完整 RoBERTa-base 编码器及全部四任务头，约126M参数、每篇一次forward。全部15项正式实验和最终五种子统计仍须完成。
+本次权重选于正式 seed42 训练的第9轮、update750。父run已于2026-10-21T04:05:34Z完整完成100轮、9,200次更新、36,500个microsteps和184次验证。最终选中权重仍来自第9轮/update750，全部8个模型、配置、分词和源码文件哈希与先前全710核验包完全一致，并非第100轮权重。当前7/15项完成，剩余8项及最终五种子统计、重载核验和发布继续。模型包含一个完整 RoBERTa-base 编码器及全部四任务头，约126M参数、每篇一次forward。全部15项正式实验和最终五种子统计仍须完成。
 
 | F1 % | 原始根目录单模型 | 上一版 positive2 单模型 | positive4 CPU 单模型 | 相比上一版增减 |
 |---|---:|---:|---:|---:|
@@ -22,7 +22,7 @@ HF根目录默认仍为旧模型，必须指定本子目录。本模型使用默
 
 ```bash
 hf download MaYiding/maven-ere-roberta-base-joint \
-  --revision ceca7c8f39b1bbdfc7015a8bafa3547dee89a950 \
+  --revision 7e539b7632f399806b1220c666f8f86a0b2caeee \
   --include "positive4-256-seed42-snapshot-u750/*" --local-dir checkpoint
 hf download MaYiding/MAVEN-ERE --repo-type dataset \
   --revision 682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e --local-dir data/MAVEN_ERE
@@ -47,8 +47,12 @@ python train_joint.py --base-model base_model --data-dir data/MAVEN_ERE \
   --scorer_num_layers 3 --positive_class_weight 4.0
 ```
 
-相对作者参考实现，corrected driver修复dummy标签loss、按实际update调度和完整resume；本次是预定六候选之一。当前发布不提前宣告最终winner，仍按预先固定规则完成候选与后续种子。原始数据三JSONL未修改，GPL、RoBERTa MIT、MAVEN/Wikipedia许可及全部来源署名保留。
+相对作者参考实现，corrected driver修复dummy标签loss、按实际update调度和完整resume；本次是预定六候选之一。六候选已全部完成，按预定规则选中positive2；这与当前最佳公开single为positive4独立。后续reference及positive2各四个种子继续。[选择证据](CANDIDATE_SELECTION.md)。原始数据三JSONL未修改，GPL、RoBERTa MIT、MAVEN/Wikipedia许可及全部来源署名保留。
 
 [全量核验](../results/positive4-256-seed42-snapshot-u750/validation.json) · [训练参数与来源](../results/positive4-256-seed42-snapshot-u750/training_recipe.json) · [发布清单](../results/positive4-256-seed42-snapshot-u750/publication_manifest.json)
 
 [Publication hash and anonymous-readback receipt](../results/positive4-256-seed42-snapshot-u750/publication_receipt.json)
+
+[完整100轮训练及权重不变核验](../results/positive4-256-seed42-snapshot-u750/training_completion.json)
+
+The parent formal run completed all100epochs /9,200optimizer updates /36,500microsteps /184validations at2026-10-21T04:05:34Z. Its final selected checkpoint remains epoch9/update750, not an epoch100 weight. All8model/config/tokenizer/source hashes exactly match the previously full710validated public snapshot. No model inference or weight upload was repeated. See positive4-256-seed42-snapshot-u750/training_completion.json. Seven of15formal runs are complete; the remaining8runs and final five-seed checks continue.

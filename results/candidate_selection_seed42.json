@@ -1,0 +1,108 @@
+{
+  "status": "candidate_selection_verified",
+  "protocol": {
+    "protocol": "task_best_combined_official_valid",
+    "rule": "maximize minimum F1-point difference from the seed42 upstream reference across coreference mean, temporal, causal and subevent; then overall F1; then stable candidate order",
+    "split": "valid",
+    "test_labels_used": false
+  },
+  "source_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "plan_sha256": "4eac71926a9d4c503a8ed352161ad537f4678c636c2ce6e360a2f913b3739dd1",
+  "candidate_order": [
+    "corrected-256",
+    "corrected-512",
+    "width150-256",
+    "appendix-two-layer-256",
+    "positive2-256",
+    "positive4-256"
+  ],
+  "ranking": [
+    {
+      "candidate": "positive2-256",
+      "minimum_task_delta": 0.048999665981881435,
+      "overall_f1": 52.00153037883534,
+      "task_deltas": {
+        "coreference": 0.048999665981881435,
+        "temporal": 1.3127225828206903,
+        "causal": 1.7157193639821529,
+        "subevent": 4.7838241627475
+      }
+    },
+    {
+      "candidate": "positive4-256",
+      "minimum_task_delta": -0.38220749257682485,
+      "overall_f1": 52.14502736076697,
+      "task_deltas": {
+        "coreference": -0.38220749257682485,
+        "temporal": 0.029406932020755505,
+        "causal": 2.752671826335245,
+        "subevent": 6.035382437479534
+      }
+    },
+    {
+      "candidate": "width150-256",
+      "minimum_task_delta": -0.8606106862780614,
+      "overall_f1": 49.72782781445381,
+      "task_deltas": {
+        "coreference": -0.0566588872743381,
+        "temporal": 0.21243194504248208,
+        "causal": -0.5287068534840067,
+        "subevent": -0.8606106862780614
+      }
+    },
+    {
+      "candidate": "corrected-512",
+      "minimum_task_delta": -0.9155939213296129,
+      "overall_f1": 50.19911556446233,
+      "task_deltas": {
+        "coreference": -0.12161738859184368,
+        "temporal": 1.3211621790448405,
+        "causal": 0.3676556489167986,
+        "subevent": -0.9155939213296129
+      }
+    },
+    {
+      "candidate": "appendix-two-layer-256",
+      "minimum_task_delta": -1.0967329148439795,
+      "overall_f1": 49.296428114390054,
+      "task_deltas": {
+        "coreference": -0.11347740232359627,
+        "temporal": -0.6670511986090943,
+        "causal": -1.0967329148439795,
+        "subevent": -1.0818817664722644
+      }
+    },
+    {
+      "candidate": "corrected-256",
+      "minimum_task_delta": -1.9770288206263622,
+      "overall_f1": 49.43382380765378,
+      "task_deltas": {
+        "coreference": 0.12657084772348526,
+        "temporal": 0.4901104819232529,
+        "causal": -1.0492130182144273,
+        "subevent": -1.9770288206263622
+      }
+    }
+  ],
+  "selected_candidate": "positive2-256",
+  "completed_formal_runs": 7,
+  "required_formal_runs": 15,
+  "remaining_reference_seeds": [
+    13,
+    21,
+    87,
+    100
+  ],
+  "remaining_selected_candidate_seeds": [
+    13,
+    21,
+    87,
+    100
+  ],
+  "split": "valid",
+  "test_scored": false,
+  "training_must_continue": true,
+  "selection_applies_to_task_selected_combination": true,
+  "published_best_single_candidate": "positive4-256",
+  "published_single_does_not_override_predeclared_selection": true
+}

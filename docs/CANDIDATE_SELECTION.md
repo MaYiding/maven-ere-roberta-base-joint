@@ -13,8 +13,6 @@
 
 positive2四任务增量均为正，最小增量为共指+0.04899966598点；positive4组合Overall较高，但共指-0.38220749258点，因此按预定规则排序第二。未因公开single改善而修改选择规则。
 
-上述组合仅是原始GPU训练统计，不冒充已核验的CPU single或新公开组合包。positive2和positive4各自的task-best组合均使用四个任务字段、三个不同完整checkpoint。当前已核验公开single最佳仍为positive4，实际CPU Overall51.78221109033361。
+原始GPU选择依据保持不变。positive2和positive4的seed42组合后来均通过完整710篇CPU CLI/AutoModel核验，CPU/GPU和任务模型成本分别披露。全部15项正式训练均完成100轮，固定positive2五种子CPU均值、样本SD和配对95%CI已完成。[完整报告](FINAL_REPRODUCTION_REPORT.md)保留全部四项共指、三类关系指标及选择/padding/实现差异。valid不是隐藏test，positive4不被追加为五种子训练arm。
 
-当前7/15项完成，余下reference与positive2的seed13/21/87/100共8项仍须各跑满100轮，之后报告同一valid协议五种子均值、样本SD和配对95%CI，并完成最终冻结重载、报告和发布回读。valid不是论文隐藏test。
-
-[完整分项增量和选择证据](../results/candidate_selection_seed42.json)
+[原始选择证据](../results/candidate_selection_seed42.json)

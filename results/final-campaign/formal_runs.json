@@ -1,0 +1,3656 @@
+{
+  "status": "all15_actual100epoch_per_run_metrics_and_selected_provenance_verified",
+  "read_at": "2026-10-21T17:09:28.787849+00:00",
+  "frozen_training_commit": "8a49171cfe160d85877ffea5e7247c2141bcf3d4",
+  "upstream_commit": "ac81a9711a69f43f55bfbc50b3bb573fd11c64b0",
+  "data_sha256": {
+    "train.jsonl": "6a5519fe7c30448690adb13d49217c50d474fc57480eae10aecb29df7eb638b7",
+    "valid.jsonl": "6faea0e4e16b4a2d5d9631e09ef6e1c6bac6e3f912490bfc48eeaceaf98c6153",
+    "test.jsonl": "aa34be601fc6397fec8256d796c4f73bd868f1230dea96e31675c18563f05bd7"
+  },
+  "foundation_weight_sha256": "5bde1d28afb363d0103324efeb5afc8b2b397fe5e04beabb9b1ef355255ade81",
+  "runs": {
+    "reference-seed42": {
+      "run_id": "reference-seed42",
+      "kind": "reference",
+      "seed": 42,
+      "variant": null,
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "6db71cee8164ff407096c36f3bfb362ad54a9470be24fbd75dfbdebb7158070b",
+      "history_or_events_sha256": "5f812f4807aaf185206b9f6c9039e607a0aa31dcae5985858ed833c7a364226f",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9125,
+      "training_validations": 182,
+      "final_selected_model_validations": 4,
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.19687487534702,
+          "b_cubed_recall": 98.29440597522711,
+          "b_cubed_f1": 97.7425595346459,
+          "ceaf_precision": 97.84380850559734,
+          "ceaf_recall": 97.11152553905033,
+          "ceaf_f1": 97.47629173719578,
+          "muc_precision": 76.76452217364147,
+          "muc_recall": 83.09668695064232,
+          "muc_f1": 79.8051948051948,
+          "blanc_precision": 84.70688837151236,
+          "blanc_recall": 92.25750044809287,
+          "blanc_f1": 88.09889189650634
+        },
+        "temporal": {
+          "temporal_precision": 53.73228299613808,
+          "temporal_recall": 52.49761451537124,
+          "temporal_f1": 53.10777372173359
+        },
+        "causal": {
+          "causal_precision": 33.274765729585006,
+          "causal_recall": 29.191133294186727,
+          "causal_f1": 31.099468251485767
+        },
+        "subevent": {
+          "subevent_precision": 29.33595456531236,
+          "subevent_recall": 22.020003279226103,
+          "subevent_f1": 25.156879273204087
+        },
+        "coreference_mean_f1": 90.78073449338571,
+        "overall_f1": 50.036213934952286
+      },
+      "task_selected_original_checkpoint_provenance": {
+        "coreference": {
+          "sha256": "867372d7a97510c9b6f49afac4ebcda26af8a52a865b85f53a125bd09e7f9974",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 1800,
+          "selected_optimizer_updates": 450,
+          "bytes": 517262086
+        },
+        "temporal": {
+          "sha256": "4c7449d1edae4f35ee1900cd412a1ff265689c6b7f3b16d7f62def9d965fffba",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 2800,
+          "selected_optimizer_updates": 700,
+          "bytes": 517261183
+        },
+        "causal": {
+          "sha256": "d125b5cc0759064437548a83dd6bc118c46a773b005ab2b79fb28b416ec3a7b8",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 23400,
+          "selected_optimizer_updates": 5850,
+          "bytes": 517260581
+        },
+        "subevent": {
+          "sha256": "a49695d99ccaa3a729edbe9d10a6b68320f6e02b9d21700aeb3d681e13b6782a",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 7200,
+          "selected_optimizer_updates": 1800,
+          "bytes": 517261183
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": false
+    },
+    "corrected-256-seed42": {
+      "run_id": "corrected-256-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "corrected-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 1.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "45e09d49dcec087c5b2f2c3bc0c5142392983dd733bf6bb29a63187d8d0dab3f",
+      "history_or_events_sha256": "8744f08ef45ca5fe1c39cbbb475b7a522c11dbb1413a7a20ea191126973f71b2",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e034-u00003050",
+        "epoch": 34,
+        "update_step": 3050,
+        "score": 47.91798706240483,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e005-u00000400",
+          "epoch": 5,
+          "update_step": 400,
+          "score": 90.9073053411092,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e006-u00000500",
+          "epoch": 6,
+          "update_step": 500,
+          "score": 53.59788420365684,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e025-u00002250",
+          "epoch": 25,
+          "update_step": 2250,
+          "score": 30.05025523327134,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e020-u00001750",
+          "epoch": 20,
+          "update_step": 1750,
+          "score": 23.179850452577725,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.05008877805473,
+          "b_cubed_recall": 98.01303336708285,
+          "b_cubed_f1": 97.52918424636162,
+          "ceaf_precision": 97.56949328992819,
+          "ceaf_recall": 96.77342295022139,
+          "ceaf_f1": 97.16982768250078,
+          "muc_precision": 74.62779156327544,
+          "muc_recall": 81.33874239350912,
+          "muc_f1": 77.83888709155613,
+          "blanc_precision": 84.60243480542293,
+          "blanc_recall": 89.86233858273032,
+          "blanc_f1": 87.04020439628897
+        },
+        "temporal": {
+          "temporal_precision": 49.794206220679605,
+          "temporal_recall": 51.97692497711388,
+          "temporal_f1": 50.862158857153695
+        },
+        "causal": {
+          "causal_precision": 32.25890079502246,
+          "causal_recall": 27.400176159718143,
+          "causal_f1": 29.631687569455465
+        },
+        "subevent": {
+          "subevent_precision": 28.399452804377567,
+          "subevent_recall": 17.01918347270044,
+          "subevent_f1": 21.283575968833297
+        },
+        "coreference_mean_f1": 89.89452585417688,
+        "overall_f1": 47.91798706240483
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.79177430953524,
+          "b_cubed_recall": 97.90430214080381,
+          "b_cubed_f1": 97.84800587267418,
+          "ceaf_precision": 97.53320268995847,
+          "ceaf_recall": 97.56311901493545,
+          "ceaf_f1": 97.54815855874277,
+          "muc_precision": 79.91858887381275,
+          "muc_recall": 79.64841108857335,
+          "muc_f1": 79.7832712495767,
+          "blanc_precision": 86.94764284899166,
+          "blanc_recall": 90.08379645098039,
+          "blanc_f1": 88.44978568344317
+        },
+        "temporal": {
+          "temporal_precision": 50.827767113411916,
+          "temporal_recall": 56.687348939488615,
+          "temporal_f1": 53.59788420365684
+        },
+        "causal": {
+          "causal_precision": 32.60066970035202,
+          "causal_recall": 27.86993540810335,
+          "causal_f1": 30.05025523327134
+        },
+        "subevent": {
+          "subevent_precision": 28.97908979089791,
+          "subevent_recall": 19.314641744548286,
+          "subevent_f1": 23.179850452577725
+        },
+        "coreference_mean_f1": 90.9073053411092,
+        "overall_f1": 49.43382380765377
+      },
+      "selected_complete_models": {
+        "0f8d04b47d424b788fd33868f24df649-e034-u00003050": {
+          "checkpoint_identity": {
+            "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e034-u00003050",
+            "epoch": 34,
+            "update_step": 3050
+          },
+          "files": {
+            "config.json": {
+              "sha256": "fc34780cb6e9a8022ea377812178fc8a563bbade37a873f396b448459fe614ed",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "855e9fd48ad6c950e3a39fb9f3642296216f6ea0a2bd63e7165e83acd66e3898",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint"
+          ]
+        },
+        "0f8d04b47d424b788fd33868f24df649-e005-u00000400": {
+          "checkpoint_identity": {
+            "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e005-u00000400",
+            "epoch": 5,
+            "update_step": 400
+          },
+          "files": {
+            "config.json": {
+              "sha256": "fc34780cb6e9a8022ea377812178fc8a563bbade37a873f396b448459fe614ed",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "8c913d8ecc8244d8acf840e52aff98b5c7c88edc7ae74396aaaff54f66ad06a2",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "0f8d04b47d424b788fd33868f24df649-e006-u00000500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e006-u00000500",
+            "epoch": 6,
+            "update_step": 500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "fc34780cb6e9a8022ea377812178fc8a563bbade37a873f396b448459fe614ed",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "b637769fc86869262617749de7cf63eb6fc142118c258a4da02a99147605875c",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "0f8d04b47d424b788fd33868f24df649-e025-u00002250": {
+          "checkpoint_identity": {
+            "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e025-u00002250",
+            "epoch": 25,
+            "update_step": 2250
+          },
+          "files": {
+            "config.json": {
+              "sha256": "fc34780cb6e9a8022ea377812178fc8a563bbade37a873f396b448459fe614ed",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "0798b20e9caf80f9f973fe2e63102b72ac49f05a0c7c9a1f3a7a52f8d6bc41e1",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        },
+        "0f8d04b47d424b788fd33868f24df649-e020-u00001750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "0f8d04b47d424b788fd33868f24df649-e020-u00001750",
+            "epoch": 20,
+            "update_step": 1750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "fc34780cb6e9a8022ea377812178fc8a563bbade37a873f396b448459fe614ed",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "f798e166d1f0f34561a6b647d51036e5d77210c95099a88545576fdb3de87ba9",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "subevent"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "corrected-512-seed42": {
+      "run_id": "corrected-512-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "corrected-512",
+        "max_length": 512,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 1.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "9ffe5ad0c262cbd4ab736d80820dc75163767f664a5a348f3baf818fc50837db",
+      "history_or_events_sha256": "3aa22e729da4f8547782a7822cb0e3fde158e5722519a3cbdc429f244cfbbd04",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e017-u00001500",
+        "epoch": 17,
+        "update_step": 1500,
+        "score": 49.46963633976877,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e006-u00000550",
+          "epoch": 6,
+          "update_step": 550,
+          "score": 90.65911710479386,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e006-u00000500",
+          "epoch": 6,
+          "update_step": 500,
+          "score": 54.42893590077843,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e017-u00001500",
+          "epoch": 17,
+          "update_step": 1500,
+          "score": 31.467123900402566,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e018-u00001600",
+          "epoch": 18,
+          "update_step": 1600,
+          "score": 24.241285351874474,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 96.80652531739345,
+          "b_cubed_recall": 98.21624407338692,
+          "b_cubed_f1": 97.50628963142098,
+          "ceaf_precision": 97.65879548881632,
+          "ceaf_recall": 96.51452029475684,
+          "ceaf_f1": 97.08328625002814,
+          "muc_precision": 73.35329341317365,
+          "muc_recall": 82.8262339418526,
+          "muc_f1": 77.80247697681804,
+          "blanc_precision": 83.90054341073724,
+          "blanc_recall": 91.4985340306122,
+          "blanc_f1": 87.30315646973519
+        },
+        "temporal": {
+          "temporal_precision": 51.80525869693396,
+          "temporal_recall": 54.47284422422103,
+          "temporal_f1": 53.10557319765314
+        },
+        "causal": {
+          "causal_precision": 31.967585580127235,
+          "causal_recall": 30.98209042865531,
+          "causal_f1": 31.467123900402566
+        },
+        "subevent": {
+          "subevent_precision": 27.75399864834422,
+          "subevent_recall": 20.200032792261027,
+          "subevent_f1": 23.382045929018787
+        },
+        "coreference_mean_f1": 89.92380233200059,
+        "overall_f1": 49.46963633976877
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.25522280954159,
+          "b_cubed_recall": 98.1898945324142,
+          "b_cubed_f1": 97.72032374374764,
+          "ceaf_precision": 97.70500845691772,
+          "ceaf_recall": 97.06966517144853,
+          "ceaf_f1": 97.38630058836674,
+          "muc_precision": 76.65615141955836,
+          "muc_recall": 82.1501014198783,
+          "muc_f1": 79.30809399477808,
+          "blanc_precision": 85.53674134725327,
+          "blanc_recall": 91.36326483961332,
+          "blanc_f1": 88.22175009228302
+        },
+        "temporal": {
+          "temporal_precision": 52.3957208226705,
+          "temporal_recall": 56.62631928198124,
+          "temporal_f1": 54.42893590077843
+        },
+        "causal": {
+          "causal_precision": 31.967585580127235,
+          "causal_recall": 30.98209042865531,
+          "causal_f1": 31.467123900402566
+        },
+        "subevent": {
+          "subevent_precision": 28.389084507042256,
+          "subevent_recall": 21.15100836202656,
+          "subevent_f1": 24.241285351874474
+        },
+        "coreference_mean_f1": 90.65911710479386,
+        "overall_f1": 50.19911556446233
+      },
+      "selected_complete_models": {
+        "2a010a14484d4b24952261ce65d45312-e017-u00001500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e017-u00001500",
+            "epoch": 17,
+            "update_step": 1500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "f42d99f3a5c9d02b71c09f4737e89d322cf1ee9b10e0762fef068bba751e761a",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "causal"
+          ]
+        },
+        "2a010a14484d4b24952261ce65d45312-e006-u00000550": {
+          "checkpoint_identity": {
+            "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e006-u00000550",
+            "epoch": 6,
+            "update_step": 550
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "c3755a9dbb4f39a9d97c92e50450c2c7618b3ac9a7546f45da9d56492daaa4a4",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "2a010a14484d4b24952261ce65d45312-e006-u00000500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e006-u00000500",
+            "epoch": 6,
+            "update_step": 500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "8e771e6e007fa1e41518288580c36efa4271a47d6bd4a8fbdf4f88ec77fa51a1",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "2a010a14484d4b24952261ce65d45312-e018-u00001600": {
+          "checkpoint_identity": {
+            "checkpoint_id": "2a010a14484d4b24952261ce65d45312-e018-u00001600",
+            "epoch": 18,
+            "update_step": 1600
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c08eb395627e37dbfd90c1b3cc1a950085e6706d93374bd2f0a3ed92abf05a89",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "e19256cfb587bfa384d594b73e6f310d884f0330b63400a6793e0003c68e44d5",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "subevent"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "width150-256-seed42": {
+      "run_id": "width150-256-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "width150-256",
+        "max_length": 256,
+        "scorer_hidden_size": 150,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 1.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "814759c77d119cf26d0fd4fa5a4824a62cd1541684cbce56bb54d04151732074",
+      "history_or_events_sha256": "c316128e8524db31a74febd7d670d0663ebecb3bf33a59d4a9d5fac616adee87",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e078-u00007100",
+        "epoch": 78,
+        "update_step": 7100,
+        "score": 47.96122965119565,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e006-u00000550",
+          "epoch": 6,
+          "update_step": 550,
+          "score": 90.72407560611137,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e006-u00000500",
+          "epoch": 6,
+          "update_step": 500,
+          "score": 53.32020566677607,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e036-u00003300",
+          "epoch": 36,
+          "update_step": 3300,
+          "score": 30.57076139800176,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e027-u00002400",
+          "epoch": 27,
+          "update_step": 2400,
+          "score": 24.296268586926026,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.70960773514344,
+          "b_cubed_recall": 97.5577366016061,
+          "b_cubed_f1": 97.63361310872686,
+          "ceaf_precision": 97.23065194155083,
+          "ceaf_recall": 97.39169896948911,
+          "ceaf_f1": 97.31110882353993,
+          "muc_precision": 78.23691460055096,
+          "muc_recall": 76.80865449628126,
+          "muc_f1": 77.51620607301261,
+          "blanc_precision": 86.20079656870014,
+          "blanc_recall": 87.41481501965708,
+          "blanc_f1": 86.79746711526825
+        },
+        "temporal": {
+          "temporal_precision": 49.910462169663326,
+          "temporal_recall": 50.08403686966293,
+          "temporal_f1": 49.99709887049358
+        },
+        "causal": {
+          "causal_precision": 33.23596531264263,
+          "causal_recall": 26.724897240164413,
+          "causal_f1": 29.626917287115017
+        },
+        "subevent": {
+          "subevent_precision": 29.18421052631579,
+          "subevent_recall": 18.183308739137562,
+          "subevent_f1": 22.406303667037076
+        },
+        "coreference_mean_f1": 89.81459878013692,
+        "overall_f1": 47.96122965119565
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.40107224194901,
+          "b_cubed_recall": 98.09423438079233,
+          "b_cubed_f1": 97.74642444874725,
+          "ceaf_precision": 97.70819941403465,
+          "ceaf_recall": 97.24666138846072,
+          "ceaf_f1": 97.47688407645185,
+          "muc_precision": 77.57069408740361,
+          "muc_recall": 81.60919540229885,
+          "muc_f1": 79.53871499176276,
+          "blanc_precision": 86.03929911170154,
+          "blanc_recall": 90.49767346778732,
+          "blanc_f1": 88.13427890748356
+        },
+        "temporal": {
+          "temporal_precision": 51.323654613075234,
+          "temporal_recall": 55.47838048600919,
+          "temporal_f1": 53.32020566677607
+        },
+        "causal": {
+          "causal_precision": 31.94655572445796,
+          "causal_recall": 29.30857310628303,
+          "causal_f1": 30.57076139800176
+        },
+        "subevent": {
+          "subevent_precision": 28.2760121898128,
+          "subevent_recall": 21.298573536645353,
+          "subevent_f1": 24.296268586926026
+        },
+        "coreference_mean_f1": 90.72407560611137,
+        "overall_f1": 49.7278278144538
+      },
+      "selected_complete_models": {
+        "1686e3d5934f4b778830407060c5d450-e078-u00007100": {
+          "checkpoint_identity": {
+            "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e078-u00007100",
+            "epoch": 78,
+            "update_step": 7100
+          },
+          "files": {
+            "config.json": {
+              "sha256": "5e33de32265c07a234f838f11c7ed71fdeb287d98761119add3eebb0fd800bd7",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "ec76e044a83d6ad6af84a4f003981563c1363300218c1d24718749507b0dfb4c",
+              "bytes": 503128828
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint"
+          ]
+        },
+        "1686e3d5934f4b778830407060c5d450-e006-u00000550": {
+          "checkpoint_identity": {
+            "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e006-u00000550",
+            "epoch": 6,
+            "update_step": 550
+          },
+          "files": {
+            "config.json": {
+              "sha256": "5e33de32265c07a234f838f11c7ed71fdeb287d98761119add3eebb0fd800bd7",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "757adadc2e39800a513c65fe1bbe25b785195fa7eac1edf99f5f2fd378835155",
+              "bytes": 503128828
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "1686e3d5934f4b778830407060c5d450-e006-u00000500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e006-u00000500",
+            "epoch": 6,
+            "update_step": 500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "5e33de32265c07a234f838f11c7ed71fdeb287d98761119add3eebb0fd800bd7",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "9a84f296a98dabedc778384e6b595cc63aa9fdf9b8ddc81eb5f8dbc453d854f8",
+              "bytes": 503128828
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "1686e3d5934f4b778830407060c5d450-e036-u00003300": {
+          "checkpoint_identity": {
+            "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e036-u00003300",
+            "epoch": 36,
+            "update_step": 3300
+          },
+          "files": {
+            "config.json": {
+              "sha256": "5e33de32265c07a234f838f11c7ed71fdeb287d98761119add3eebb0fd800bd7",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "937cf8d70259b44761337574428e25cf7177bb3b2cc6147b013e8f0308b119b7",
+              "bytes": 503128828
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        },
+        "1686e3d5934f4b778830407060c5d450-e027-u00002400": {
+          "checkpoint_identity": {
+            "checkpoint_id": "1686e3d5934f4b778830407060c5d450-e027-u00002400",
+            "epoch": 27,
+            "update_step": 2400
+          },
+          "files": {
+            "config.json": {
+              "sha256": "5e33de32265c07a234f838f11c7ed71fdeb287d98761119add3eebb0fd800bd7",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "aabf69ecdfce6011699bf3c80cb330e5897c28aaec084b35cbce488c97f6f98a",
+              "bytes": 503128828
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "subevent"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "appendix-two-layer-256-seed42": {
+      "run_id": "appendix-two-layer-256-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "appendix-two-layer-256",
+        "max_length": 256,
+        "scorer_hidden_size": 150,
+        "scorer_num_layers": 2,
+        "positive_class_weight": 1.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "8a0866a379a28ea1b786908dd5ed4b602c530515e1b34b8065b6735f05065246",
+      "history_or_events_sha256": "62cffc907a91755b05a2a1aac4f07d5ced0825c81d49333f161ee42a468d42fc",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e030-u00002750",
+        "epoch": 30,
+        "update_step": 2750,
+        "score": 47.763557644907316,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e009-u00000800",
+          "epoch": 9,
+          "update_step": 800,
+          "score": 90.66725709106211,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e006-u00000500",
+          "epoch": 6,
+          "update_step": 500,
+          "score": 52.44072252312449,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e080-u00007350",
+          "epoch": 80,
+          "update_step": 7350,
+          "score": 30.002735336641788,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e027-u00002400",
+          "epoch": 27,
+          "update_step": 2400,
+          "score": 24.074997506731822,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.24633789992558,
+          "b_cubed_recall": 97.92858684872179,
+          "b_cubed_f1": 97.58626994750776,
+          "ceaf_precision": 97.51775842023504,
+          "ceaf_recall": 96.93747361766081,
+          "ceaf_f1": 97.22675018867797,
+          "muc_precision": 75.63451776649747,
+          "muc_recall": 80.5949966193374,
+          "muc_f1": 78.03600654664484,
+          "blanc_precision": 85.40936182702374,
+          "blanc_recall": 89.60830590913338,
+          "blanc_f1": 87.38734447637873
+        },
+        "temporal": {
+          "temporal_precision": 49.95499634787116,
+          "temporal_recall": 51.34580082050984,
+          "temporal_f1": 50.64085109228924
+        },
+        "causal": {
+          "causal_precision": 32.36028423276359,
+          "causal_recall": 24.735760422783322,
+          "causal_f1": 28.038938347616277
+        },
+        "subevent": {
+          "subevent_precision": 30.90539756239118,
+          "subevent_recall": 17.461878996556813,
+          "subevent_f1": 22.315348349921425
+        },
+        "coreference_mean_f1": 90.05909278980232,
+        "overall_f1": 47.763557644907316
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.58897214357224,
+          "b_cubed_recall": 97.96374560322815,
+          "b_cubed_f1": 97.77599974991759,
+          "ceaf_precision": 97.55557960721067,
+          "ceaf_recall": 97.34013264899588,
+          "ceaf_f1": 97.44773704546347,
+          "muc_precision": 78.41584158415841,
+          "muc_recall": 80.32454361054768,
+          "muc_f1": 79.35871743486973,
+          "blanc_precision": 86.23600843739435,
+          "blanc_recall": 90.14372672282387,
+          "blanc_f1": 88.08657413399769
+        },
+        "temporal": {
+          "temporal_precision": 52.80787403121715,
+          "temporal_recall": 52.0786410729595,
+          "temporal_f1": 52.44072252312449
+        },
+        "causal": {
+          "causal_precision": 32.079886354140555,
+          "causal_recall": 28.178214914856138,
+          "causal_f1": 30.002735336641788
+        },
+        "subevent": {
+          "subevent_precision": 30.728105906313647,
+          "subevent_recall": 19.790129529431056,
+          "subevent_f1": 24.074997506731822
+        },
+        "coreference_mean_f1": 90.66725709106211,
+        "overall_f1": 49.296428114390054
+      },
+      "selected_complete_models": {
+        "3ad3d158006a4de1b429b79203ee21a2-e030-u00002750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e030-u00002750",
+            "epoch": 30,
+            "update_step": 2750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "a9c30064b023c3a9ee7cb0122eb8c7c937b302172cc3c47a3318275602c43429",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "3cdde9bdbc8ca55ac722d93b1a4e28842c4ffa0b5d5ca78eb9423f4136ae1627",
+              "bytes": 502765596
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint"
+          ]
+        },
+        "3ad3d158006a4de1b429b79203ee21a2-e009-u00000800": {
+          "checkpoint_identity": {
+            "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e009-u00000800",
+            "epoch": 9,
+            "update_step": 800
+          },
+          "files": {
+            "config.json": {
+              "sha256": "a9c30064b023c3a9ee7cb0122eb8c7c937b302172cc3c47a3318275602c43429",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "9f321c771973ca364486475b33cb72ef1016f1a0b27636c32bb040a8849f47b6",
+              "bytes": 502765596
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "3ad3d158006a4de1b429b79203ee21a2-e006-u00000500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e006-u00000500",
+            "epoch": 6,
+            "update_step": 500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "a9c30064b023c3a9ee7cb0122eb8c7c937b302172cc3c47a3318275602c43429",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "dc6900dc4805dc1cc1252167af75c9482d0dee631ddb4fccc8700cbf10a13231",
+              "bytes": 502765596
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "3ad3d158006a4de1b429b79203ee21a2-e080-u00007350": {
+          "checkpoint_identity": {
+            "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e080-u00007350",
+            "epoch": 80,
+            "update_step": 7350
+          },
+          "files": {
+            "config.json": {
+              "sha256": "a9c30064b023c3a9ee7cb0122eb8c7c937b302172cc3c47a3318275602c43429",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "6110a001bd505e3dbc20b48d3128352fa1e9504c090dbee11dfe1112aa336af7",
+              "bytes": 502765596
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        },
+        "3ad3d158006a4de1b429b79203ee21a2-e027-u00002400": {
+          "checkpoint_identity": {
+            "checkpoint_id": "3ad3d158006a4de1b429b79203ee21a2-e027-u00002400",
+            "epoch": 27,
+            "update_step": 2400
+          },
+          "files": {
+            "config.json": {
+              "sha256": "a9c30064b023c3a9ee7cb0122eb8c7c937b302172cc3c47a3318275602c43429",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "bd5a295597570177320d12a4eaa573abf91441a3aa320154e994a911b75007a2",
+              "bytes": 502765596
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "subevent"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "positive2-256-seed42": {
+      "run_id": "positive2-256-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "positive2-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 2.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "3e5139a525db12304c6cbf95bacce5b857a6473962346e3ed1aa169427ff6091",
+      "history_or_events_sha256": "e07c05cc7430ef6fb712659a4406b1f0812afa0e7efee94900faeb9fc01b3f0f",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+        "epoch": 9,
+        "update_step": 750,
+        "score": 51.49974394139212,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550",
+          "epoch": 6,
+          "update_step": 550,
+          "score": 90.82973415936759,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+          "epoch": 9,
+          "update_step": 750,
+          "score": 54.42049630455428,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250",
+          "epoch": 25,
+          "update_step": 2250,
+          "score": 32.81518761546792,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+          "epoch": 9,
+          "update_step": 750,
+          "score": 29.940703435951587,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.15735923080068,
+          "b_cubed_recall": 98.19804707853073,
+          "b_cubed_f1": 97.67493120374591,
+          "ceaf_precision": 97.74901906570008,
+          "ceaf_recall": 96.95748047808752,
+          "ceaf_f1": 97.35164085453061,
+          "muc_precision": 75.91558038485414,
+          "muc_recall": 82.69100743745774,
+          "muc_f1": 79.15857605177993,
+          "blanc_precision": 85.41248143803499,
+          "blanc_recall": 91.17546330604335,
+          "blanc_f1": 88.06974792984053
+        },
+        "temporal": {
+          "temporal_precision": 47.423566959193735,
+          "temporal_recall": 63.83944356451949,
+          "temporal_f1": 54.42049630455428
+        },
+        "causal": {
+          "causal_precision": 33.846553066343745,
+          "causal_recall": 28.72137404580153,
+          "causal_f1": 31.074052015088345
+        },
+        "subevent": {
+          "subevent_precision": 29.668383773341915,
+          "subevent_recall": 30.218068535825545,
+          "subevent_f1": 29.940703435951587
+        },
+        "coreference_mean_f1": 90.56372400997427,
+        "overall_f1": 51.49974394139212
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.53576247984512,
+          "b_cubed_recall": 98.02664776793011,
+          "b_cubed_f1": 97.7805890331835,
+          "ceaf_precision": 97.60884109451206,
+          "ceaf_recall": 97.3333974597444,
+          "ceaf_f1": 97.4709246830872,
+          "muc_precision": 78.36065573770492,
+          "muc_recall": 80.79783637592968,
+          "muc_f1": 79.56058588548602,
+          "blanc_precision": 86.62820155193576,
+          "blanc_recall": 90.59610152747707,
+          "blanc_f1": 88.50683703571359
+        },
+        "temporal": {
+          "temporal_precision": 47.423566959193735,
+          "temporal_recall": 63.83944356451949,
+          "temporal_f1": 54.42049630455428
+        },
+        "causal": {
+          "causal_precision": 28.98705683736635,
+          "causal_recall": 37.80827950675279,
+          "causal_f1": 32.81518761546792
+        },
+        "subevent": {
+          "subevent_precision": 29.668383773341915,
+          "subevent_recall": 30.218068535825545,
+          "subevent_f1": 29.940703435951587
+        },
+        "coreference_mean_f1": 90.82973415936759,
+        "overall_f1": 52.00153037883534
+      },
+      "selected_complete_models": {
+        "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e009-u00000750",
+            "epoch": 9,
+            "update_step": 750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "cf16e62831c991a27c1de494af34bacd834421cfb3a7018cc98e774d6710a3b6",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "temporal",
+            "subevent"
+          ]
+        },
+        "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550": {
+          "checkpoint_identity": {
+            "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e006-u00000550",
+            "epoch": 6,
+            "update_step": 550
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "7930d9ffb3cb93a42d54c939c3a7236ddfeb538d961929b3576c23d0b863d2ed",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250": {
+          "checkpoint_identity": {
+            "checkpoint_id": "193a0348d71d4fc5b0661dd27b6ce339-e025-u00002250",
+            "epoch": 25,
+            "update_step": 2250
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "72aa9e1d5ce0c065cbd617c0c4a782454b31134b982d31dbff9187bf1cb4c6d7",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 3,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "positive4-256-seed42": {
+      "run_id": "positive4-256-seed42",
+      "kind": "candidate",
+      "seed": 42,
+      "variant": {
+        "id": "positive4-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 4.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "9ad55ee648f5d4eeb113ef2bafb5fef254101f5314fd721cfd1c3f046f57f423",
+      "history_or_events_sha256": "d4594f6f1097e184e6078f1d7a13ad18d259882ef5bf15cddeabc465b5d51bb2",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e009-u00000750",
+        "epoch": 9,
+        "update_step": 750,
+        "score": 51.78218842947946,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e098-u00008950",
+          "epoch": 98,
+          "update_step": 8950,
+          "score": 90.39852700080888,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e013-u00001150",
+          "epoch": 13,
+          "update_step": 1150,
+          "score": 53.13718065375434,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e013-u00001150",
+          "epoch": 13,
+          "update_step": 1150,
+          "score": 33.85214007782101,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e009-u00000750",
+          "epoch": 9,
+          "update_step": 750,
+          "score": 31.19226171068362,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 96.93252489422478,
+          "b_cubed_recall": 98.23682307568696,
+          "b_cubed_f1": 97.5803157346367,
+          "ceaf_precision": 97.7403743411671,
+          "ceaf_recall": 96.79900640229442,
+          "ceaf_f1": 97.26741275165982,
+          "muc_precision": 74.93887530562347,
+          "muc_recall": 82.89384719405002,
+          "muc_f1": 78.71589085072232,
+          "blanc_precision": 83.69244728721831,
+          "blanc_recall": 91.65375522638344,
+          "blanc_f1": 87.23751345605173
+        },
+        "temporal": {
+          "temporal_precision": 40.774529082449526,
+          "temporal_recall": 73.51845662777237,
+          "temporal_f1": 52.45607032204441
+        },
+        "causal": {
+          "causal_precision": 26.350280549963596,
+          "causal_recall": 45.155607751027595,
+          "causal_f1": 33.28013848692218
+        },
+        "subevent": {
+          "subevent_precision": 23.327643664146954,
+          "subevent_recall": 47.0568945728808,
+          "subevent_f1": 31.19226171068362
+        },
+        "coreference_mean_f1": 90.20028319826764,
+        "overall_f1": 51.78218842947946
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.63909259719156,
+          "b_cubed_recall": 97.82585780673517,
+          "b_cubed_f1": 97.73238597562528,
+          "ceaf_precision": 97.3903769076908,
+          "ceaf_recall": 97.36647889483079,
+          "ceaf_f1": 97.37842643503508,
+          "muc_precision": 78.42211732973702,
+          "muc_recall": 78.6342123056119,
+          "muc_f1": 78.52802160702227,
+          "blanc_precision": 86.28982283130127,
+          "blanc_recall": 89.78680795450695,
+          "blanc_f1": 87.95527398555295
+        },
+        "temporal": {
+          "temporal_precision": 43.47996325002929,
+          "temporal_recall": 68.3091394333929,
+          "temporal_f1": 53.13718065375434
+        },
+        "causal": {
+          "causal_precision": 29.21953299925365,
+          "causal_recall": 40.23047563123899,
+          "causal_f1": 33.85214007782101
+        },
+        "subevent": {
+          "subevent_precision": 23.327643664146954,
+          "subevent_recall": 47.0568945728808,
+          "subevent_f1": 31.19226171068362
+        },
+        "coreference_mean_f1": 90.39852700080888,
+        "overall_f1": 52.14502736076697
+      },
+      "selected_complete_models": {
+        "31b18f704ec34617b056f7fee7896332-e009-u00000750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e009-u00000750",
+            "epoch": 9,
+            "update_step": 750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c4264aecd8dfb13b1f2149f136a933f2a52a0123a512269193fdd418a412b5f3",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "585b6ad1c5fc40b158d3f7c481c3d54ee172a8105a8191ee7e38e2dd4d919d1b",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "subevent"
+          ]
+        },
+        "31b18f704ec34617b056f7fee7896332-e098-u00008950": {
+          "checkpoint_identity": {
+            "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e098-u00008950",
+            "epoch": 98,
+            "update_step": 8950
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c4264aecd8dfb13b1f2149f136a933f2a52a0123a512269193fdd418a412b5f3",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "d9f61d1ba847fb043aa055bdc5e97ad555f300a88862df9150f5ed673e84a5e7",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "31b18f704ec34617b056f7fee7896332-e013-u00001150": {
+          "checkpoint_identity": {
+            "checkpoint_id": "31b18f704ec34617b056f7fee7896332-e013-u00001150",
+            "epoch": 13,
+            "update_step": 1150
+          },
+          "files": {
+            "config.json": {
+              "sha256": "c4264aecd8dfb13b1f2149f136a933f2a52a0123a512269193fdd418a412b5f3",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "2be4aa76febb9dc018473ad65ace6860cd8b7531d6576a28544bbf2d0b25cc34",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal",
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 3,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "reference-seed13": {
+      "run_id": "reference-seed13",
+      "kind": "reference",
+      "seed": 13,
+      "variant": null,
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "f63da6efbeb3e354a565595844f50710718f5387974115351613fa73b99cea9a",
+      "history_or_events_sha256": "9ea847a3201841e3c61db3fdb6b7208afc2025b8d04341496dd536aea6c7aad6",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9125,
+      "training_validations": 182,
+      "final_selected_model_validations": 4,
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.62394105082515,
+          "b_cubed_recall": 97.98505462791178,
+          "b_cubed_f1": 97.80416451365636,
+          "ceaf_precision": 97.57963336634013,
+          "ceaf_recall": 97.45392498644362,
+          "ceaf_f1": 97.51673866388492,
+          "muc_precision": 79.2,
+          "muc_recall": 80.32454361054768,
+          "muc_f1": 79.7583081570997,
+          "blanc_precision": 85.8891478910518,
+          "blanc_recall": 90.61797615538099,
+          "blanc_f1": 88.10249947396804
+        },
+        "temporal": {
+          "temporal_precision": 53.26957819495719,
+          "temporal_recall": 52.55719108579511,
+          "temporal_f1": 52.91098687562934
+        },
+        "causal": {
+          "causal_precision": 32.47286821705426,
+          "causal_recall": 30.74721080446271,
+          "causal_f1": 31.58648770924446
+        },
+        "subevent": {
+          "subevent_precision": 26.069364161849713,
+          "subevent_recall": 22.18396458435809,
+          "subevent_f1": 23.970236513420144
+        },
+        "coreference_mean_f1": 90.79542770215224,
+        "overall_f1": 49.81578470011155
+      },
+      "task_selected_original_checkpoint_provenance": {
+        "coreference": {
+          "sha256": "c2dad961c50a9fd87c110f1d37c0e8572603f2a78d7fce8d931d72bcd49913d8",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 2200,
+          "selected_optimizer_updates": 550,
+          "bytes": 517262086
+        },
+        "temporal": {
+          "sha256": "8385677c7e7530591c64fb131161ccd21f23fff610bcd9ce94a5217b23a71843",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 3000,
+          "selected_optimizer_updates": 750,
+          "bytes": 517261183
+        },
+        "causal": {
+          "sha256": "02fa6ec4ab4da114d319b438da2cfb160c7cfb6342b8efbb6432bc51b14b3d4a",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 18800,
+          "selected_optimizer_updates": 4700,
+          "bytes": 517260581
+        },
+        "subevent": {
+          "sha256": "c9a85cd86c0b38c9643babefcb618131fdf4ceeb7f9034a30324eaf400a6e409",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 7800,
+          "selected_optimizer_updates": 1950,
+          "bytes": 517261183
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": false
+    },
+    "reference-seed21": {
+      "run_id": "reference-seed21",
+      "kind": "reference",
+      "seed": 21,
+      "variant": null,
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "1e466acada3f295734b2af618b3a95550439868f4dc063ead1f36082aef36170",
+      "history_or_events_sha256": "f15e55e4212f1f1c8734be8f2fd9c3c8f9a314af0354e0bc356843509ea5dde2",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9125,
+      "training_validations": 182,
+      "final_selected_model_validations": 4,
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.42202941251249,
+          "b_cubed_recall": 98.01255037925452,
+          "b_cubed_f1": 97.71639774309115,
+          "ceaf_precision": 97.62821864717402,
+          "ceaf_recall": 97.22096026621533,
+          "ceaf_f1": 97.42416384702625,
+          "muc_precision": 77.24628312863608,
+          "muc_recall": 80.79783637592968,
+          "muc_f1": 78.98215465961667,
+          "blanc_precision": 85.96840639302043,
+          "blanc_recall": 90.6813471911441,
+          "blanc_f1": 88.17511363573327
+        },
+        "temporal": {
+          "temporal_precision": 53.591286730483,
+          "temporal_recall": 52.14596744116208,
+          "temporal_f1": 52.85874907326941
+        },
+        "causal": {
+          "causal_precision": 30.593101410739344,
+          "causal_recall": 30.40223135642983,
+          "causal_f1": 30.497367742885544
+        },
+        "subevent": {
+          "subevent_precision": 26.222038111019057,
+          "subevent_recall": 20.75750122970979,
+          "subevent_f1": 23.171959366706325
+        },
+        "coreference_mean_f1": 90.57445747136684,
+        "overall_f1": 49.27563341355703
+      },
+      "task_selected_original_checkpoint_provenance": {
+        "coreference": {
+          "sha256": "96be3fe242de55f21d907e3e05fd67520a085a46528b35cfa4474a1945816fab",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 35800,
+          "selected_optimizer_updates": 8950,
+          "bytes": 517262086
+        },
+        "temporal": {
+          "sha256": "251a1f80135e81e84cfa16d768b69a289ac62b6696f58f21630405c8ca1c0197",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 3000,
+          "selected_optimizer_updates": 750,
+          "bytes": 517261183
+        },
+        "causal": {
+          "sha256": "12fda418b3c020e257058724f01e84a6f41177e3c01f2c7640b1afa197dd11b9",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 16200,
+          "selected_optimizer_updates": 4050,
+          "bytes": 517260581
+        },
+        "subevent": {
+          "sha256": "a94f756ae2c6d27665522039326f54bc9169f80b3ab2c5d642cad68633d882ae",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 15600,
+          "selected_optimizer_updates": 3900,
+          "bytes": 517261183
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": false
+    },
+    "reference-seed87": {
+      "run_id": "reference-seed87",
+      "kind": "reference",
+      "seed": 87,
+      "variant": null,
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "f2654f2bd64caddaa1cf377acc547faee958c25aada2731472f89914f7a57759",
+      "history_or_events_sha256": "1c47a0c186ad3e7c312b8a988324d90fefd94cb25fb983d5cb7fe51c239dc79d",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9125,
+      "training_validations": 182,
+      "final_selected_model_validations": 4,
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.39862262471932,
+          "b_cubed_recall": 98.12530426703655,
+          "b_cubed_f1": 97.76061305818453,
+          "ceaf_precision": 97.71323111891263,
+          "ceaf_recall": 97.29962379744738,
+          "ceaf_f1": 97.50598884346293,
+          "muc_precision": 77.77777777777779,
+          "muc_recall": 81.40635564570657,
+          "muc_f1": 79.55071027419888,
+          "blanc_precision": 85.74157592460836,
+          "blanc_recall": 91.09618828574276,
+          "blanc_f1": 88.22598827781547
+        },
+        "temporal": {
+          "temporal_precision": 50.3792982440939,
+          "temporal_recall": 56.32456153097255,
+          "temporal_f1": 53.1863025352293
+        },
+        "causal": {
+          "causal_precision": 33.30259076045946,
+          "causal_recall": 29.154433352906633,
+          "causal_f1": 31.090759657156276
+        },
+        "subevent": {
+          "subevent_precision": 30.042534139243337,
+          "subevent_recall": 22.003607148712902,
+          "subevent_f1": 25.402233579405642
+        },
+        "coreference_mean_f1": 90.76082511341545,
+        "overall_f1": 50.11003022130167
+      },
+      "task_selected_original_checkpoint_provenance": {
+        "coreference": {
+          "sha256": "d0688780441a42922e287ebc3f276cf9d4db8399be03bdd121df08680c31a7a0",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 2200,
+          "selected_optimizer_updates": 550,
+          "bytes": 517262086
+        },
+        "temporal": {
+          "sha256": "1d4de5e2b5b230b5d81c56c4f99cb741f5bc29d2e70f78ba1bb4128d5e1c121d",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 4600,
+          "selected_optimizer_updates": 1150,
+          "bytes": 517261183
+        },
+        "causal": {
+          "sha256": "8bc45b2312cc38a09438b220943433a1c6c14a4bb8995a5b22d7129288dd05fb",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 23200,
+          "selected_optimizer_updates": 5800,
+          "bytes": 517260581
+        },
+        "subevent": {
+          "sha256": "b913b16cd3ebe8c58188c096e72f143ac568caedad67d68b38e4e4fa3ab00c9b",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 10200,
+          "selected_optimizer_updates": 2550,
+          "bytes": 517261183
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": false
+    },
+    "reference-seed100": {
+      "run_id": "reference-seed100",
+      "kind": "reference",
+      "seed": 100,
+      "variant": null,
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "85e7fb65fd298e178abc171459cea48136a0bb00bce6d0410b0e471afd642bb3",
+      "history_or_events_sha256": "1b71bfa53997f8bc982db572b249f649fd8562581c1a54b5e0b25baede1b3069",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9125,
+      "training_validations": 182,
+      "final_selected_model_validations": 4,
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.74875458874332,
+          "b_cubed_recall": 97.8176615910024,
+          "b_cubed_f1": 97.78319595032698,
+          "ceaf_precision": 97.4697950593572,
+          "ceaf_recall": 97.4697950593572,
+          "ceaf_f1": 97.4697950593572,
+          "muc_precision": 79.24273157538877,
+          "muc_recall": 79.24273157538877,
+          "muc_f1": 79.24273157538877,
+          "blanc_precision": 87.23578744469108,
+          "blanc_recall": 89.07657629420125,
+          "blanc_f1": 88.1332612392542
+        },
+        "temporal": {
+          "temporal_precision": 50.384273608010574,
+          "temporal_recall": 56.299374688191726,
+          "temporal_f1": 53.177842032062074
+        },
+        "causal": {
+          "causal_precision": 31.85434516523868,
+          "causal_recall": 30.563711098062242,
+          "causal_f1": 31.195684746778547
+        },
+        "subevent": {
+          "subevent_precision": 30.961331901181527,
+          "subevent_recall": 18.904738481718315,
+          "subevent_f1": 23.47551664460959
+        },
+        "coreference_mean_f1": 90.65724595608178,
+        "overall_f1": 49.626572344883
+      },
+      "task_selected_original_checkpoint_provenance": {
+        "coreference": {
+          "sha256": "8a37d80c065b13dff3d2952f150c54b2b74f1ecee55e679d9d9464fb25549e37",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 3200,
+          "selected_optimizer_updates": 800,
+          "bytes": 517262086
+        },
+        "temporal": {
+          "sha256": "68b1d4071f598f60bda033de94370e20bc56749033efffe33cc2517501c1b888",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 4600,
+          "selected_optimizer_updates": 1150,
+          "bytes": 517261183
+        },
+        "causal": {
+          "sha256": "d418b8778ccb51bcd3d9823431145b5cb6e1804a69cd35b69589fb7589545164",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 31400,
+          "selected_optimizer_updates": 7850,
+          "bytes": 517260581
+        },
+        "subevent": {
+          "sha256": "14c03aea761b777f5451c6d85750669fc849119bc55a6aea9ac21cd31ea2ee21",
+          "selection": "upstream_strict_improvement",
+          "selected_micro_step": 7600,
+          "selected_optimizer_updates": 1900,
+          "bytes": 517261183
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": false
+    },
+    "positive2-256-seed13": {
+      "run_id": "positive2-256-seed13",
+      "kind": "candidate",
+      "seed": 13,
+      "variant": {
+        "id": "positive2-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 2.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "4c93ff81dbf846fc06a4eb5114bde956a6815ed3029f58372d62e2d463f77ba2",
+      "history_or_events_sha256": "34632cc9a2014fb7dad5e6d0cba75f851a1d87a1ed186d169abfc807adecd6ea",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e009-u00000750",
+        "epoch": 9,
+        "update_step": 750,
+        "score": 50.906175485577215,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e008-u00000700",
+          "epoch": 8,
+          "update_step": 700,
+          "score": 90.61366416371916,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e007-u00000600",
+          "epoch": 7,
+          "update_step": 600,
+          "score": 54.06172044741289,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e022-u00001950",
+          "epoch": 22,
+          "update_step": 1950,
+          "score": 32.83541461090884,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e009-u00000750",
+          "epoch": 9,
+          "update_step": 750,
+          "score": 28.218068092970363,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.61822917409168,
+          "b_cubed_recall": 97.81818790508326,
+          "b_cubed_f1": 97.71810624674283,
+          "ceaf_precision": 97.4588079987078,
+          "ceaf_recall": 97.39304228568493,
+          "ceaf_f1": 97.42591404368997,
+          "muc_precision": 78.32214765100672,
+          "muc_recall": 78.90466531440163,
+          "muc_f1": 78.61232738295723,
+          "blanc_precision": 85.93068243652777,
+          "blanc_recall": 89.32284868459742,
+          "blanc_f1": 87.54775971590043
+        },
+        "temporal": {
+          "temporal_precision": 46.13362336209375,
+          "temporal_recall": 64.51270724654529,
+          "temporal_f1": 53.796721894160314
+        },
+        "causal": {
+          "causal_precision": 32.85148994589356,
+          "causal_recall": 29.85907222548444,
+          "causal_f1": 31.283885107855575
+        },
+        "subevent": {
+          "subevent_precision": 24.90589711417817,
+          "subevent_recall": 32.54631906869979,
+          "subevent_f1": 28.218068092970363
+        },
+        "coreference_mean_f1": 90.32602684732262,
+        "overall_f1": 50.906175485577215
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.85686797891525,
+          "b_cubed_recall": 97.721632604366,
+          "b_cubed_f1": 97.78920353648482,
+          "ceaf_precision": 97.40059653965464,
+          "ceaf_recall": 97.5977758345328,
+          "ceaf_f1": 97.49908649478898,
+          "muc_precision": 79.80636237897649,
+          "muc_recall": 78.02569303583502,
+          "muc_f1": 78.90598290598291,
+          "blanc_precision": 87.55286761115852,
+          "blanc_recall": 88.99598037463242,
+          "blanc_f1": 88.26038371761994
+        },
+        "temporal": {
+          "temporal_precision": 46.23343644515403,
+          "temporal_recall": 65.08134865855844,
+          "temporal_f1": 54.06172044741289
+        },
+        "causal": {
+          "causal_precision": 30.605772280367905,
+          "causal_recall": 35.41544333529066,
+          "causal_f1": 32.83541461090884
+        },
+        "subevent": {
+          "subevent_precision": 24.90589711417817,
+          "subevent_recall": 32.54631906869979,
+          "subevent_f1": 28.218068092970363
+        },
+        "coreference_mean_f1": 90.61366416371916,
+        "overall_f1": 51.432216828752814
+      },
+      "selected_complete_models": {
+        "9dbf75ca9451452cbf632b4f4ee8af11-e009-u00000750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e009-u00000750",
+            "epoch": 9,
+            "update_step": 750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "6c0ae40831cb45036a256ad435e5a76b75cd8efe1229793225afebc5388694e3",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "subevent"
+          ]
+        },
+        "9dbf75ca9451452cbf632b4f4ee8af11-e008-u00000700": {
+          "checkpoint_identity": {
+            "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e008-u00000700",
+            "epoch": 8,
+            "update_step": 700
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "51d625d68d8c223ae094d8e3f851808ad8b832726ee425e4097167a14df4e486",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "9dbf75ca9451452cbf632b4f4ee8af11-e007-u00000600": {
+          "checkpoint_identity": {
+            "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e007-u00000600",
+            "epoch": 7,
+            "update_step": 600
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "ec6d3df70766a514a2802a2cb14229d0783b2344ef633266c3fa127b65938e3e",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "9dbf75ca9451452cbf632b4f4ee8af11-e022-u00001950": {
+          "checkpoint_identity": {
+            "checkpoint_id": "9dbf75ca9451452cbf632b4f4ee8af11-e022-u00001950",
+            "epoch": 22,
+            "update_step": 1950
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "54858244a279176156ddd3b40fb8a2659c819815522582654a392672fbee60ed",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "positive2-256-seed21": {
+      "run_id": "positive2-256-seed21",
+      "kind": "candidate",
+      "seed": 21,
+      "variant": {
+        "id": "positive2-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 2.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "30848398836fb77fa3c5b2f370370437a5759c3a7226d79b56da62615f4472c7",
+      "history_or_events_sha256": "e2d8a221072e9596d901eaa62bd0ba52879e6619a9132ae19738bd0feef21e3e",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e009-u00000750",
+        "epoch": 9,
+        "update_step": 750,
+        "score": 51.439989315834644,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e005-u00000450",
+          "epoch": 5,
+          "update_step": 450,
+          "score": 90.9406714684606,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e008-u00000700",
+          "epoch": 8,
+          "update_step": 700,
+          "score": 53.90885566714372,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e025-u00002300",
+          "epoch": 25,
+          "update_step": 2300,
+          "score": 32.84424379232506,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e009-u00000750",
+          "epoch": 9,
+          "update_step": 750,
+          "score": 29.504119384424065,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.31196893181082,
+          "b_cubed_recall": 98.10018431137665,
+          "b_cubed_f1": 97.70448694696431,
+          "ceaf_precision": 97.70899324740208,
+          "ceaf_recall": 97.10958834434457,
+          "ceaf_f1": 97.4083686912289,
+          "muc_precision": 76.82077264091197,
+          "muc_recall": 82.01487491548343,
+          "muc_f1": 79.33289731850883,
+          "blanc_precision": 85.21885124008229,
+          "blanc_recall": 90.72705119919482,
+          "blanc_f1": 87.76637012876542
+        },
+        "temporal": {
+          "temporal_precision": 45.15502980453768,
+          "temporal_recall": 66.26464590689586,
+          "temporal_f1": 53.71011972180727
+        },
+        "causal": {
+          "causal_precision": 31.873816115401425,
+          "causal_recall": 32.112448620082205,
+          "causal_f1": 31.992687385740403
+        },
+        "subevent": {
+          "subevent_precision": 28.047879414807152,
+          "subevent_recall": 31.119855714051486,
+          "subevent_f1": 29.504119384424065
+        },
+        "coreference_mean_f1": 90.55303077136685,
+        "overall_f1": 51.439989315834644
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.96040627418718,
+          "b_cubed_recall": 97.78998214009461,
+          "b_cubed_f1": 97.87512001984115,
+          "ceaf_precision": 97.47978009193737,
+          "ceaf_recall": 97.74289955234134,
+          "ceaf_f1": 97.61116250705852,
+          "muc_precision": 81.1149825783972,
+          "muc_recall": 78.70182555780933,
+          "muc_f1": 79.89018531228552,
+          "blanc_precision": 87.4785338629042,
+          "blanc_recall": 89.34048911565037,
+          "blanc_f1": 88.38621803465712
+        },
+        "temporal": {
+          "temporal_precision": 46.98917066286488,
+          "temporal_recall": 63.218491017500014,
+          "temporal_f1": 53.90885566714372
+        },
+        "causal": {
+          "causal_precision": 28.666812609457093,
+          "causal_recall": 38.446858485026425,
+          "causal_f1": 32.84424379232506
+        },
+        "subevent": {
+          "subevent_precision": 28.047879414807152,
+          "subevent_recall": 31.119855714051486,
+          "subevent_f1": 29.504119384424065
+        },
+        "coreference_mean_f1": 90.9406714684606,
+        "overall_f1": 51.799472578088356
+      },
+      "selected_complete_models": {
+        "7405c298bc1348ac86925213a40ad725-e009-u00000750": {
+          "checkpoint_identity": {
+            "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e009-u00000750",
+            "epoch": 9,
+            "update_step": 750
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "c25ad133fc739fef1397cd59837de47fd66f4d6376791e022aeb5bd7652e1d0b",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "subevent"
+          ]
+        },
+        "7405c298bc1348ac86925213a40ad725-e005-u00000450": {
+          "checkpoint_identity": {
+            "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e005-u00000450",
+            "epoch": 5,
+            "update_step": 450
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "335eb0a9aa34481e62efe6b5c37c9801aae599f7c24824758b14ca2dbe1682be",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "7405c298bc1348ac86925213a40ad725-e008-u00000700": {
+          "checkpoint_identity": {
+            "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e008-u00000700",
+            "epoch": 8,
+            "update_step": 700
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "6443fba481527a069dd6904febfe0da8a9e5540900e1b99cbac3f0e38ed086d1",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "7405c298bc1348ac86925213a40ad725-e025-u00002300": {
+          "checkpoint_identity": {
+            "checkpoint_id": "7405c298bc1348ac86925213a40ad725-e025-u00002300",
+            "epoch": 25,
+            "update_step": 2300
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "69b777a227bb7818d680c2bc783b61da293955bf89a208d4b165c261fba12ebf",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "positive2-256-seed87": {
+      "run_id": "positive2-256-seed87",
+      "kind": "candidate",
+      "seed": 87,
+      "variant": {
+        "id": "positive2-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 2.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "57180dfe7e47e56b9ce9b705842a02091515a015b4857dd5a4c7b9598af23934",
+      "history_or_events_sha256": "8db10bc9f332505fba016842c6b33825d84664446630da71a2db30a0a644484b",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e011-u00001000",
+        "epoch": 11,
+        "update_step": 1000,
+        "score": 50.62995972771108,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e005-u00000450",
+          "epoch": 5,
+          "update_step": 450,
+          "score": 90.62770197846939,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e006-u00000550",
+          "epoch": 6,
+          "update_step": 550,
+          "score": 54.058983768833535,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e028-u00002500",
+          "epoch": 28,
+          "update_step": 2500,
+          "score": 32.597783242933666,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e011-u00001000",
+          "epoch": 11,
+          "update_step": 1000,
+          "score": 27.179272879231092,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.34930723405351,
+          "b_cubed_recall": 97.80749927487835,
+          "b_cubed_f1": 97.57786537943602,
+          "ceaf_precision": 97.40078441088772,
+          "ceaf_recall": 96.98849963545364,
+          "ceaf_f1": 97.194204810963,
+          "muc_precision": 75.83979328165374,
+          "muc_recall": 79.37795807978364,
+          "muc_f1": 77.56854971919391,
+          "blanc_precision": 86.1403086185307,
+          "blanc_recall": 88.72218740533111,
+          "blanc_f1": 87.38525168522602
+        },
+        "temporal": {
+          "temporal_precision": 44.01812458750064,
+          "temporal_recall": 67.19268419089688,
+          "temporal_f1": 53.19080000536801
+        },
+        "causal": {
+          "causal_precision": 29.49969493593655,
+          "causal_recall": 35.48884321785085,
+          "causal_f1": 32.21829812754048
+        },
+        "subevent": {
+          "subevent_precision": 27.719058983975454,
+          "subevent_recall": 26.66010821446139,
+          "subevent_f1": 27.179272879231092
+        },
+        "coreference_mean_f1": 89.93146789870474,
+        "overall_f1": 50.62995972771108
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 98.07363349686179,
+          "b_cubed_recall": 97.60521490133414,
+          "b_cubed_f1": 97.83886354580704,
+          "ceaf_precision": 97.27707946520037,
+          "ceaf_recall": 97.87383475300602,
+          "ceaf_f1": 97.5745446950493,
+          "muc_precision": 81.94343727338651,
+          "muc_recall": 76.40297498309668,
+          "muc_f1": 79.07627711686494,
+          "blanc_precision": 87.90546028304891,
+          "blanc_recall": 88.13751543303252,
+          "blanc_f1": 88.0211225561563
+        },
+        "temporal": {
+          "temporal_precision": 45.82931874380967,
+          "temporal_recall": 65.89120252643409,
+          "temporal_f1": 54.058983768833535
+        },
+        "causal": {
+          "causal_precision": 30.126408867301823,
+          "causal_recall": 35.510863182618905,
+          "causal_f1": 32.597783242933666
+        },
+        "subevent": {
+          "subevent_precision": 27.719058983975454,
+          "subevent_recall": 26.66010821446139,
+          "subevent_f1": 27.179272879231092
+        },
+        "coreference_mean_f1": 90.62770197846939,
+        "overall_f1": 51.115935467366924
+      },
+      "selected_complete_models": {
+        "f2631b7f0d5845848f1e8c85b7ee7d26-e011-u00001000": {
+          "checkpoint_identity": {
+            "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e011-u00001000",
+            "epoch": 11,
+            "update_step": 1000
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "a6c2a7e362535365a2df26f2c52d479c47e4e9378586246ed0e5028b37f991bf",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "subevent"
+          ]
+        },
+        "f2631b7f0d5845848f1e8c85b7ee7d26-e005-u00000450": {
+          "checkpoint_identity": {
+            "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e005-u00000450",
+            "epoch": 5,
+            "update_step": 450
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "d0acb6257e3ea4e1c25bbbaaf133bfdfbad6c9c54a8a4e7adcdae58efca0f103",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "f2631b7f0d5845848f1e8c85b7ee7d26-e006-u00000550": {
+          "checkpoint_identity": {
+            "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e006-u00000550",
+            "epoch": 6,
+            "update_step": 550
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "a127fffa2c3198c2f33dffc0b88f30e20e693a570f5c02dd308a5a27d9154d1d",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "f2631b7f0d5845848f1e8c85b7ee7d26-e028-u00002500": {
+          "checkpoint_identity": {
+            "checkpoint_id": "f2631b7f0d5845848f1e8c85b7ee7d26-e028-u00002500",
+            "epoch": 28,
+            "update_step": 2500
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "2b6a347a87f3c047f8f39bd7bdff11120d9e2909362a21ca932ff8084136d344",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    },
+    "positive2-256-seed100": {
+      "run_id": "positive2-256-seed100",
+      "kind": "candidate",
+      "seed": 100,
+      "variant": {
+        "id": "positive2-256",
+        "max_length": 256,
+        "scorer_hidden_size": 200,
+        "scorer_num_layers": 3,
+        "positive_class_weight": 2.0
+      },
+      "status": "completed",
+      "actual_epochs": 100,
+      "actual_exit_code": 0,
+      "summary_sha256": "da0cdc82238f406336dfa10f9a3389c18b7e93c5bbe48f6d2c6f229831a65210",
+      "history_or_events_sha256": "b2a52b2330d428c7d3f603a1b9ff3fad15caf9d979ef76797005676fef0635dd",
+      "training_precision": "float32",
+      "batch_size": 8,
+      "accumulation_steps": 4,
+      "split": "valid",
+      "documents": 710,
+      "canary_or_smoke": false,
+      "test_scored": false,
+      "micro_steps": 36500,
+      "optimizer_updates": 9200,
+      "training_validations": 184,
+      "selected_single": {
+        "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e011-u00000950",
+        "epoch": 11,
+        "update_step": 950,
+        "score": 50.82891643043175,
+        "selection_rule": "overall_f1",
+        "exported": true
+      },
+      "task_selections": {
+        "coreference": {
+          "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e008-u00000650",
+          "epoch": 8,
+          "update_step": 650,
+          "score": 90.66406546468501,
+          "selection_rule": "upstream-any",
+          "exported": true
+        },
+        "temporal": {
+          "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e007-u00000600",
+          "epoch": 7,
+          "update_step": 600,
+          "score": 54.22739275059154,
+          "selection_rule": "temporal_f1",
+          "exported": true
+        },
+        "causal": {
+          "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e017-u00001550",
+          "epoch": 17,
+          "update_step": 1550,
+          "score": 32.596012853711045,
+          "selection_rule": "causal_f1",
+          "exported": true
+        },
+        "subevent": {
+          "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e011-u00000950",
+          "epoch": 11,
+          "update_step": 950,
+          "score": 28.054113145668214,
+          "selection_rule": "subevent_f1",
+          "exported": true
+        }
+      },
+      "original_gpu_single_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.03467362038927,
+          "b_cubed_recall": 98.17758413315221,
+          "b_cubed_f1": 97.60278317385429,
+          "ceaf_precision": 97.70022706623755,
+          "ceaf_recall": 96.83716144464756,
+          "ceaf_f1": 97.26677975902398,
+          "muc_precision": 75.04621072088725,
+          "muc_recall": 82.35294117647058,
+          "muc_f1": 78.52998065764024,
+          "blanc_precision": 84.0125808563555,
+          "blanc_recall": 91.22997146506489,
+          "blanc_f1": 87.26291659131724
+        },
+        "temporal": {
+          "temporal_precision": 48.215304182509506,
+          "temporal_recall": 58.96336767462474,
+          "temporal_f1": 53.05041868491753
+        },
+        "causal": {
+          "causal_precision": 28.025512728872272,
+          "causal_recall": 37.411920140927776,
+          "causal_f1": 32.04551884568232
+        },
+        "subevent": {
+          "subevent_precision": 24.048260513060793,
+          "subevent_recall": 33.66125594359731,
+          "subevent_f1": 28.054113145668214
+        },
+        "coreference_mean_f1": 90.16561504545894,
+        "overall_f1": 50.82891643043175
+      },
+      "original_gpu_task_combination_metrics": {
+        "coreference": {
+          "b_cubed_precision": 97.05839561506775,
+          "b_cubed_recall": 98.37556912528792,
+          "b_cubed_f1": 97.71254366870052,
+          "ceaf_precision": 97.901491931032,
+          "ceaf_recall": 96.94656050246724,
+          "ceaf_f1": 97.42168620353965,
+          "muc_precision": 75.88522588522588,
+          "muc_recall": 84.04327248140635,
+          "muc_f1": 79.75617581007378,
+          "blanc_precision": 84.04626830628294,
+          "blanc_recall": 92.43905430679825,
+          "blanc_f1": 87.76585617642611
+        },
+        "temporal": {
+          "temporal_precision": 48.63389448675414,
+          "temporal_recall": 61.274744862126255,
+          "temporal_f1": 54.22739275059154
+        },
+        "causal": {
+          "causal_precision": 28.346627597807807,
+          "causal_recall": 38.34409864944216,
+          "causal_f1": 32.596012853711045
+        },
+        "subevent": {
+          "subevent_precision": 24.048260513060793,
+          "subevent_recall": 33.66125594359731,
+          "subevent_f1": 28.054113145668214
+        },
+        "coreference_mean_f1": 90.66406546468501,
+        "overall_f1": 51.38539605366395
+      },
+      "selected_complete_models": {
+        "88cab8b8fa554236bb5fa5048f68e8b7-e011-u00000950": {
+          "checkpoint_identity": {
+            "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e011-u00000950",
+            "epoch": 11,
+            "update_step": 950
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "d0bae58879d04f80a9c821c9aa3a118c8c3bdfa3d20e4606ce8a3fa07fd190fd",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "joint",
+            "subevent"
+          ]
+        },
+        "88cab8b8fa554236bb5fa5048f68e8b7-e008-u00000650": {
+          "checkpoint_identity": {
+            "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e008-u00000650",
+            "epoch": 8,
+            "update_step": 650
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "9168a38df0094616d2dbb3515f748e76063da4f7509db14ae328077abc0abc59",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "coreference"
+          ]
+        },
+        "88cab8b8fa554236bb5fa5048f68e8b7-e007-u00000600": {
+          "checkpoint_identity": {
+            "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e007-u00000600",
+            "epoch": 7,
+            "update_step": 600
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "0fb13349e62e68d22cc29c2c1edf3aa9b2e7060f444cdc23982a3b0d92f4ae50",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "temporal"
+          ]
+        },
+        "88cab8b8fa554236bb5fa5048f68e8b7-e017-u00001550": {
+          "checkpoint_identity": {
+            "checkpoint_id": "88cab8b8fa554236bb5fa5048f68e8b7-e017-u00001550",
+            "epoch": 17,
+            "update_step": 1550
+          },
+          "files": {
+            "config.json": {
+              "sha256": "97f99146fe0f462e911946fc3ce25478b554a98d036db411a2d96ac412afe72c",
+              "bytes": 3128
+            },
+            "configuration_maven_ere.py": {
+              "sha256": "f57ad7d239ab5fa3520b59fdd76163f3eb7dfe3eba0a1b98002f09c023a7839d",
+              "bytes": 4241
+            },
+            "modeling_maven_ere.py": {
+              "sha256": "b7d09b6622b7b5f4a5c08412f6ada89eb3923f98868b91f4afef947098ae9104",
+              "bytes": 12477
+            },
+            "model.safetensors": {
+              "sha256": "c3e8ef68f8e0cf1020dda6b3868a1b66d158197ac7e1b4a1febdea87cbaf6843",
+              "bytes": 504795436
+            },
+            "vocab.json": {
+              "sha256": "32b29acf82d3333462eb4b13416760f2aef956052e8fea1749fe5b20f866a4bf",
+              "bytes": 999355
+            },
+            "merges.txt": {
+              "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+              "bytes": 456318
+            },
+            "special_tokens_map.json": {
+              "sha256": "f23c8e6099631c233c16d9bf8dab198f610826cdd1b358f270f6d55c1863e857",
+              "bytes": 958
+            },
+            "tokenizer_config.json": {
+              "sha256": "99fa781d08267d8a69e2339be3dbd00da1c3ccf34802c0444f52682fa2742689",
+              "bytes": 1221
+            }
+          },
+          "selected_fields": [
+            "causal"
+          ]
+        }
+      },
+      "task_combination_complete_model_count": 4,
+      "single_gpu_overall_selected_checkpoint_available": true
+    }
+  },
+  "original_gpu_metrics_not_cpu_package_results": true,
+  "new_inference_or_export_performed": false,
+  "public_source_or_training_modified": false,
+  "test_scored": false
+}

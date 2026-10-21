@@ -1,0 +1,38 @@
+{
+  "status": "published_hf_full_bytes_hashes_visibility_and_anonymous_readbacks_verified",
+  "hf_parent_revision": "1b308bc516da9539fe837cff95a0677c4659a6ae",
+  "hf_revision": "32cec123f43723b0eb47dd3406347c3b0f537df4",
+  "formal_runs": 15,
+  "epochs_each": 100,
+  "data_revision": "682fb313d7bec8c0db71715f0d59cd1b7dfa2e2e",
+  "files": {
+    "FINAL_REPRODUCTION_REPORT.md": {
+      "bytes": 14376,
+      "sha256": "52685923a42e2c8a966c23110f8f9bdcb11e38b27981a6f95415ddb415725ec2"
+    },
+    "five_seed_cpu.json": {
+      "bytes": 41183,
+      "sha256": "1481bf9a9d704522bcbde30733c2fccdd46eeaf4851e284951c2f24cb05a68cb"
+    },
+    "formal_runs.json": {
+      "bytes": 137442,
+      "sha256": "689909710a8bd96a98cb93c1e52b03f602be8f16c05ad92e04593df15d35170f"
+    },
+    "provenance.json": {
+      "bytes": 1356,
+      "sha256": "82c8a4a4b2230f65ed792dd5c3414097ffcc214e0a32bdd0f2565817fd345761"
+    }
+  },
+  "test_scored": false,
+  "hf_public": true,
+  "hf_all_git_lfs_content_addresses_and_sizes_exact": true,
+  "hf_anonymous_small_file_readback_count": 40,
+  "old_hf_entries_preserved": 176,
+  "hf_new_full_weight_bytes_readback": 1009590872,
+  "hf_all_new_weight_sha256_exact": true,
+  "hf_verified_payload_files": 217,
+  "hf_total_entries_including_gitattributes": 218,
+  "hf_anonymous_full_small_file_readbacks": 40,
+  "hf_readback_verified_at": "2026-10-21T17:34:11.800181+00:00",
+  "old_weight_body_downloads": 0
+}

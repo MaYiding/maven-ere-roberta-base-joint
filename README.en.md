@@ -1,5 +1,21 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## Latest verified single-joint improvement: positive4 interim snapshot
+
+`positive4-256-seed42-snapshot-u750/` has CPU overall **51.7822** on the full710-document validation set: **+0.2825points** over the preceding positive2 single, and **+3.0684points** over the original root single. It contains one encoder and all task heads, one forward per document. Full public CLI and independent AutoModel weights, predictions and metrics match exactly.
+
+| F1 % | Original root single | Preceding positive2 single | Positive4 CPU single | Delta vs preceding |
+|---|---:|---:|---:|---:|
+| coreference_mean_f1 | 90.08368906 | 90.56372401 | 90.20028320 | -0.36344081 |
+| temporal_f1 | 53.08093519 | 54.42049630 | 52.45616097 | -1.96433534 |
+| causal_f1 | 27.33665533 | 31.07405202 | 33.28013849 | +2.20608647 |
+| subevent_f1 | 24.35389549 | 29.94070344 | 31.19226171 | +1.25155827 |
+| overall_f1 | 48.71379377 | 51.49974394 | 51.78221109 | +0.28246715 |
+
+Selected at epoch9/update750 of a still-running formal100-epoch run. All15formal experiments continue. The root still loads the old baseline: select this subdirectory and use default padding without `--reference-padding`. [Full metrics, training and inference](docs/POSITIVE4_SINGLE_SNAPSHOT.md).
+
+CPU/publicCLI and independentAutoModel match exactly on all710documents, predictions, metrics and state tensors. CPU overall51.78221109033361 and temporal52.456160965460995 differ from saved GPU51.78218842947946 and52.45607032204441: one validation document has one additional saved-GPU BEFORE pair that CPU omits. Full document/pair and metric differences are in validation.json. GPU logits are unavailable; no numerical margin or exact cause is asserted, and no thresholds were changed.
+
 ## Latest verified single-joint improvement: positive2 interim snapshot
 
 `positive2-256-seed42-snapshot-u750/` has CPU overall **51.4997** on the full710-document validation set: **+2.0301points** over the preceding corrected512 single, and **+2.7860points** over the original root single. It contains one encoder and all task heads, one forward per document. Full public CLI and independent AutoModel weights, predictions and metrics match exactly.

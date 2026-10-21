@@ -1,5 +1,21 @@
 # MAVEN-ERE Joint RoBERTa-base Training
 
+## 最新单联合模型提升：positive4 中期快照
+
+`positive4-256-seed42-snapshot-u750/` 在完整710篇valid上的CPU Overall为 **51.7822**，相比上一版51.4997提高 **0.2825点**，相比原始48.7138提高 **3.0684点**。一完整encoder与全部任务头、每篇一次forward。公开CLI和独立AutoModel重载的全部预测、指标与权重严格一致。
+
+| F1 % | 原始根目录单模型 | 上一版 positive2 单模型 | positive4 CPU 单模型 | 相比上一版增减 |
+|---|---:|---:|---:|---:|
+| 共指四项均值 | 90.08368906 | 90.56372401 | 90.20028320 | -0.36344081 |
+| 时间 | 53.08093519 | 54.42049630 | 52.45616097 | -1.96433534 |
+| 因果 | 27.33665533 | 31.07405202 | 33.28013849 | +2.20608647 |
+| 子事件 | 24.35389549 | 29.94070344 | 31.19226171 | +1.25155827 |
+| Overall | 48.71379377 | 51.49974394 | 51.78221109 | +0.28246715 |
+
+父run仍需跑满100轮，全部15项实验继续；这是第9轮/update750的已冻结中期权重。HF根目录仍保留旧版，加载此快照需指定子目录、默认padding，**不要加`--reference-padding`**。[完整指标、训练及推理命令](docs/POSITIVE4_SINGLE_SNAPSHOT.md)。
+
+CPU/publicCLI and independentAutoModel match exactly on all710documents, predictions, metrics and state tensors. CPU overall51.78221109033361 and temporal52.456160965460995 differ from saved GPU51.78218842947946 and52.45607032204441: one validation document has one additional saved-GPU BEFORE pair that CPU omits. Full document/pair and metric differences are in validation.json. GPU logits are unavailable; no numerical margin or exact cause is asserted, and no thresholds were changed.
+
 ## 最新单联合模型提升：positive2 中期快照
 
 `positive2-256-seed42-snapshot-u750/` 在完整710篇valid上的CPU Overall为 **51.4997**，相比上一版49.4696提高 **2.0301点**，相比原始48.7138提高 **2.7860点**。一完整encoder与全部任务头、每篇一次forward。公开CLI和独立AutoModel重载的全部预测、指标与权重严格一致。
